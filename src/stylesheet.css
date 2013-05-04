@@ -34,6 +34,15 @@ canvas, body > div {
     position: absolute;
 }
 
+canvas {
+    width: 960px;
+    height: 576px;
+    margin: -288px 0 0 -590px;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+}
+
 section.screen {
     width: 960px;
     height: 600px;
@@ -68,16 +77,15 @@ pre a {
 }
 
 div#character {
-    width: 300px;
-    padding: 10px;
-    top: 230px;
-    right: 0;
-    bottom: 0;
+    width: 200px;
+    height: 576px;
+    margin: -288px 0 0 390px;
+    position: fixed;
+    top: 50%;
+    left: 50%;
 
-    border: 2px solid #8a1e51;
-    border-bottom: none;
-    border-right: none;
-
+    
+    
     font: normal 400 14px/1.4em 'DejaVu Sans Mono', monospace;
     color: #fff;
 }
