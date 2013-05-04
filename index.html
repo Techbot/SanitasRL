@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="en-GB">
+    <head>
+        <meta charset="utf-8" />
+        <title>SanitasRL - 7DRL2013</title>
+        <link rel="icon" href="favicon.ico" />
+        <link href="stylesheet.css" rel="stylesheet" />
+    </head>
+    <body>
+        <canvas id="background"></canvas>
+        <canvas id="foreground"></canvas>
+        <canvas id="fov"></canvas>
+        <canvas id="minimap" width="298" height="230"></canvas>
+
+        <div id="character" width="300">
+            <section class="statistics">
+                <div class="level">
+                    <strong>≡</strong> Dungeon level: <span>1</span>
+                </div>
+                <div class="health">
+                    <strong>❤</strong> Health: <span class="red"></span>
+                </div>
+                <div class="damage">
+                    <strong>★</strong> Damage: <span class="blue"></span>
+                </div>
+                <div class="defence">
+                    <strong>★</strong> Defence: <span class="blue"></span>
+                </div>
+                <div class="hit">
+                    <strong>★</strong> Hit chance: <span class="blue"></span>
+                </div>
+                <div class="turn">
+                    <strong>★</strong> Turn: <span class="blue"></span>
+                </div>
+            </section>
+
+            <section class="equipment">
+                <div class="armour">
+                    <strong>★</strong> <span class="name"></span>
+                </div>
+
+                <div class="weapon">
+                    <strong>★</strong> <span class="name"></span>
+                </div>
+
+                <div class="jewelry">
+                    <strong>★</strong> <span class="name"></span>
+                </div>
+            </section>
+
+            <section class="see">
+                <div>You see here:</div>
+                <div class="look">
+                    <span>Nothing</span>
+                </div>
+            </section>
+        </div>
+
+        <div id="log"></div>
+
+        <section class="background"></section>
+        <section class="screen welcome">
+<pre class="logo"> ____ ___  ___ _              _____             _ _            _____  _      
+|__  |   \| _ \ |            / ____|           (_) |          |  __ \| |     
+  / /| |) |   / |__         | (___   __ _ _ __  _| |_ __ _ ___| |__) | |     
+ /_/ |___/|_|_\____|         \___ \ / _` | '_ \| | __/ _` / __|  _  /| |     
+                             ____) | (_| | | | | | || (_| \__ \ | \ \| |____ 
+                            |_____/ \__,_|_| |_|_|\__\__,_|___/_|  \_\______|</pre>
+<pre class="body">
+Deep below the plains of Ostengot lies the dungeons of Rungaard. Your mission is to retrieve the
+long lost crown of King Aaidric. What you might find lies far beyond our imagination. Original, I know.
+
+Your health is permanent in this game, so watch your HP closely. If you lose one point it's lost forever.
+You can, however, fortify your health by drinking from a well or by equipping certain items, this
+will lower you character's power though.
+
+For each lost health point you grow stronger. It's a game about balancing your character's power and
+health pool. There's also various items around the dungeon that will improve your character.
+
+There's a total of five levels in the dungeon with a boss at the end. For more information and downloads,
+take a look at the <a href="http://codejunkie.se/sanitasrl/readme.html" target="_blank">readme</a>.
+
+You can press <span>ESC</span> at any time to bring up this help window. Anyways, you know the drill:
+<span>y</span>  <span>k</span>  <span>u</span>    <span>7</span>  <span>8</span>  <span>9</span>        <span>W</span>/<span>↑</span>               <span>x</span> - Examine / Look
+ \ | /      \ | /          |                <span>g</span> - Get / Grab / Pick up
+<span>h</span> —<span>.</span>— <span>l</span>    <span>4</span> —<span>5</span>— <span>6</span>    <span>A</span>/<span>←</span> — — <span>D</span>/<span>→</span>           <span>q</span> - Drink (From a well)
+ / | \      / | \          |                <span>t</span> - Telekinesis (Requires Cloudcleaver)
+<span>b</span>  <span>j</span>  <span>n</span>    <span>1</span>  <span>2</span>  <span>3</span>        <span>S</span>/<span>↓</span>               <span>&gt;</span> - Traverse down a staircase (Alternative <span>ENTER</span>)
+                                            <span>.</span> / <span>5</span> - Wait one turn (Alternative <span>SPACE</span>)
+</pre>
+<pre class="bottom">Press <span>ENTER</span> to begin</pre>
+        </section>
+        <section class="screen death" style="display: none;">
+<pre class="logo">__     __               _ _          _       
+\ \   / /              | (_)        | |      
+ \ \_/ /__  _   _    __| |_  ___  __| |      
+  \   / _ \| | | |  / _` | |/ _ \/ _` |      
+   | | (_) | |_| | | (_| | |  __/ (_| |_ _ _ 
+   |_|\___/ \__,_|  \__,_|_|\___|\__,_(_|_|_)</pre>
+<pre class="body">
+
+
+    _____
+  /~/~   ~\
+ | |       \         We say farewell to the brave adventurer who lost his life <span class="lastHit"></span> <span class="enemy"></span>
+ \ \        \        in the dungeons of Rungaard.
+  \ \        \
+ --\ \       .\''    You survived <span class="turns"></span> turns and reached level <span class="level"></span> of the dungeon.
+--==\ \     ,,|!!|,  You were equipped with <span class="weapon"></span>, <span class="armour"></span> and <span class="jewelry"></span>.
+    ''"'',,}{,,</pre>
+<pre class="bottom">Press <span>ENTER</span> to restart</pre>
+        </section>
+        <section class="screen score" style="display: none;">
+<pre class="logo">  _____                            _         _       _   _                 
+ / ____|                          | |       | |     | | (_)                
+| |     ___  _ __   __ _ _ __ __ _| |_ _   _| | __ _| |_ _  ___  _ __  ___ 
+| |    / _ \| '_ \ / _` | '__/ _` | __| | | | |/ _` | __| |/ _ \| '_ \/ __|
+| |___| (_) | | | | (_| | | | (_| | |_| |_| | | (_| | |_| | (_) | | | \__ \
+ \_____\___/|_| |_|\__, |_|  \__,_|\__|\__,_|_|\__,_|\__|_|\___/|_| |_|___/
+                    __/ |                                                  
+                   |___/                                                   </pre>
+<pre class="body">
+
+     ___________
+._____|_______|_____.
+||_____/  |  \_____||         
+      /   |   \               You have slain the old guardian of King Aaidric and retrieved his long lost crown.
+     /    |    \
+    /     |     \             You we're equipped with <span class="weapon"></span>, <span class="armour"></span> and <span class="jewelry"></span>.
+   /      |      \
+  /       |       \
+ /        |        \          Made by Codejunkie for the 7DRL challenge.
+|         |         |         For more information and downloads, take a look at the <a href="http://codejunkie.se/sanitasrl/readme.html" target="_blank">readme</a>.
+ \        |        /
+   \      |      /
+     \    |    /
+       \  |  /
+         \|/
+          `</pre>
+<pre class="bottom">Press <span>ENTER</span> if you want to do another run</pre>
+        </section>
+
+        <script src="scripts/library/jquery-1.9.1.min.js"></script>
+        <script src="scripts/library/jquery.imgpreload.min.js"></script>
+        <script src="scripts/library/adjustedRandom.js"></script>
+        <script src="scripts/library/directions.js"></script>
+        <script src="scripts/library/keys.js"></script>
+        
+        <script src="scripts/log.js"></script>
+        <script src="scripts/tiles.js"></script>
+        <script src="scripts/items.js"></script>
+        <script src="scripts/monsters.js"></script>
+        <script src="scripts/pathfinder.js"></script>
+        <script src="scripts/player.js"></script>
+        <script src="scripts/dungeon.js"></script>
+        <script src="scripts/game.js"></script>
+        <script src="scripts/render.js"></script>
+        <script src="scripts/bootstrap.js"></script>
+    </body>
+</html>
