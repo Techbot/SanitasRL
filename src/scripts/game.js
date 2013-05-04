@@ -132,7 +132,7 @@ Game.prototype.render = function() {
     //if(this.shouldRender === true) {    
         this.updateCamera(this.player.x, this.player.y);
         this.newRender();
-        this.renderFOV(this.fov);
+        //this.renderFOV(this.fov);
         this.shouldRender = false;
     //}
     
