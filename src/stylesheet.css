@@ -10,24 +10,12 @@
     font-style: normal;
 }
 
-/* Remove all margin and padding and use border-box */
-* {
-    margin: 0;
-    padding: 0;
-    -webkit-box-sizing: border-box;
-	-moz-box-sizing: border-box;
-	box-sizing: border-box;
-}
-
 /* Remove any scrollbars */
-html, body {
-    overflow: hidden;
-    background: #000;
-}
-
-/* Position all root elements absolutley */
-canvas, body > div {
-    position: absolute;
+body {
+    background: #111;
+    font: normal 400 14px/1.4em 'DejaVu Sans Mono', monospace;
+    text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.9);
+    color: #fff;
 }
 
 canvas {
@@ -72,62 +60,31 @@ pre a {
     text-decoration: none;
 }
 
-div#character {
+.sidebar {
     width: 200px;
     height: 576px;
     margin: -288px 0 0 390px;
     position: fixed;
     top: 50%;
     left: 50%;
-
-    
-    
-    font: normal 400 14px/1.4em 'DejaVu Sans Mono', monospace;
+    font: normal 400 14px/1.2em 'DejaVu Sans Mono', monospace;
     color: #fff;
 }
-div#character section {
-    margin-bottom: 10px;
-    padding-bottom: 6px;
-    border-bottom: 2px solid rgba(255, 255, 255, 0.3);
-}
-
-section.equipment span:not(:first-of-type) {
-    display: block;
-}
-
-strong {
+.sidebar img {
+    margin-right: 5px;
     position: relative;
-    font-weight: normal;
+    top: 3px;
 }
-.health strong {
-    top: 1px;
-    font-size: 20px;
+.sidebar p {
+    margin: 0 0 10px 0;
 }
-.level strong {
-    top: 2px;
-    font-size: 22px;
+.sidebar .indent {
+    display: inline-block;
+    margin: 5px 0 5px 21px;
 }
-.armour, .weapon {
-    margin-bottom: 7px;
+.sidebar .indent:last-of-type {
+    margin-bottom: 0;
 }
-.defence strong, .damage strong, .hit strong, .turn strong, .equipment strong {
-    font-size: 22px;
-}
-
-span.name {
-    color: #007eff;
-}
-
-span.flavour {
-    color: #fff569;
-    font-style: italic;
-}
-.red { color: #c00; }
-
-.look {
-    padding-left: 10px;
-}
-.look span {
-    padding-top: 2px;
-    display: block;
+.sidebar .red {
+    color: #c00;
 }

@@ -58,12 +58,11 @@ Player.prototype.hit = function() {
 Player.prototype.updateInterface = function() {
     'use strict';
 
-    $('#character .health span').text(this.health);
-    $('#character .damage span').text(this.calcDamage());
-    $('#character .defence span').text(this.calcDefence());
-    $('#character .hit span').text(this.hit() + '%');
+    $('.character-health').text(this.health);
+    $('.character-damage').text(this.calcDamage() + ' (' + this.hit() + '%)');
+    $('.character-defence').text(this.calcDefence());
 
-    $('#character .weapon span.name').text(this.weapon.name);
+    $('.character-weapon').text(this.weapon.name);
 
     if(this.weapon.description !== '') {
         if($('#character .weapon span.description').length === 0) {
@@ -85,7 +84,7 @@ Player.prototype.updateInterface = function() {
         $('#character .weapon span.flavour').remove();
     }
 
-    $('#character .armour span.name').text(this.armour.name);
+    $('.character-armour').text(this.armour.name);
 
     if(this.armour.description !== '') {
         if($('#character .armour span.description').length === 0) {
@@ -107,7 +106,7 @@ Player.prototype.updateInterface = function() {
         $('#character .armour span.flavour').remove();
     }
 
-    $('#character .jewelry span.name').text(this.jewelry.name);
+    $('.character-trinket').text(this.jewelry.name);
 
     if(this.jewelry.description !== '') {
         if($('#character .jewelry span.description').length === 0) {

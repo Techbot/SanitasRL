@@ -10,7 +10,31 @@
     <canvas id="canvas" width="960" height="576"></canvas>
     <canvas id="fov"></canvas>
 
-    <div id="character">
+    <section class="sidebar">
+        <p>
+            <img src="images/dungeon-level.png">Dungeon Level: <span class="dungeon-level"></span><br>
+            <img src="images/dungeon-turn.png">Elapsed turns: <span class="dungeon-turn"></span>
+        </p>
+        <p>
+            <img src="images/character-health.png">Health: <span class="character-health red"></span><br>
+            <img src="images/character-weapon.png">Damage: <span class="character-damage"></span><br>
+            <img src="images/character-defence.png">Defence: <span class="character-defence"></span>
+        </p>
+        <p>
+            <img src="images/character-weapon.png">Weapon:<br>
+                <span class="character-weapon indent"></span><br>
+            <img src="images/character-armour.png">Armour:<br>
+                <span class="character-armour indent"></span><br>
+            <img src="images/character-trinket.png">Trinket:<br>
+                <span class="character-trinket indent"></span>
+        </p>
+        <p>
+            <img src="images/character-sight.png">You see here:<br>
+                <span class="character-sight indent"></span>
+        </p>
+    </section>
+    
+    <!--<div id="character">
         <section class="statistics">
             <div class="level">
                 <strong>≡</strong> Dungeon level: <span>1</span>
@@ -52,7 +76,7 @@
                 <span>Nothing</span>
             </div>
         </section>
-    </div>
+    </div>-->
     
     <section class="screen welcome">
 <pre class="logo"> ____ ___  ___ _              _____             _ _            _____  _      

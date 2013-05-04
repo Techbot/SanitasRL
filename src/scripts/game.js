@@ -183,10 +183,10 @@ Game.prototype.turn = function() {
 Game.prototype.updateInterface = function() {
     'use strict';
 
-    $('.level span').text(this.dungeon.level);
+    $('.dungeon-level').text(this.dungeon.level);
     
     // DEBUG
-    $('.turn span').text(this.turnCounter);
+    $('.dungeon-turn').text(this.turnCounter);
     
     var look = '',
         position = {
@@ -196,19 +196,19 @@ Game.prototype.updateInterface = function() {
     
     if(this.pointIsInsideFOV(position.x, position.y) === true) {
         if(this.dungeon.cells[position.x][position.y].look(this.player) !== undefined) {
-            look += '<span>' + this.dungeon.cells[position.x][position.y].look(this.player) + '</span>';
+            look += this.dungeon.cells[position.x][position.y].look(this.player) + '<br>';
         }
         if(this.dungeon.monsterAt(position.x, position.y) !== undefined) {
-            look += '<span>' + this.dungeon.monsterAt(position.x, position.y).displayName() + '</span>';
+            look += this.dungeon.monsterAt(position.x, position.y).displayName() + '<br>';
         }
         if(this.dungeon.itemAt(position.x, position.y) !== undefined) {
-            look += '<span>' + this.dungeon.itemAt(position.x, position.y).displayName() + '</span>';
+            look += this.dungeon.itemAt(position.x, position.y).displayName() + '<br>';
         }
     } else {
-        look = '<span>You can\'t see that far</span>';
+        look = 'You can\'t see that far';
     }
     
-    $('#character .look').html(look === '' ? '<span>Nothing</span>' : look);
+    $('.character-sight').html(look === '' ? 'Nothing' : look);
 };
 
 Game.prototype.updateAmulet = function() {
