@@ -1,64 +1,64 @@
 <!doctype html>
 <html lang="en-GB">
-    <head>
-        <meta charset="utf-8" />
-        <title>SanitasRL - 7DRL2013</title>
-        <link rel="icon" href="favicon.ico" />
-        <link href="stylesheet.css" rel="stylesheet" />
-    </head>
-    <body>
-        <canvas id="background"></canvas>
-        <canvas id="foreground"></canvas>
-        <canvas id="fov"></canvas>
+<head>
+    <meta charset="utf-8">
+    <title>SanitasRL</title>
+    <link rel="icon" href="favicon.ico">
+    <link rel="stylesheet" href="stylesheet.css">
+</head>
+<body>
+    <canvas id="background"></canvas>
+    <canvas id="foreground"></canvas>
+    <canvas id="fov"></canvas>
 
-        <div id="character" width="300">
-            <section class="statistics">
-                <div class="level">
-                    <strong>≡</strong> Dungeon level: <span>1</span>
-                </div>
-                <div class="health">
-                    <strong>❤</strong> Health: <span class="red"></span>
-                </div>
-                <div class="damage">
-                    <strong>★</strong> Damage: <span class="blue"></span>
-                </div>
-                <div class="defence">
-                    <strong>★</strong> Defence: <span class="blue"></span>
-                </div>
-                <div class="hit">
-                    <strong>★</strong> Hit chance: <span class="blue"></span>
-                </div>
-                <div class="turn">
-                    <strong>★</strong> Turn: <span class="blue"></span>
-                </div>
-            </section>
+    <div id="character" width="300">
+        <section class="statistics">
+            <div class="level">
+                <strong>≡</strong> Dungeon level: <span>1</span>
+            </div>
+            <div class="health">
+                <strong>❤</strong> Health: <span class="red"></span>
+            </div>
+            <div class="damage">
+                <strong>★</strong> Damage: <span class="blue"></span>
+            </div>
+            <div class="defence">
+                <strong>★</strong> Defence: <span class="blue"></span>
+            </div>
+            <div class="hit">
+                <strong>★</strong> Hit chance: <span class="blue"></span>
+            </div>
+            <div class="turn">
+                <strong>★</strong> Turn: <span class="blue"></span>
+            </div>
+        </section>
 
-            <section class="equipment">
-                <div class="armour">
-                    <strong>★</strong> <span class="name"></span>
-                </div>
+        <section class="equipment">
+            <div class="armour">
+                <strong>★</strong> <span class="name"></span>
+            </div>
 
-                <div class="weapon">
-                    <strong>★</strong> <span class="name"></span>
-                </div>
+            <div class="weapon">
+                <strong>★</strong> <span class="name"></span>
+            </div>
 
-                <div class="jewelry">
-                    <strong>★</strong> <span class="name"></span>
-                </div>
-            </section>
+            <div class="jewelry">
+                <strong>★</strong> <span class="name"></span>
+            </div>
+        </section>
 
-            <section class="see">
-                <div>You see here:</div>
-                <div class="look">
-                    <span>Nothing</span>
-                </div>
-            </section>
-        </div>
+        <section class="see">
+            <div>You see here:</div>
+            <div class="look">
+                <span>Nothing</span>
+            </div>
+        </section>
+    </div>
 
-        <div id="log"></div>
+    <div id="log"></div>
 
-        <section class="background"></section>
-        <section class="screen welcome">
+    <section class="background"></section>
+    <section class="screen welcome">
 <pre class="logo"> ____ ___  ___ _              _____             _ _            _____  _      
 |__  |   \| _ \ |            / ____|           (_) |          |  __ \| |     
   / /| |) |   / |__         | (___   __ _ _ __  _| |_ __ _ ___| |__) | |     
@@ -137,23 +137,23 @@ You can press <span>ESC</span> at any time to bring up this help window. Anyways
          \|/
           `</pre>
 <pre class="bottom">Press <span>ENTER</span> if you want to do another run</pre>
-        </section>
+    </section>
 
-        <script src="scripts/library/jquery-1.9.1.min.js"></script>
-        <script src="scripts/library/jquery.imgpreload.min.js"></script>
-        <script src="scripts/library/adjustedRandom.js"></script>
-        <script src="scripts/library/directions.js"></script>
-        <script src="scripts/library/keys.js"></script>
-        
-        <script src="scripts/log.js"></script>
-        <script src="scripts/tiles.js"></script>
-        <script src="scripts/items.js"></script>
-        <script src="scripts/monsters.js"></script>
-        <script src="scripts/pathfinder.js"></script>
-        <script src="scripts/player.js"></script>
-        <script src="scripts/dungeon.js"></script>
-        <script src="scripts/game.js"></script>
-        <script src="scripts/render.js"></script>
-        <script src="scripts/bootstrap.js"></script>
-    </body>
+    <script src="scripts/library/jquery-1.9.1.min.js"></script>
+    <script src="scripts/library/jquery.imgpreload.min.js"></script>
+    <script src="scripts/library/adjustedRandom.js"></script>
+    <script src="scripts/library/directions.js"></script>
+    <script src="scripts/library/keys.js"></script>
+    
+    <script src="scripts/log.js"></script>
+    <script src="scripts/tiles.js"></script>
+    <script src="scripts/items.js"></script>
+    <script src="scripts/monsters.js"></script>
+    <script src="scripts/pathfinder.js"></script>
+    <script src="scripts/player.js"></script>
+    <script src="scripts/dungeon.js"></script>
+    <script src="scripts/game.js"></script>
+    <script src="scripts/render.js"></script>
+    <script src="scripts/bootstrap.js"></script>
+</body>
 </html>
