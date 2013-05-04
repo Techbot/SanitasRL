@@ -5,11 +5,7 @@
  */
 @font-face {
     font-family: 'DejaVu Sans Mono';
-    src: url('font/DejaVuSansMono-webfont.eot');
-    src: url('font/DejaVuSansMono-webfont.eot?#iefix') format('embedded-opentype'),
-         url('font/DejaVuSansMono-webfont.woff') format('woff'),
-         url('font/DejaVuSansMono-webfont.ttf') format('truetype'),
-         url('font/DejaVuSansMono-webfont.svg#DejaVuSansMonoBook') format('svg');
+    src: url('DejaVuSansMono.woff') format('woff');
     font-weight: normal;
     font-style: normal;
 }
