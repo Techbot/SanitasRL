@@ -111,10 +111,14 @@ Game.prototype.updateCamera = function(dx, dy) {
     'use strict';
 
     this.camera = {
-        x: dx - Math.ceil(this.width.cells / 2),
-        y: dy - Math.ceil(this.height.cells / 2),
-        x2: dx + Math.ceil(this.width.cells / 2),
-        y2: dy + Math.ceil(this.height.cells / 2)
+        //x: dx - Math.ceil(this.width.cells / 2),
+        //y: dy - Math.ceil(this.height.cells / 2),
+        //x2: dx + Math.ceil(this.width.cells / 2),
+        //y2: dy + Math.ceil(this.height.cells / 2)
+        x: dx - 15,
+        y: dy - 9,
+        x2: dx + 15,
+        y2: dy + 9,
     };
 };
 
@@ -126,9 +130,13 @@ Game.prototype.resize = function(e) {
         height = parseInt($(window).height(), 10);
 
     // Update the canvases with the new width and height
-    $('canvas#background').attr('width', width - 300).attr('height', height);
-    $('canvas#foreground').attr('width', width - 300).attr('height', height);
-    $('canvas#fov').attr('width', width - 300).attr('height', height);
+    //$('canvas#background').attr('width', width - 300).attr('height', height);
+    //$('canvas#foreground').attr('width', width - 300).attr('height', height);
+    //$('canvas#fov').attr('width', width - 300).attr('height', height);
+    
+    $('canvas#background').attr({ 'width': 960, 'height': 576});
+    $('canvas#foreground').attr({ 'width': 960, 'height': 576});
+    $('canvas#fov').attr({ 'width': 960, 'height': 576});
 
     // Update the size of the viewport
     this.width = {
