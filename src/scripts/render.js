@@ -85,7 +85,7 @@ Game.prototype.newRender = function(fov) {
 
                 if(this.dungeon.cells[x][y].id !== Tile.EMPTY.id && this.dungeon.cells[x][y].id !== Tile.BOSS_FOV_FIX.id) {
                     t = this.dungeon.cells[x][y].image(this.dungeon.cells[x][y + 1].id, this.player);
-                    this.canvas.drawImage(this.images.tileset, t.x * 32, t.y * 32, 32, 32, (x - this.camera.x) * this.tileSize, (y - this.camera.y) * this.tileSize, this.tileSize, this.tileSize);
+                    this.canvas.drawImage(this.images.tileset, t.x * 16, t.y * 16, 16, 16, (x - this.camera.x) * this.tileSize, (y - this.camera.y) * this.tileSize, this.tileSize, this.tileSize);
                 }
 
             }
@@ -103,7 +103,7 @@ Game.prototype.newRender = function(fov) {
             && this.dungeon.visited[this.dungeon.items[i].x][this.dungeon.items[i].y] === true) {
 
             t = this.dungeon.items[i].image;
-            this.canvas.drawImage(this.images.items, t.x * 32, t.y * 32, 32, 32, (this.dungeon.items[i].x - this.camera.x) * this.tileSize, (this.dungeon.items[i].y - this.camera.y) * this.tileSize, this.tileSize, this.tileSize);
+            this.canvas.drawImage(this.images.items, t.x * 16, t.y * 16, 16, 16, (this.dungeon.items[i].x - this.camera.x) * this.tileSize, (this.dungeon.items[i].y - this.camera.y) * this.tileSize, this.tileSize, this.tileSize);
         }
     }
 
@@ -116,13 +116,13 @@ Game.prototype.newRender = function(fov) {
             && this.pointIsInsideFOV(this.dungeon.monsters[i].x, this.dungeon.monsters[i].y)) {
 
             t = this.dungeon.monsters[i].image;
-            this.canvas.drawImage(this.images.monsters, t.x * 32, t.y * 32, 32, 32, (this.dungeon.monsters[i].x - this.camera.x) * this.tileSize, (this.dungeon.monsters[i].y - this.camera.y) * this.tileSize, this.tileSize, this.tileSize);
+            this.canvas.drawImage(this.images.monsters, t.x * 16, t.y * 16, 16, 16, (this.dungeon.monsters[i].x - this.camera.x) * this.tileSize, (this.dungeon.monsters[i].y - this.camera.y) * this.tileSize, this.tileSize, this.tileSize);
 
         }
     }
 
     //this.canvas.drawImage(this.images.player, (this.player.x - this.camera.x) * this.tileSize, (this.player.y - this.camera.y) * this.tileSize);
-    this.canvas.drawImage(this.images.player, 0, 0, 32, 32, (this.player.x - this.camera.x) * this.tileSize, (this.player.y - this.camera.y) * this.tileSize, this.tileSize, this.tileSize);
+    this.canvas.drawImage(this.images.player, 0, 0, 16, 16, (this.player.x - this.camera.x) * this.tileSize, (this.player.y - this.camera.y) * this.tileSize, this.tileSize, this.tileSize);
     
     if(this.mode === this.modes.LOOK || this.mode === this.modes.TELEKINESIS) {
         this.canvas.strokeStyle = '#0f0';
