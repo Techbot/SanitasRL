@@ -91,7 +91,7 @@ Monster.prototype.turn = function(player, dungeon, turn) {
 
                 // check if we can hit the player
                 if(Math.adjustedRandom(0, 100) > this.hit + (5 * player.calcDefence())) {
-                    Messages.log('The ' + this.name + ' tries to hit you but misses.', Messages.GRAY);
+                    // TODO: Notify user about the monster missing you
                 } else {
                     dmg = Math.max(0.25, this.calcDamage() - player.calcDefence());
 
@@ -100,10 +100,10 @@ Monster.prototype.turn = function(player, dungeon, turn) {
                         player.lastHitPro = 'to';
                         player.lastHit = this.prefix.toLowerCase() + ' ' + this.name;
                         
-                        Messages.log('The ' + this.name + ' dealt ' + dmg + ' damage to you.', Messages.YELLOW);
+                        // TODO: Notify user about the monster dealing damage to you
                         player.updateInterface();
                     } else {
-                        Messages.log('The ' + this.name + ' hits you but deal no signifigant damage.', Messages.GRAY);
+                        // TODO: Notify user about the monster not dealing damage to you
                     }
                 }
 
@@ -120,7 +120,7 @@ Monster.prototype.turn = function(player, dungeon, turn) {
             
                 // we should charge a fireball (every 7th turn)
                 if((turn - this.startTurn) % 7 === 0) {
-                    Messages.log('The dragon is charging a fireball', Messages.YELLOW);
+                    // TODO: Notify user about the dragon charging a fireball
                     this.chargingFireball = true;
                     this.chargingBegan = turn;
                     this.fireballPosition = {
@@ -139,7 +139,7 @@ Monster.prototype.turn = function(player, dungeon, turn) {
 
                         // check if we can hit the player
                         if(Math.adjustedRandom(0, 100) > this.hit + (5 * player.calcDefence())) {
-                            Messages.log('The ' + this.name + ' tries to hit you but misses.', Messages.GRAY);
+                            // TODO: Notify user about the dragon missing you
                         } else {
                             dmg = Math.max(0.25, this.calcDamage() - player.calcDefence());
 
@@ -147,10 +147,10 @@ Monster.prototype.turn = function(player, dungeon, turn) {
                                 player.health -= dmg;
                                 player.lastHitPro = 'to';
                                 player.lastHit = this.prefix.toLowerCase() + ' ' + this.name;
-                                Messages.log('The ' + this.name + ' dealt ' + dmg + ' damage to you.', Messages.YELLOW);
+                                // TODO: Notify user about the dragon dealing damage to you
                                 player.updateInterface();
                             } else {
-                                Messages.log('The ' + this.name + ' hits you but deal no signifigant damage.', Messages.GRAY);
+                                // TODO: Notify user about the dragon not dealing damage to you
                             }
                         }
 
@@ -168,7 +168,7 @@ Monster.prototype.turn = function(player, dungeon, turn) {
             } else {
                 if(turn - this.chargingBegan === 2) {
                     this.chargingFireball = false;
-                    Messages.log('The dragon fires away a fireball.', Messages.YELLOW);
+                    // TODO: Notify user about the dragon firing a fireball
                     
                     if(dungeon.cells[this.fireballPosition.x][this.fireballPosition.y].id !== Tile.BOSS_HALLWAY.id) {
                         dungeon.cells[this.fireballPosition.x][this.fireballPosition.y] = Tile.FIREBALL;
@@ -179,7 +179,7 @@ Monster.prototype.turn = function(player, dungeon, turn) {
                         player.lastHitPro = 'by getting hit by';
                         player.lastHit = 'a fireball';
                         player.updateInterface();
-                        Messages.log('You take 2 damage from the fireball.', Messages.YELLOW);
+                        // TODO: Notify user about you taking damage from the fireball
                     }
                 }
             }

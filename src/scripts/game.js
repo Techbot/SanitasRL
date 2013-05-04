@@ -88,7 +88,6 @@ Game.prototype.initialize = function() {
     // ???
     this.fov = this.calculateFOV();
     
-    Messages.clear();
     
     // ???
     this.updateInterface();
@@ -201,7 +200,6 @@ Game.prototype.turn = function() {
         
         // Show the death message
         this.state = 'death';
-        Messages.clear();
         $('.death span.turns').text(this.turnCounter);
         $('.death span.lastHit').text(this.player.lastHitPro);
         $('.death span.enemy').text(this.player.lastHit);
@@ -259,7 +257,7 @@ Game.prototype.updateAmulet = function() {
                     
                     if(this.amulet_glowing === false) {
                         this.amulet_glowing = true;
-                        Messages.log('Your amulet starts glowing, enemies are near.', Messages.YELLOW);
+                        // TODO: Notify user about amulet glowing
                     }
                 
                 }
@@ -268,7 +266,7 @@ Game.prototype.updateAmulet = function() {
 
         if(enemies === false && this.amulet_glowing === true) {
             this.amulet_glowing = false;
-            Messages.log('Your amulet stops glowing, no enemies are near.', Messages.YELLOW);
+            // TODO: Notify user about amulet not glowing
         }
     }
 };
@@ -484,7 +482,7 @@ Game.prototype.keydown = function(e) {
                         this.player.updateInterface();
                         this.dungeon.cells[this.player.x][this.player.y - 1] = Tile.SHRINE_USED;
                         
-                        Messages.log('You gained ' + (1 + (this.dungeon.level / 2)) + ' health points for drinking from the well, it is now empty.');
+                        // TODO: Notify user about gaining health from drinking and the well being exhausted
                         
                         // UPDATE THE TURN COUNTER
                         this.turn();
@@ -493,7 +491,7 @@ Game.prototype.keydown = function(e) {
                         this.player.updateInterface();
                         this.dungeon.cells[this.player.x + 1][this.player.y] = Tile.SHRINE_USED;
                         
-                        Messages.log('You gained ' + (1 + (this.dungeon.level / 2)) + ' health points for drinking from the well, it is now empty.');
+                        // TODO: Notify user about gaining health from drinking and the well being exhausted
                         
                         // UPDATE THE TURN COUNTER
                         this.turn();
@@ -502,7 +500,7 @@ Game.prototype.keydown = function(e) {
                         this.player.updateInterface();
                         this.dungeon.cells[this.player.x][this.player.y + 1] = Tile.SHRINE_USED;
                         
-                        Messages.log('You gained ' + (1 + (this.dungeon.level / 2)) + ' health points for drinking from the well, it is now empty.');
+                        // TODO: Notify user about gaining health from drinking and the well being exhausted
                         
                         // UPDATE THE TURN COUNTER
                         this.turn();
@@ -511,7 +509,7 @@ Game.prototype.keydown = function(e) {
                         this.player.updateInterface();
                         this.dungeon.cells[this.player.x - 1][this.player.y] = Tile.SHRINE_USED;
                         
-                        Messages.log('You gained ' + (1 + (this.dungeon.level / 2)) + ' health points for drinking from the well, it is now empty.');
+                        // TODO: Notify user about gaining health from drinking and the well being exhausted
                         
                         // UPDATE THE TURN COUNTER
                         this.turn();
@@ -538,7 +536,7 @@ Game.prototype.keydown = function(e) {
                     // Move
                     
                     if(this.dungeon.cells[newPosition.x][newPosition.y].id === Tile.BOSS_DOOR.id) {
-                        Messages.log('You\'re about to enter the boss lair, are you ready?', Messages.BLUE);
+                        // TODO: Notify user about entering the boss lair
                         this.dungeon.cells[newPosition.x][newPosition.y] = Tile.BOSS_SECOND_DOOR;
                     } else {
                         this.player.x = newPosition.x;
@@ -562,7 +560,7 @@ Game.prototype.keydown = function(e) {
                                 mess += ', ' + this.dungeon.monsterAt(newPosition.x, newPosition.y).health + ' health remaining.';
                             }
                         
-                            Messages.log(mess, Messages.DEFAULT);
+                            // TODO: Notify user about combat (variable: mess)
                             
                             if(this.dungeon.monsterAt(newPosition.x, newPosition.y).health <= 0) {
                             
@@ -574,8 +572,8 @@ Game.prototype.keydown = function(e) {
                                     $('.background').fadeIn(1500);
                                     $('.score').fadeIn(1500);
                                 }
-                            
-                                Messages.log('The ' + this.dungeon.monsterAt(newPosition.x, newPosition.y).name + ' dies.', Messages.RED);
+                                
+                                // TODO: Notify user about the monster dying
                                 
                                 // if the monster has items, drop one of them
                                 if(this.dungeon.monsterAt(newPosition.x, newPosition.y).weapon !== undefined) {
@@ -647,10 +645,10 @@ Game.prototype.keydown = function(e) {
                             }
                     
                         } else {
-                            Messages.log('You hit the ' + this.dungeon.monsterAt(newPosition.x, newPosition.y).name + ' but deal no signifigant damage.', Messages.GRAY);
+                            // TODO: Notify user about you hitting but not dealing any damage
                         }
                     } else {
-                        Messages.log('You miss the ' + this.dungeon.monsterAt(newPosition.x, newPosition.y).name);
+                        // TODO: Notify user about you missing
                     }
                     
                     // update all other entities
@@ -667,7 +665,7 @@ Game.prototype.keydown = function(e) {
                         this.player.lastHitPro = 'by opening';
                         this.player.lastHit = 'a trapped door';
                         this.player.updateInterface();
-                        Messages.log('You took 0.5 damage from a trap.', Messages.YELLOW);
+                        // TODO: Notify user about you taking 0.5 damage from the trap
                     }
                     
                     this.dungeon.cells[this.player.x][this.player.y] = Tile.TRAP_SPRUNG;
@@ -678,7 +676,7 @@ Game.prototype.keydown = function(e) {
                         this.player.lastHitPro = 'by opening';
                         this.player.lastHit = 'a trapped door';
                         this.player.updateInterface();
-                        Messages.log('You took 1.5 damage from a trap.', Messages.YELLOW);
+                        // TODO: Notify user about you taking 1.5 damage from the trap
                     }
 
                     this.dungeon.cells[this.player.x][this.player.y] = Tile.BARS_TRAP_SPRUNG;
@@ -697,9 +695,9 @@ Game.prototype.keydown = function(e) {
                         this.dungeon.monsters.push(new Monster(this.player.x - 1, this.player.y, Monsters.random(this.dungeon.level)));
                         this.dungeon.monsters.push(new Monster(this.player.x, this.player.y - 1, Monsters.random(this.dungeon.level)));
                         
-                        Messages.log('You hear a tick and suddenly four monsters appear out of nowhere.', Messages.DEFAULT);
+                        // TODO: Notify user about you triggering the monster trap
                     } else {
-                        Messages.log('You see the contraption on the floor and quickly disarm the trap before tripping on it.', Messages.DEFAULT);
+                        // TODO: Notify user about you noticing the monster trap
                     }
                     this.dungeon.cells[this.player.x][this.player.y] = Tile.FLOOR;
                     break;
@@ -733,7 +731,7 @@ Game.prototype.keydown = function(e) {
                     this.player.health -= 2;
                     this.player.lastHitPro = 'by stepping into';
                     this.player.lastHit = 'a fire';
-                    Messages.log('You take 2 damage from the fire.', Messages.YELLOW);
+                    // TODO: Notify user about taking 2 damage from the fire
                     break;
             }
             

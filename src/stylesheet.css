@@ -136,20 +136,3 @@ span.flavour {
     padding-top: 2px;
     display: block;
 }
-
-/* The message log */
-#log {
-    width: 800px;
-    height: 140px;
-    padding: 10px;
-    bottom: 0;
-    left: 0;
-    border-top: 2px solid #8a1e51;
-    border-right: 2px solid #8a1e51;
-    font: normal 400 14px/1.4em 'DejaVu Sans Mono', monospace;
-    color: #fff;
-    background: rgba(0, 0, 0, 0.7);
-}
-#log span {
-    display: block;
-}
