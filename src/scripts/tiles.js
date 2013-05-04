@@ -116,7 +116,7 @@ var Tile = {
             'use strict';
             return {
                 x: 5,
-                y: tileBelow === Tile.WALL.id ? 1 : 0
+                y: 0
             };
         }
     },
@@ -164,7 +164,7 @@ var Tile = {
             'use strict';
             return {
                 x: player.armour.id === 'rogues_hide' ? 6 : 5, // Should check for the effect player.effects.indexOf(Effects.spotTraps)?
-                y: tileBelow === Tile.WALL.id ? 1 : 0
+                y: 0
             };
         }
     },
@@ -292,7 +292,7 @@ var Tile = {
             'use strict';
             return {
                 x: player.armour.id === 'rogues_hide' ? 6 : 5, // Should check for the effect player.effects.indexOf(Effects.spotTraps)?
-                y: tileBelow === Tile.WALL.id ? 1 : 0
+                y: 0
             };
         }
     },
@@ -352,7 +352,7 @@ var Tile = {
             'use strict';
             return {
                 x: 5,
-                y: tileBelow === Tile.WALL.id ? 1 : 0
+                y: 0
             };
         }
     },
@@ -466,7 +466,7 @@ var Tile = {
             'use strict';
             return {
                 x: 5,
-                y: tileBelow === Tile.WALL.id ? 1 : 0
+                y: 0
             };
         }
     },
@@ -486,7 +486,7 @@ var Tile = {
             'use strict';
             return {
                 x: 5,
-                y: tileBelow === Tile.WALL.id ? 1 : 0
+                y: 0
             };
         }
     },

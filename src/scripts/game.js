@@ -8,7 +8,6 @@ var Game = function() {
 
     // Get the canvas context from the DOM
     this.canvas = document.getElementById('canvas').getContext('2d');
-    this.fovoverlay = document.getElementById('fov').getContext('2d');
     
     // The size of the individual tiles for the viewport
     this.tileSize = 16;
@@ -76,15 +75,12 @@ Game.prototype.initialize = function() {
     // If you have the Amulet of Detection this variable will help controlling if the amulet is currently glowing
     this.amulet_glowing = false;
     
-    // ???
-    this.fov = this.calculateFOV();
-    
     
     // ???
     this.updateInterface();
     
     // ???
-    this.dungeon.updateVisitedCells(this.fov);
+    //this.dungeon.updateVisitedCells(this.fov);
     
     this.shouldRender = true;
     
@@ -102,10 +98,10 @@ Game.prototype.updateCamera = function(dx, dy) {
         //y: dy - Math.ceil(this.height.cells / 2),
         //x2: dx + Math.ceil(this.width.cells / 2),
         //y2: dy + Math.ceil(this.height.cells / 2)
-        x: dx - 15,
-        y: dy - 9,
-        x2: dx + 15,
-        y2: dy + 9,
+        x: dx - 30,
+        y: dy - 18,
+        x2: dx + 29,
+        y2: dy + 17,
     };
 };
 
@@ -118,7 +114,6 @@ Game.prototype.resize = function(e) {
 
     // Update the canvases with the new width and height
     $('canvas#canvas').attr({ 'width': 960, 'height': 576});
-    $('canvas#fov').attr({ 'width': 960, 'height': 576});
     
     // Update the camera & render if the player & camera has been defined
     if(this.player !== undefined || this.camera !== undefined) {
@@ -128,13 +123,10 @@ Game.prototype.resize = function(e) {
 
 Game.prototype.render = function() {
     'use strict';
-
-    //if(this.shouldRender === true) {    
-        this.updateCamera(this.player.x, this.player.y);
-        this.newRender();
-        //this.renderFOV(this.fov);
-        this.shouldRender = false;
-    //}
+ 
+    this.updateCamera(this.player.x, this.player.y);
+    this.newRender();
+    this.shouldRender = false;
     
     window.requestAnimationFrame(this.render.bind(this));
 };
@@ -145,12 +137,12 @@ Game.prototype.render = function() {
 Game.prototype.turn = function() {
     var i;
     for(i = 0; i < this.dungeon.monsters.length; i += 1) {
-        if(this.pointIsInsideFOV(this.dungeon.monsters[i].x, this.dungeon.monsters[i].y)) {
+        //if(this.pointIsInsideFOV(this.dungeon.monsters[i].x, this.dungeon.monsters[i].y)) {
             this.dungeon.monsters[i].lastKnownPositionOfPlayer = {
                 x: this.player.x,
                 y: this.player.y
             };
-        }
+        //}
         
         if(this.dungeon.monsters[i].lastKnownPositionOfPlayer !== undefined) {
             this.dungeon.monsters[i].turn(this.player, this.dungeon, this.turnCounter);
@@ -194,7 +186,7 @@ Game.prototype.updateInterface = function() {
             y: (this.mode === this.modes.MOVEMENT) ? this.player.y : this.cursor.y
         };
     
-    if(this.pointIsInsideFOV(position.x, position.y) === true) {
+    //if(this.pointIsInsideFOV(position.x, position.y) === true) {
         if(this.dungeon.cells[position.x][position.y].look(this.player) !== undefined) {
             look += this.dungeon.cells[position.x][position.y].look(this.player) + '<br>';
         }
@@ -204,9 +196,9 @@ Game.prototype.updateInterface = function() {
         if(this.dungeon.itemAt(position.x, position.y) !== undefined) {
             look += this.dungeon.itemAt(position.x, position.y).displayName() + '<br>';
         }
-    } else {
+    /*} else {
         look = 'You can\'t see that far';
-    }
+    }*/
     
     $('.character-sight').html(look === '' ? 'Nothing' : look);
 };
@@ -507,7 +499,7 @@ Game.prototype.keydown = function(e) {
                         this.player.x = newPosition.x;
                         this.player.y = newPosition.y;
                             
-                        this.fov = this.calculateFOV();
+                        //this.fov = this.calculateFOV();
                         
                         // update all other entities
                         // they should attack here?
@@ -620,7 +612,7 @@ Game.prototype.keydown = function(e) {
                     this.turn();
                 }
             }
-            this.dungeon.updateVisitedCells(this.fov);
+            //this.dungeon.updateVisitedCells(this.fov);
             
             // Check for special behaviour on tiles
             switch(this.dungeon.cells[this.player.x][this.player.y].id) {
