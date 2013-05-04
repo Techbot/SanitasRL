@@ -20,17 +20,14 @@ $(function() {
     $(document).keydown(function(e) {
         // If we're showing a screen, remove it if the user press enter
         if(game.state === 'welcome' && e.which === Keys.VK_ENTER) {
-            $('.background').fadeOut();
-            $('.screen').fadeOut();
+            $('.window').fadeOut();
             game.state = 'running';
         } else if(game.state === 'death' && e.which === Keys.VK_ENTER) {
-            $('.background').fadeOut();
-            $('.screen').fadeOut();
+            $('.window').fadeOut();
             game.initialize();
             game.state = 'running';
         } else if(game.state === 'score' && e.which === Keys.VK_ENTER) {
-            $('.background').fadeOut();
-            $('.screen').fadeOut();
+            $('.window').fadeOut();
             game.initialize();
             game.state = 'running';
         } else {

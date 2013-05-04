@@ -1,8 +1,3 @@
-/*
- * SanitasRL - 7DRL2013
- * Developer: codejunkie (albin.odervall@gmail.com)
- * URL: http://codejunkie.se/sanitasrl/
- */
 @font-face {
     font-family: 'DejaVu Sans Mono';
     src: url('DejaVuSansMono.woff') format('woff');
@@ -10,13 +5,15 @@
     font-style: normal;
 }
 
-/* Remove any scrollbars */
 body {
     background: #111;
     font: normal 400 14px/1.4em 'DejaVu Sans Mono', monospace;
     text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.9);
     color: #fff;
 }
+
+.red  { color: #c00; }
+.cyan { color: #00d3d3; }
 
 canvas {
     width: 960px;
@@ -27,37 +24,23 @@ canvas {
     left: 50%;
 }
 
-section.screen {
-    width: 960px;
-    height: 600px;
-    padding: 15px 20px 20px 20px;
-    border: 2px solid #8a1e51;
-    background: black;
-    position: absolute;
+.window {
+    width: 1180px;
+    height: 576px;
+    margin: -288px 0 0 -590px;
+    position: fixed;
     top: 50%;
     left: 50%;
-    margin: -300px 0 0 -480px;
-    font: normal 400 14px/1.4em 'DejaVu Sans Mono', monospace;
-    color: white;
+    background: #111;
 }
-section.screen pre {
-    font: normal 400 14px/1.4em 'DejaVu Sans Mono', monospace;
+.window pre {
+    font: inherit;
 }
-section.screen pre.logo {
+.window .logo {
+    line-height: 1.2em;
+}
+.window .center {
     text-align: center;
-}
-section.screen pre.body {
-    margin-top: 20px;
-}
-section.screen pre.bottom {
-    text-align: center;
-    position: absolute;
-    bottom: 30px;
-    width: 100%;
-}
-span.blue, pre span:not(.lastHit), pre a { color: #00d3d3; }
-pre a {
-    text-decoration: none;
 }
 
 .sidebar {
@@ -67,8 +50,7 @@ pre a {
     position: fixed;
     top: 50%;
     left: 50%;
-    font: normal 400 14px/1.2em 'DejaVu Sans Mono', monospace;
-    color: #fff;
+    line-height: 1.2em;
 }
 .sidebar img {
     margin-right: 5px;
@@ -84,7 +66,4 @@ pre a {
 }
 .sidebar .indent:last-of-type {
     margin-bottom: 0;
-}
-.sidebar .red {
-    color: #c00;
 }
