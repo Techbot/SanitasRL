@@ -73,7 +73,7 @@ Dungeon.prototype.updateVisitedCells = function(bounds) {
 };
 
 Dungeon.prototype.generate = function() {
-    var generator = new ROT.Map.Digger(this.width, this.height);
+    var generator = new ROT.Map.Uniform(this.width, this.height);
     
     var x, y;
     for(x = 0; x < this.width; x += 1) {
@@ -90,4 +90,51 @@ Dungeon.prototype.generate = function() {
     };
     
     generator.create(generatorCallback.bind(this));
+    
+    var x, y;
+    for(x = 1; x < this.width - 1; x += 1) {
+        for(y = 1; y < this.height - 1; y += 1) {            
+            if(this.cells[x][y].id === Tile.FLOOR.id) {
+                // North
+                if(this.cells[x][y - 1].id === Tile.EMPTY.id) {
+                    this.cells[x][y - 1] = Tile.WALL;
+                }
+                
+                // North East
+                if(this.cells[x + 1][y - 1].id === Tile.EMPTY.id) {
+                    this.cells[x + 1][y - 1] = Tile.WALL;
+                }
+                
+                // East
+                if(this.cells[x + 1][y].id === Tile.EMPTY.id) {
+                    this.cells[x + 1][y] = Tile.WALL;
+                }
+                
+                // South East
+                if(this.cells[x + 1][y + 1].id === Tile.EMPTY.id) {
+                    this.cells[x + 1][y + 1] = Tile.WALL;
+                }
+                
+                // South
+                if(this.cells[x][y + 1].id === Tile.EMPTY.id) {
+                    this.cells[x][y + 1] = Tile.WALL;
+                }
+                
+                // South West
+                if(this.cells[x - 1][y + 1].id === Tile.EMPTY.id) {
+                    this.cells[x - 1][y + 1] = Tile.WALL;
+                }
+                
+                // West
+                if(this.cells[x - 1][y].id === Tile.EMPTY.id) {
+                    this.cells[x - 1][y] = Tile.WALL;
+                }
+                
+                // North West
+                if(this.cells[x - 1][y - 1].id === Tile.EMPTY.id) {
+                    this.cells[x - 1][y - 1] = Tile.WALL;
+                }
+            }
+        }
+    }
 };
