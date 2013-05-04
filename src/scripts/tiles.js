@@ -135,7 +135,7 @@ var Tile = {
         image: function() {
             'use strict';
             return {
-                x: 0,
+                x: 7,
                 y: 0
             };
         }
@@ -183,8 +183,8 @@ var Tile = {
         image: function() {
             'use strict';
             return {
-                x: 0,
-                y: 0
+                x: 7,
+                y: 1
             };
         }
     },
@@ -311,7 +311,7 @@ var Tile = {
         image: function() {
             'use strict';
             return {
-                x: 0,
+                x: 7,
                 y: 0
             };
         }
@@ -371,7 +371,7 @@ var Tile = {
         image: function() {
             'use strict';
             return {
-                x: 0,
+                x: 7,
                 y: 0
             };
         }
