@@ -7,8 +7,8 @@ var Dungeon = function() {
     'use strict';
 
     // The width and height of the dungeon
-    this.width = 70;
-    this.height = 70;
+    this.width = 60;
+    this.height = 36;
 
     // The depth level of this dungeon
     // The generate function generates a more difficult dungeon the higher this number is

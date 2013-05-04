@@ -10,17 +10,8 @@ var Game = function() {
     this.canvas = document.getElementById('canvas').getContext('2d');
     this.fovoverlay = document.getElementById('fov').getContext('2d');
     
-    // The size of the viewport in pixels and cells
-    this.width = {
-        px: undefined,
-        cells: undefined
-    };
-    this.height = {
-        px: undefined,
-        cells: undefined
-    };
     // The size of the individual tiles for the viewport
-    this.tileSize = 32;
+    this.tileSize = 16;
     
     // The images used as tilesets
     this.images = {
@@ -126,34 +117,8 @@ Game.prototype.resize = function(e) {
         height = parseInt($(window).height(), 10);
 
     // Update the canvases with the new width and height
-    //$('canvas#background').attr('width', width - 300).attr('height', height);
-    //$('canvas#foreground').attr('width', width - 300).attr('height', height);
-    //$('canvas#fov').attr('width', width - 300).attr('height', height);
-    
     $('canvas#canvas').attr({ 'width': 960, 'height': 576});
     $('canvas#fov').attr({ 'width': 960, 'height': 576});
-
-    // Update the size of the viewport
-    this.width = {
-        px: width - 300,
-        cells: Math.floor((width - 300) / this.tileSize)
-    };
-    this.height = {
-        px: height,
-        cells: Math.floor(height / this.tileSize)
-    };
-
-    if(this.height.px < 1000) {
-        $('div#character').css({
-            'font-size': '12px',
-            'top': '150px'
-        });
-    } else {
-        $('div#character').css({
-            'font-size': '14px',
-            'top': '225px'
-        });
-    }
     
     // Update the camera & render if the player & camera has been defined
     if(this.player !== undefined || this.camera !== undefined) {
