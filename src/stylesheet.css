@@ -76,12 +76,6 @@ pre a {
     text-decoration: none;
 }
 
-/* The right hand side bar */
-canvas#minimap {
-    right: 0;
-    border-left: 2px solid #8a1e51;
-}
-
 div#character {
     width: 300px;
     padding: 10px;

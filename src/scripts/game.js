@@ -10,7 +10,6 @@ var Game = function() {
     this.background = document.getElementById('background').getContext('2d');
     this.foreground = document.getElementById('foreground').getContext('2d');
     this.fovoverlay = document.getElementById('fov').getContext('2d');
-    this.minimap = document.getElementById('minimap').getContext('2d');
     
     // The size of the viewport in pixels and cells
     this.width = {
@@ -21,9 +20,8 @@ var Game = function() {
         px: undefined,
         cells: undefined
     };
-    // The size of the individual tiles for the viewport and minimap in pixels
+    // The size of the individual tiles for the viewport
     this.tileSize = 32;
-    this.minimapSize = 4;
     
     // The images used as tilesets
     this.images = {
@@ -149,19 +147,15 @@ Game.prototype.resize = function(e) {
     };
 
     if(this.height.px < 1000) {
-        this.minimapSize = 2;
         $('div#character').css({
             'font-size': '12px',
             'top': '150px'
         });
-        $('canvas#minimap').attr('height', '150');
     } else {
-        this.minimapSize = 3;
         $('div#character').css({
             'font-size': '14px',
             'top': '225px'
         });
-        $('canvas#minimap').attr('height', '225');
     }
     
     // Update the camera & render if the player & camera has been defined
@@ -178,7 +172,6 @@ Game.prototype.render = function() {
         this.renderBackground();
         this.renderForeground();
         this.renderFOV(this.fov);
-        this.renderMinimap();
         this.shouldRender = false;
     //}
     
