@@ -56,6 +56,9 @@ section.screen {
     font: normal 400 14px/1.4em 'DejaVu Sans Mono', monospace;
     color: white;
 }
+section.screen pre {
+    font: normal 400 14px/1.4em 'DejaVu Sans Mono', monospace;
+}
 section.screen pre.logo {
     text-align: center;
 }
