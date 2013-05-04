@@ -7,8 +7,7 @@ var Game = function() {
     'use strict';
 
     // Get the canvas context from the DOM
-    this.background = document.getElementById('background').getContext('2d');
-    this.foreground = document.getElementById('foreground').getContext('2d');
+    this.canvas = document.getElementById('canvas').getContext('2d');
     this.fovoverlay = document.getElementById('fov').getContext('2d');
     
     // The size of the viewport in pixels and cells
@@ -132,8 +131,7 @@ Game.prototype.resize = function(e) {
     //$('canvas#foreground').attr('width', width - 300).attr('height', height);
     //$('canvas#fov').attr('width', width - 300).attr('height', height);
     
-    $('canvas#background').attr({ 'width': 960, 'height': 576});
-    $('canvas#foreground').attr({ 'width': 960, 'height': 576});
+    $('canvas#canvas').attr({ 'width': 960, 'height': 576});
     $('canvas#fov').attr({ 'width': 960, 'height': 576});
 
     // Update the size of the viewport
@@ -169,8 +167,7 @@ Game.prototype.render = function() {
 
     //if(this.shouldRender === true) {    
         this.updateCamera(this.player.x, this.player.y);
-        this.renderBackground();
-        this.renderForeground();
+        this.newRender();
         this.renderFOV(this.fov);
         this.shouldRender = false;
     //}
