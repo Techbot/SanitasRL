@@ -187,7 +187,7 @@ Dungeon.prototype.generate = function() {
         }
         
         // Place items
-        this.items = [];
+        this.items.length = 0;
         
         var item, placed, rx, ry, free;
         for(i = 0; i < 10; i += 1) {
@@ -226,7 +226,7 @@ Dungeon.prototype.generate = function() {
         }
         
         // Place monsters
-        this.monsters = [];
+        this.monsters.length = 0;
         
         for(i = 0; i < 20; i += 1) {
             placed = false;
