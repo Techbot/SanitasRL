@@ -6,6 +6,25 @@
 var Game = function() {
     'use strict';
 
+    // Request Animation Frame shortcut
+    window.requestAnimationFrame = (function() {
+        return window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame;
+    }());
+    
+    // Bind to the keydown and keypress events
+    $(document).on('keydown', function(e) {
+        var key = e.which + (e.ctrlKey ? 400 : (e.altKey ? 600 : 0));
+        if(Keys.hasOwnProperty(key)) {
+            this.keydown(key, Keys[key]); // Should be input
+            return false;
+        }
+    }.bind(this)).on('keypress', function(e) {
+        if(Keys.hasOwnProperty(e.which + 200)) {
+            this.keydown(e.which + 200, Keys[e.which + 200]); // Should be input
+            return false;
+        }
+    }.bind(this));
+    
     // Get the canvas context from the DOM
     this.canvas = document.getElementById('canvas').getContext('2d');
     
@@ -231,6 +250,24 @@ Game.prototype.updateAmulet = function() {
 Game.prototype.keydown = function(code, key) {
     'use strict';
     
+    if(key === 'enter') {
+        switch(this.state) {
+            case 'welcome':
+                $('.window').fadeOut();
+                this.state = 'running';
+                break;
+            case 'death':
+                $('.window').fadeOut();
+                this.initialize();
+                this.state = 'running';
+                break;
+            case 'score':
+                $('.window').fadeOut();
+                this.initialize();
+                this.state = 'running';
+                break;
+        }
+    }
     
     if(this.state === 'running') {
     
