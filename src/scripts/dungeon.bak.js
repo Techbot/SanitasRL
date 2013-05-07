@@ -163,7 +163,7 @@ Dungeon.prototype.generate = function() {
             // Check if there is an empty adjecent cells and which direction it is in
             if(this.cells[randomX][randomY - 1] === Tile.EMPTY) {
                 // NORTH
-                direction = Direction.NORTH;
+                direction = ROT.NORTH;
 
                 startX = randomX - Math.floor(room.width / 2);
                 startY = randomY - 1 - room.height;
@@ -171,7 +171,7 @@ Dungeon.prototype.generate = function() {
                 endY = randomY - 2;
             } else if(this.cells[randomX + 1][randomY] === Tile.EMPTY) {
                 // EAST
-                direction = Direction.EAST;
+                direction = ROT.EAST;
 
                 startX = randomX + 2;
                 startY = randomY - Math.floor(room.height / 2);
@@ -179,7 +179,7 @@ Dungeon.prototype.generate = function() {
                 endY = randomY + Math.floor(room.height / 2);
             } else if(this.cells[randomX][randomY + 1] === Tile.EMPTY) {
                 // SOUTH
-                direction = Direction.SOUTH;
+                direction = ROT.SOUTH;
 
                 startX = randomX - Math.floor(room.width / 2);
                 startY = randomY + 2;
@@ -187,7 +187,7 @@ Dungeon.prototype.generate = function() {
                 endY = randomY + 1 + room.height;
             } else if(this.cells[randomX - 1][randomY] === Tile.EMPTY) {
                 // WEST
-                direction = Direction.WEST;
+                direction = ROT.WEST;
 
                 startX = randomX - 1 - room.width;
                 startY = randomY - Math.floor(room.height / 2);
@@ -287,7 +287,7 @@ Dungeon.prototype.generate = function() {
         // 7. Add a corridor between the new and old room
         this.cells[randomX][randomY] = Tile.FLOOR;
         switch(direction) {
-            case Direction.NORTH:
+            case ROT.NORTH:
                 // Floor
                 this.cells[randomX][randomY - 1] = corridorCell;
                 this.cells[randomX][randomY - 2] = floorCell;
@@ -295,7 +295,7 @@ Dungeon.prototype.generate = function() {
                 this.cells[randomX + 1][randomY - 1] = Tile.WALL;
                 this.cells[randomX - 1][randomY - 1] = Tile.WALL;
                 break;
-            case Direction.EAST:
+            case ROT.EAST:
                 // Floor
                 this.cells[randomX + 1][randomY] = corridorCell;
                 this.cells[randomX + 2][randomY] = floorCell;
@@ -303,7 +303,7 @@ Dungeon.prototype.generate = function() {
                 this.cells[randomX + 1][randomY + 1] = Tile.WALL;
                 this.cells[randomX + 1][randomY - 1] = Tile.WALL;
                 break;
-            case Direction.SOUTH:
+            case ROT.SOUTH:
                 // Floor
                 this.cells[randomX][randomY + 1] = corridorCell;
                 this.cells[randomX][randomY + 2] = floorCell;
@@ -311,7 +311,7 @@ Dungeon.prototype.generate = function() {
                 this.cells[randomX + 1][randomY + 1] = Tile.WALL;
                 this.cells[randomX - 1][randomY + 1] = Tile.WALL;
                 break;
-            case Direction.WEST:
+            case ROT.WEST:
                 // Floor
                 this.cells[randomX - 1][randomY] = corridorCell;
                 this.cells[randomX - 2][randomY] = floorCell;

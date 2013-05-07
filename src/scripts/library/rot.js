@@ -1,6 +1,8 @@
 /*
 	This is rot.js, the ROguelike Toolkit in JavaScript.
 	Version 0.5~dev, generated on Thu Apr  4 12:25:16 CEST 2013.
+    
+    This is a modified version of rot.js
 */
 
 /**
@@ -19,7 +21,17 @@ var ROT = {
 	/** Default height for display and map generators */
 	DEFAULT_HEIGHT: 25,
 
-	/** Directional constants. Ordering is important! */
+	/** Directional constants. */
+    NORTH:      0,
+    NORTH_EAST: 1,
+    EAST:       2,
+    SOUTH_EAST: 3,
+    SOUTH:      4,
+    SOUTH_WEST: 5,
+    WEST:       6,
+    NORTH_WEST: 7,
+    
+    /** Directional constants with relative x and y coordinates. It starts at north and goes clockwise. Ordering is important! */
 	DIRS: {
 		"4": [
 			[ 0, -1],

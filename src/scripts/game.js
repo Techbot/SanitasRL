@@ -551,35 +551,35 @@ Game.prototype.keydown = function(e) {
                                         };
                                         while((i.x === undefined && i.y === undefined) || tries < 8) {
                                             switch(tries) {
-                                                case Direction.NORTH:
+                                                case ROT.NORTH:
                                                     tempPosition.x = newPosition.x;
                                                     tempPosition.y = newPosition.y - 1;
                                                     break;
-                                                case Direction.NORTH_EAST:
+                                                case ROT.NORTH_EAST:
                                                     tempPosition.x = newPosition.x + 1;
                                                     tempPosition.y = newPosition.y - 1;
                                                     break;
-                                                case Direction.EAST:
+                                                case ROT.EAST:
                                                     tempPosition.x = newPosition.x + 1;
                                                     tempPosition.y = newPosition.y;
                                                     break;
-                                                case Direction.SOUTH_EAST:
+                                                case ROT.SOUTH_EAST:
                                                     tempPosition.x = newPosition.x + 1;
                                                     tempPosition.y = newPosition.y + 1;
                                                     break;
-                                                case Direction.SOUTH:
+                                                case ROT.SOUTH:
                                                     tempPosition.x = newPosition.x;
                                                     tempPosition.y = newPosition.y + 1;
                                                     break;
-                                                case Direction.SOUTH_WEST:
+                                                case ROT.SOUTH_WEST:
                                                     tempPosition.x = newPosition.x - 1;
                                                     tempPosition.y = newPosition.y + 1;
                                                     break;
-                                                case Direction.WEST:
+                                                case ROT.WEST:
                                                     tempPosition.x = newPosition.x - 1;
                                                     tempPosition.y = newPosition.y;
                                                     break;
-                                                case Direction.NORTH_WEST:
+                                                case ROT.NORTH_WEST:
                                                     tempPosition.x = newPosition.x - 1;
                                                     tempPosition.y = newPosition.y - 1;
                                             }
