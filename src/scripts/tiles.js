@@ -18,7 +18,8 @@ var Tile = {
             'use strict';
             return undefined;
         },
-        image: undefined
+        image: undefined,
+        colour: undefined
     },
     FLOOR: {
         id: 0,
@@ -38,7 +39,8 @@ var Tile = {
                 x: 0,
                 y: 0
             };
-        }
+        },
+        colour: '#444'
     },
     WALL: {
         id: 1,
@@ -58,7 +60,8 @@ var Tile = {
                 x: 3,
                 y: 0
             };
-        }
+        },
+        colour: '#a2a2a2'
     },
     WATER: {
         id: 2,
@@ -78,7 +81,8 @@ var Tile = {
                 x: 1,
                 y: 0
             };
-        }
+        },
+        colour: '#175ba9'
     },
     STAIRS: {
         id: 3,
@@ -98,7 +102,8 @@ var Tile = {
                 x: 4,
                 y: 0
             };
-        }
+        },
+        colour: '#a2a2a2'
     },
     DOOR: {
         id: 4,
@@ -118,7 +123,8 @@ var Tile = {
                 x: 5,
                 y: 0
             };
-        }
+        },
+        colour: '#a2a2a2'
     },
     DOOR_OPEN: {
         id: 5,
@@ -138,7 +144,8 @@ var Tile = {
                 x: 7,
                 y: 0
             };
-        }
+        },
+        colour: '#444'
     },
     TRAP: {
         id: 6,
@@ -166,7 +173,8 @@ var Tile = {
                 x: player.armour.id === 'rogues_hide' ? 6 : 5, // Should check for the effect player.effects.indexOf(Effects.spotTraps)?
                 y: 0
             };
-        }
+        },
+        colour: '#a2a2a2'
     },
     TRAP_SPRUNG: {
         id: 7,
@@ -186,7 +194,8 @@ var Tile = {
                 x: 7,
                 y: 1
             };
-        }
+        },
+        colour: '#444'
     },
     SHRINE: {
         id: 8,
@@ -206,7 +215,8 @@ var Tile = {
                 x: 3,
                 y: 1
             };
-        }
+        },
+        colour: '#8a1e51'
     },
     SHRINE_USED: {
         id: 9,
@@ -226,7 +236,8 @@ var Tile = {
                 x: 4,
                 y: 1
             };
-        }
+        },
+        colour: '#682444'
     },
     PILLAR: {
         id: 10,
@@ -246,7 +257,8 @@ var Tile = {
                 x: 1,
                 y: 1
             };
-        }
+        },
+        colour: '#a2a2a2'
     },
     BARS: {
         id: 11,
@@ -266,7 +278,8 @@ var Tile = {
                 x: 2,
                 y: 1
             };
-        }
+        },
+        colour: '#a2a2a2'
     },
     BARS_TRAP: {
         id: 12,
@@ -294,7 +307,8 @@ var Tile = {
                 x: player.armour.id === 'rogues_hide' ? 6 : 5, // Should check for the effect player.effects.indexOf(Effects.spotTraps)?
                 y: 0
             };
-        }
+        },
+        colour: '#a2a2a2'
     },
     BARS_TRAP_SPRUNG: {
         id: 13,
@@ -314,7 +328,8 @@ var Tile = {
                 x: 7,
                 y: 0
             };
-        }
+        },
+        colour: '#444'
     },
     BLOOD_STAINED_FLOOR: {
         id: 14,
@@ -334,7 +349,8 @@ var Tile = {
                 x: 2,
                 y: 0
             };
-        }
+        },
+        colour: '#c00'
     },
     BARS_DOOR: {
         id: 15,
@@ -354,7 +370,8 @@ var Tile = {
                 x: 5,
                 y: 0
             };
-        }
+        },
+        colour: '#a2a2a2'
     },
     BARS_DOOR_OPEN: {
         id: 23,
@@ -374,7 +391,8 @@ var Tile = {
                 x: 7,
                 y: 0
             };
-        }
+        },
+        colour: '#444'
     },
     MONSTER_SPAWNER: { // MAYBE OTHER TYPE?
         id: 16,
@@ -394,7 +412,8 @@ var Tile = {
                 x: 0,
                 y: 0
             };
-        }
+        },
+        colour: '#a2a2a2'
     },
     BOSS_WALL: {
         id: 17,
@@ -414,7 +433,8 @@ var Tile = {
                 x: 3,
                 y: 0
             };
-        }
+        },
+        colour: '#a2a2a2'
     },
     BOSS_FOV_FIX: {
         id: 19,
@@ -428,7 +448,7 @@ var Tile = {
             'use strict';
             return 'You can\'t see that far.';
         },
-        image: undefined
+        image: '#444'
     },
     BOSS_FLOOR: {
         id: 18,
@@ -448,7 +468,8 @@ var Tile = {
                 x: 0,
                 y: 0
             };
-        }
+        },
+        colour: '#a2a2a2'
     },
     BOSS_DOOR: {
         id: 20,
@@ -468,7 +489,8 @@ var Tile = {
                 x: 5,
                 y: 0
             };
-        }
+        },
+        colour: '#a2a2a2'
     },
     BOSS_SECOND_DOOR: {
         id: 21,
@@ -488,7 +510,8 @@ var Tile = {
                 x: 5,
                 y: 0
             };
-        }
+        },
+        colour: '#a2a2a2'
     },
     BOSS_HALLWAY: {
         id: 22,
@@ -508,7 +531,8 @@ var Tile = {
                 x: 0,
                 y: 0
             };
-        }
+        },
+        colour: '#444'
     },
     FIREBALL: {
         id: 30,
@@ -528,7 +552,8 @@ var Tile = {
                 x: 0,
                 y: 1
             };
-        }
+        },
+        colour: '#ff7300'
     },
 
     FOV_FIX: {
@@ -549,7 +574,8 @@ var Tile = {
                 x: 0,
                 y: 0
             };
-        }
+        },
+        colour: '#444'
     },
     HIGHLIGHT: {
         id: 10000,
@@ -569,6 +595,7 @@ var Tile = {
                 x: 0,
                 y: 0
             };
-        }
+        },
+        colour: undefined
     }
 };

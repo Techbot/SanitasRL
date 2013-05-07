@@ -95,14 +95,26 @@ Game.prototype.newRender = function() {
     }*/
     
     // Background
-    var x, y, t;
+    var x, y, t, c;
     for(x = 0; x < 60; x += 1) {
         for(y = 0; y < 36; y += 1) {
             //if(x > 0 && y > 0 && x < this.dungeon.width && y < this.dungeon.height) {
 
                 if(this.dungeon.cells[x][y].id !== Tile.EMPTY.id && this.dungeon.cells[x][y].id !== Tile.BOSS_FOV_FIX.id) {
+                
+                    // Get the coordinates for the tile in the tileset
                     t = this.dungeon.cells[x][y].image(Tile.EMPTY, this.player);
+                    c = this.dungeon.cells[x][y].colour;
+                    
+                    // Draw the tile
                     this.canvas.drawImage(this.images.tileset, t.x * 16, t.y * 16, 16, 16, x * this.tileSize, y * this.tileSize, this.tileSize, this.tileSize);
+                    
+                    // Draw the blending colour above the tile
+                    this.canvas.globalCompositeOperation = 'source-atop';
+                    this.canvas.fillStyle = c;
+                    this.canvas.fillRect(x * 16, y * 16, 16, 16);
+                    this.canvas.globalCompositeOperation = 'source-over';
+                    
                 }
 
             //}
