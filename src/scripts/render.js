@@ -100,7 +100,7 @@ Game.prototype.newRender = function() {
         for(y = 0; y < 36; y += 1) {
             //if(x > 0 && y > 0 && x < this.dungeon.width && y < this.dungeon.height) {
 
-                if(this.dungeon.cells[x][y].id !== Tile.EMPTY.id && this.dungeon.cells[x][y].id !== Tile.BOSS_FOV_FIX.id) {
+                if(this.dungeon.cells[x][y].id !== Tile.EMPTY.id) {
                 
                     // Get the coordinates for the tile in the tileset
                     t = this.dungeon.cells[x][y].image(Tile.EMPTY, this.player);

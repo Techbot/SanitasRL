@@ -231,7 +231,6 @@ Game.prototype.updateAmulet = function() {
 Game.prototype.keydown = function(code, key) {
     'use strict';
     
-    console.log(code, key);
     
     if(this.state === 'running') {
     
@@ -384,10 +383,6 @@ Game.prototype.keydown = function(code, key) {
                             }
                             
                             switch(this.dungeon.cells[this.cursor.x][this.cursor.y].id) {
-                                case Tile.TRAP.id:
-                                case Tile.BARS_TRAP.id:
-                                    this.dungeon.cells[this.cursor.x][this.cursor.y] = Tile.TRAP_SPRUNG;
-                                    break;
                                 case Tile.DOOR.id:
                                     this.dungeon.cells[this.cursor.x][this.cursor.y] = Tile.DOOR_OPEN;
                                     break;
@@ -492,10 +487,10 @@ Game.prototype.keydown = function(code, key) {
                 if(this.dungeon.monsterAt(newPosition.x, newPosition.y) === undefined) {
                     // Move
                     
-                    if(this.dungeon.cells[newPosition.x][newPosition.y].id === Tile.BOSS_DOOR.id) {
+                    /*if(this.dungeon.cells[newPosition.x][newPosition.y].id === Tile.BOSS_DOOR.id) {
                         // TODO: Notify user about entering the boss lair
                         this.dungeon.cells[newPosition.x][newPosition.y] = Tile.BOSS_SECOND_DOOR;
-                    } else {
+                    } else {*/
                         this.player.x = newPosition.x;
                         this.player.y = newPosition.y;
                             
@@ -504,7 +499,7 @@ Game.prototype.keydown = function(code, key) {
                         // update all other entities
                         // they should attack here?
                         this.turn();
-                    }
+                    //}
                 } else {
                     // Fight
                     if(ROT.RNG.getRangeUniform(0, 100) <= this.player.hit() + (5 * this.dungeon.monsterAt(newPosition.x, newPosition.y).calcDefence())) {
@@ -616,28 +611,6 @@ Game.prototype.keydown = function(code, key) {
             
             // Check for special behaviour on tiles
             switch(this.dungeon.cells[this.player.x][this.player.y].id) {
-                case Tile.TRAP.id:
-                    if(this.player.armour.id !== 'aaidrics_defence') { // Should check for the effect player.effects.indexOf(Effects.spotTraps)?
-                        this.player.health -= 0.5;
-                        this.player.lastHitPro = 'by opening';
-                        this.player.lastHit = 'a trapped door';
-                        this.player.updateInterface();
-                        // TODO: Notify user about you taking 0.5 damage from the trap
-                    }
-                    
-                    this.dungeon.cells[this.player.x][this.player.y] = Tile.TRAP_SPRUNG;
-                    break;
-                case Tile.BARS_TRAP.id:
-                    if(this.player.armour.id !== 'aaidrics_defence') { // Should check for the effect player.effects.indexOf(Effects.spotTraps)?
-                        this.player.health -= 1.5;
-                        this.player.lastHitPro = 'by opening';
-                        this.player.lastHit = 'a trapped door';
-                        this.player.updateInterface();
-                        // TODO: Notify user about you taking 1.5 damage from the trap
-                    }
-
-                    this.dungeon.cells[this.player.x][this.player.y] = Tile.BARS_TRAP_SPRUNG;
-                    break;
                 case Tile.BARS_DOOR.id:
                     this.dungeon.cells[this.player.x][this.player.y] = Tile.BARS_DOOR_OPEN;
                     break;
@@ -658,7 +631,7 @@ Game.prototype.keydown = function(code, key) {
                     }
                     this.dungeon.cells[this.player.x][this.player.y] = Tile.FLOOR;
                     break;
-                case Tile.BOSS_SECOND_DOOR.id:
+                /*case Tile.BOSS_SECOND_DOOR.id:
                     this.dungeon.cells[this.player.x][this.player.y] = Tile.BOSS_HALLWAY;
                     
                     var i;
@@ -683,7 +656,7 @@ Game.prototype.keydown = function(code, key) {
                         this.bossClosed = true;
                     }
                 
-                    break;
+                    break;*/
                 case Tile.FIREBALL.id:
                     this.player.health -= 2;
                     this.player.lastHitPro = 'by stepping into';

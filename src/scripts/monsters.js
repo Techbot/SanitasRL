@@ -170,9 +170,9 @@ Monster.prototype.turn = function(player, dungeon, turn) {
                     this.chargingFireball = false;
                     // TODO: Notify user about the dragon firing a fireball
                     
-                    if(dungeon.cells[this.fireballPosition.x][this.fireballPosition.y].id !== Tile.BOSS_HALLWAY.id) {
+                    /*if(dungeon.cells[this.fireballPosition.x][this.fireballPosition.y].id !== Tile.BOSS_HALLWAY.id) {
                         dungeon.cells[this.fireballPosition.x][this.fireballPosition.y] = Tile.FIREBALL;
-                    }
+                    }*/
                     
                     if(player.x === this.fireballPosition.x && player.y === this.fireballPosition.y) {
                         player.health -= 2;

@@ -31,9 +31,7 @@ Monster.prototype.pathfind = function(sx, sy, dx, dy, dungeon) {
     // 2. If we can move to the new position, do it
     if(dungeon.cells[suggestedPosition.x][suggestedPosition.y].solid === false
         && dungeon.cells[suggestedPosition.x][suggestedPosition.y].id !== Tile.BARS_DOOR
-        && dungeon.cells[suggestedPosition.x][suggestedPosition.y].id !== Tile.BARS_TRAP
         && dungeon.cells[suggestedPosition.x][suggestedPosition.y].id !== Tile.BARS_DOOR_OPEN
-        && dungeon.cells[suggestedPosition.x][suggestedPosition.y].id !== Tile.BARS_TRAP_SPRUNG
         && dungeon.monsterAt(suggestedPosition.x, suggestedPosition.y) === undefined) {
         return suggestedPosition;
     }
@@ -43,9 +41,7 @@ Monster.prototype.pathfind = function(sx, sy, dx, dy, dungeon) {
     // Check if we can move left / right
     if(dungeon.cells[suggestedPosition.x][sy].solid === false
         && dungeon.cells[suggestedPosition.x][sy].id !== Tile.BARS_DOOR
-        && dungeon.cells[suggestedPosition.x][sy].id !== Tile.BARS_TRAP
         && dungeon.cells[suggestedPosition.x][sy].id !== Tile.BARS_DOOR_OPEN
-        && dungeon.cells[suggestedPosition.x][sy].id !== Tile.BARS_TRAP_SPRUNG
         && dungeon.monsterAt(suggestedPosition.x, sy) === undefined) {
         return {
             x: suggestedPosition.x,
@@ -56,9 +52,7 @@ Monster.prototype.pathfind = function(sx, sy, dx, dy, dungeon) {
     // Check if we can move up / down
     if(dungeon.cells[sx][suggestedPosition.y].solid === false
         && dungeon.cells[sx][suggestedPosition.y].id !== Tile.BARS_DOOR
-        && dungeon.cells[sx][suggestedPosition.y].id !== Tile.BARS_TRAP
         && dungeon.cells[sx][suggestedPosition.y].id !== Tile.BARS_DOOR_OPEN
-        && dungeon.cells[sx][suggestedPosition.y].id !== Tile.BARS_TRAP_SPRUNG
         && dungeon.monsterAt(sx, suggestedPosition.y) === undefined) {
         return {
             x: sx,
@@ -82,9 +76,7 @@ Monster.prototype.pathfind = function(sx, sy, dx, dy, dungeon) {
         // try right - diagonally
         if(dungeon.cells[suggestedPosition.x + 1][suggestedPosition.y].solid === false
             && dungeon.cells[suggestedPosition.x + 1][suggestedPosition.y].id !== Tile.BARS_DOOR
-            && dungeon.cells[suggestedPosition.x + 1][suggestedPosition.y].id !== Tile.BARS_TRAP
             && dungeon.cells[suggestedPosition.x + 1][suggestedPosition.y].id !== Tile.BARS_DOOR_OPEN
-            && dungeon.cells[suggestedPosition.x + 1][suggestedPosition.y].id !== Tile.BARS_TRAP_SPRUNG
             && dungeon.monsterAt(suggestedPosition.x + 1, suggestedPosition.y) === undefined) {
             return {
                 x: suggestedPosition.x + 1,
@@ -94,9 +86,7 @@ Monster.prototype.pathfind = function(sx, sy, dx, dy, dungeon) {
         // try left - diagonally
         if(dungeon.cells[suggestedPosition.x - 1][suggestedPosition.y].solid === false
             && dungeon.cells[suggestedPosition.x - 1][suggestedPosition.y].id !== Tile.BARS_DOOR
-            && dungeon.cells[suggestedPosition.x - 1][suggestedPosition.y].id !== Tile.BARS_TRAP
             && dungeon.cells[suggestedPosition.x - 1][suggestedPosition.y].id !== Tile.BARS_DOOR_OPEN
-            && dungeon.cells[suggestedPosition.x - 1][suggestedPosition.y].id !== Tile.BARS_TRAP_SPRUNG
             && dungeon.monsterAt(suggestedPosition.x - 1, suggestedPosition.y) === undefined) {
             return {
                 x: suggestedPosition.x - 1,
@@ -111,9 +101,7 @@ Monster.prototype.pathfind = function(sx, sy, dx, dy, dungeon) {
         // try up - diagonally
         if(dungeon.cells[suggestedPosition.x][suggestedPosition.y - 1].solid === false
             && dungeon.cells[suggestedPosition.x][suggestedPosition.y - 1].id !== Tile.BARS_DOOR
-            && dungeon.cells[suggestedPosition.x][suggestedPosition.y - 1].id !== Tile.BARS_TRAP
             && dungeon.cells[suggestedPosition.x][suggestedPosition.y - 1].id !== Tile.BARS_DOOR_OPEN
-            && dungeon.cells[suggestedPosition.x][suggestedPosition.y - 1].id !== Tile.BARS_TRAP_SPRUNG
             && dungeon.monsterAt(suggestedPosition.x, suggestedPosition.y - 1) === undefined) {
             return {
                 x: suggestedPosition.x,
@@ -123,9 +111,7 @@ Monster.prototype.pathfind = function(sx, sy, dx, dy, dungeon) {
         // try down - diagonally
         if(dungeon.cells[suggestedPosition.x][suggestedPosition.y + 1].solid === false
             && dungeon.cells[suggestedPosition.x][suggestedPosition.y + 1].id !== Tile.BARS_DOOR
-            && dungeon.cells[suggestedPosition.x][suggestedPosition.y + 1].id !== Tile.BARS_TRAP
             && dungeon.cells[suggestedPosition.x][suggestedPosition.y + 1].id !== Tile.BARS_DOOR_OPEN
-            && dungeon.cells[suggestedPosition.x][suggestedPosition.y + 1].id !== Tile.BARS_TRAP_SPRUNG
             && dungeon.monsterAt(suggestedPosition.x, suggestedPosition.y + 1) === undefined) {
             return {
                 x: suggestedPosition.x,

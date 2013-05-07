@@ -13,13 +13,10 @@ $(function() {
     // Create the game instance
     var game = new Game();
     
+    // ONLY FOR DEBUG
     $('.window').hide();
     game.state = 'running';
     
-    // Bind the resize and keydown methods to the game
-    $(window).resize(function() {
-        game.resize();
-    }).resize();
     
     $(document).on('keydown', function(e) {
         // If we're showing a screen, remove it if the user press enter
