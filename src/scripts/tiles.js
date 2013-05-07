@@ -57,7 +57,7 @@ var Tile = {
         image: function() {
             'use strict';
             return {
-                x: 3,
+                x: 1,
                 y: 0
             };
         },
@@ -78,7 +78,7 @@ var Tile = {
         image: function() {
             'use strict';
             return {
-                x: 1,
+                x: 0,
                 y: 0
             };
         },
@@ -99,7 +99,7 @@ var Tile = {
         image: function() {
             'use strict';
             return {
-                x: 4,
+                x: 3,
                 y: 0
             };
         },
@@ -120,7 +120,7 @@ var Tile = {
         image: function(tileBelow) {
             'use strict';
             return {
-                x: 5,
+                x: 4,
                 y: 0
             };
         },
@@ -141,7 +141,7 @@ var Tile = {
         image: function() {
             'use strict';
             return {
-                x: 7,
+                x: 6,
                 y: 0
             };
         },
@@ -170,11 +170,11 @@ var Tile = {
         image: function(tileBelow, player) {
             'use strict';
             return {
-                x: player.armour.id === 'rogues_hide' ? 6 : 5, // Should check for the effect player.effects.indexOf(Effects.spotTraps)?
+                x: 4,
                 y: 0
             };
         },
-        colour: '#a2a2a2'
+        colour: '#a2a2a2' // rogues_hide doesn't matter, colour doesn't change
     },
     TRAP_SPRUNG: {
         id: 7,
@@ -191,8 +191,8 @@ var Tile = {
         image: function() {
             'use strict';
             return {
-                x: 7,
-                y: 1
+                x: 6,
+                y: 0
             };
         },
         colour: '#444'
@@ -212,8 +212,8 @@ var Tile = {
         image: function() {
             'use strict';
             return {
-                x: 3,
-                y: 1
+                x: 1,
+                y: 0
             };
         },
         colour: '#8a1e51'
@@ -233,8 +233,8 @@ var Tile = {
         image: function() {
             'use strict';
             return {
-                x: 4,
-                y: 1
+                x: 1,
+                y: 0
             };
         },
         colour: '#682444'
@@ -255,10 +255,10 @@ var Tile = {
             'use strict';
             return {
                 x: 1,
-                y: 1
+                y: 0
             };
         },
-        colour: '#a2a2a2'
+        colour: '#666'
     },
     BARS: {
         id: 11,
@@ -276,7 +276,7 @@ var Tile = {
             'use strict';
             return {
                 x: 2,
-                y: 1
+                y: 0
             };
         },
         colour: '#a2a2a2'
@@ -304,11 +304,11 @@ var Tile = {
         image: function(tileBelow, player) {
             'use strict';
             return {
-                x: player.armour.id === 'rogues_hide' ? 6 : 5, // Should check for the effect player.effects.indexOf(Effects.spotTraps)?
+                x: 4,
                 y: 0
             };
         },
-        colour: '#a2a2a2'
+        colour: '#a2a2a2' // rogues_hide doesn't matter
     },
     BARS_TRAP_SPRUNG: {
         id: 13,
@@ -325,7 +325,7 @@ var Tile = {
         image: function() {
             'use strict';
             return {
-                x: 7,
+                x: 6,
                 y: 0
             };
         },
@@ -346,7 +346,7 @@ var Tile = {
         image: function() {
             'use strict';
             return {
-                x: 2,
+                x: 0,
                 y: 0
             };
         },
@@ -367,7 +367,7 @@ var Tile = {
         image: function(tileBelow) {
             'use strict';
             return {
-                x: 5,
+                x: 4,
                 y: 0
             };
         },
@@ -388,7 +388,7 @@ var Tile = {
         image: function() {
             'use strict';
             return {
-                x: 7,
+                x: 6,
                 y: 0
             };
         },
@@ -430,7 +430,7 @@ var Tile = {
         image: function() {
             'use strict';
             return {
-                x: 3,
+                x: 1,
                 y: 0
             };
         },
@@ -486,7 +486,7 @@ var Tile = {
         image: function(tileBelow) {
             'use strict';
             return {
-                x: 5,
+                x: 4,
                 y: 0
             };
         },
@@ -507,7 +507,7 @@ var Tile = {
         image: function(tileBelow) {
             'use strict';
             return {
-                x: 5,
+                x: 4,
                 y: 0
             };
         },
@@ -550,7 +550,7 @@ var Tile = {
             'use strict';
             return {
                 x: 0,
-                y: 1
+                y: 0
             };
         },
         colour: '#ff7300'
