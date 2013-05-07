@@ -39,8 +39,6 @@ var Game = function() {
         player: new Image()
     };
     
-    this.shouldRender = false;
-    
     // welcome - showing welcome screen
     // death - showing death screen
     // score - showing score screen
@@ -101,8 +99,6 @@ Game.prototype.initialize = function() {
     // ???
     //this.dungeon.updateVisitedCells(this.fov);
     
-    this.shouldRender = true;
-    
     this.render();
 };
 
@@ -127,25 +123,87 @@ Game.prototype.updateCamera = function(dx, dy) {
 Game.prototype.resize = function(e) {
     'use strict';
 
+    console.log('resize');
+    
     // Get the width and height of the window
     var width = parseInt($(window).width(), 10),
         height = parseInt($(window).height(), 10);
 
     // Update the canvases with the new width and height
     $('canvas#canvas').attr({ 'width': 960, 'height': 576});
-    
-    // Update the camera & render if the player & camera has been defined
-    if(this.player !== undefined || this.camera !== undefined) {
-        this.shouldRender = true;
-    }
 };
 
 Game.prototype.render = function() {
     'use strict';
  
     this.updateCamera(this.player.x, this.player.y);
-    this.newRender();
-    this.shouldRender = false;
+    
+    this.canvas.clearRect(0, 0, 960, 576);
+
+    // Background
+    var x, y, t, c;
+    for(x = 0; x < 60; x += 1) {
+        for(y = 0; y < 36; y += 1) {
+            //if(x > 0 && y > 0 && x < this.dungeon.width && y < this.dungeon.height) {
+
+                if(this.dungeon.cells[x][y].id !== Tile.EMPTY.id) {
+                
+                    // Get the coordinates for the tile in the tileset
+                    t = this.dungeon.cells[x][y].image(Tile.EMPTY, this.player);
+                    c = this.dungeon.cells[x][y].colour;
+                    
+                    // Draw the tile
+                    this.canvas.drawImage(this.images.tileset, t.x * 16, t.y * 16, 16, 16, x * this.tileSize, y * this.tileSize, this.tileSize, this.tileSize);
+                    
+                    // Draw the blending colour above the tile
+                    this.canvas.globalCompositeOperation = 'source-atop';
+                    this.canvas.fillStyle = c;
+                    this.canvas.fillRect(x * 16, y * 16, 16, 16);
+                    this.canvas.globalCompositeOperation = 'source-over';
+                    
+                }
+
+            //}
+        }
+    }
+    
+    // Foreground
+    var i, t;
+    // Items
+    for(i = 0; i < this.dungeon.items.length; i += 1) {
+        if(this.dungeon.items[i].x >= this.camera.x
+            && this.dungeon.items[i].x <= this.camera.x2
+            && this.dungeon.items[i].y >= this.camera.y
+            && this.dungeon.items[i].y <= this.camera.y2
+            /*&& this.dungeon.visited[this.dungeon.items[i].x][this.dungeon.items[i].y] === true*/) {
+
+            t = this.dungeon.items[i].image;
+            this.canvas.drawImage(this.images.items, t.x * 16, t.y * 16, 16, 16, this.dungeon.items[i].x * this.tileSize, this.dungeon.items[i].y * this.tileSize, this.tileSize, this.tileSize);
+        }
+    }
+
+    // Monsters
+    for(i = 0; i < this.dungeon.monsters.length; i += 1) {
+        if(this.dungeon.monsters[i].x >= this.camera.x
+            && this.dungeon.monsters[i].x <= this.camera.x2
+            && this.dungeon.monsters[i].y >= this.camera.y
+            && this.dungeon.monsters[i].y <= this.camera.y2
+            /*&& this.pointIsInsideFOV(this.dungeon.monsters[i].x, this.dungeon.monsters[i].y)*/) {
+
+            t = this.dungeon.monsters[i].image;
+            this.canvas.drawImage(this.images.monsters, t.x * 16, t.y * 16, 16, 16, this.dungeon.monsters[i].x * this.tileSize, this.dungeon.monsters[i].y * this.tileSize, this.tileSize, this.tileSize);
+
+        }
+    }
+
+    //this.canvas.drawImage(this.images.player, (this.player.x - this.camera.x) * this.tileSize, (this.player.y - this.camera.y) * this.tileSize);
+    this.canvas.drawImage(this.images.player, 0, 0, 16, 16, this.player.x * this.tileSize, this.player.y * this.tileSize, this.tileSize, this.tileSize);
+    
+    if(this.mode === this.modes.LOOK || this.mode === this.modes.TELEKINESIS) {
+        this.canvas.strokeStyle = '#0f0';
+        this.canvas.lineWidth = 2;
+        this.canvas.strokeRect(this.cursor.x * this.tileSize + 1, this.cursor.y * this.tileSize + 1, this.tileSize - 2, this.tileSize - 2);
+    }
     
     window.requestAnimationFrame(this.render.bind(this));
 };
@@ -187,7 +245,6 @@ Game.prototype.turn = function() {
         $('.death').fadeIn(1500);
     }
     
-    this.shouldRender = true;
     this.turnCounter += 1;
 };
 
@@ -431,14 +488,12 @@ Game.prototype.keydown = function(code, key) {
                                 x: this.player.x,
                                 y: this.player.y
                             };
-                            this.shouldRender = true;
                         } else {
                             this.mode = this.modes.TELEKINESIS;
                             this.cursor = {
                                 x: this.player.x,
                                 y: this.player.y
                             };
-                            this.shouldRender = true;
                         }
                     }
                     break;
@@ -452,14 +507,12 @@ Game.prototype.keydown = function(code, key) {
                             x: this.player.x,
                             y: this.player.y
                         };
-                        this.shouldRender = true;
                     } else {
                         this.mode = this.modes.LOOK;
                         this.cursor = {
                             x: this.player.x,
                             y: this.player.y
                         };
-                        this.shouldRender = true;
                     }
                     break;
                 // Pray
@@ -517,7 +570,6 @@ Game.prototype.keydown = function(code, key) {
         if(this.mode === this.modes.LOOK || this.mode === this.modes.TELEKINESIS) {
             this.cursor.x = newPosition.x;
             this.cursor.y = newPosition.y;
-            this.shouldRender = true;
         // If there has been a change to the newPosition
         } else if(this.player.x !== newPosition.x || this.player.y !== newPosition.y) {
             if(this.dungeon.cells[newPosition.x][newPosition.y].solid === false) {
@@ -701,13 +753,9 @@ Game.prototype.keydown = function(code, key) {
                     // TODO: Notify user about taking 2 damage from the fire
                     break;
             }
-            
-            this.shouldRender = true;
         }
         
         this.updateAmulet();
-        
-        this.shouldRender = true;
         
         // Update the interface
         this.updateInterface();
