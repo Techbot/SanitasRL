@@ -73,7 +73,9 @@ Dungeon.prototype.updateVisitedCells = function(bounds) {
 };
 
 Dungeon.prototype.generate = function() {
-    var generator = new ROT.Map.Uniform(this.width, this.height);
+    // Level 5 should work differently, we should generate a large room on level 5 for the boss
+
+    var generator = new ROT.Map.Digger(this.width, this.height);
     
     var x, y;
     for(x = 0; x < this.width; x += 1) {
@@ -90,6 +92,160 @@ Dungeon.prototype.generate = function() {
     };
     
     generator.create(generatorCallback.bind(this));
+    
+    var rooms = Array.shuffle(generator.getRooms()), i;
+    for(i = 0; i < rooms.length; i += 1) {
+        // Add stairs to the first room
+        var dx = rooms[i]._x2 - rooms[i]._x1,
+            dy = rooms[i]._y2 - rooms[i]._y1,
+            cx = rooms[i]._x1 + Math.ceil(dx / 2),
+            cy = rooms[i]._y1 + Math.ceil(dy / 2);
+            
+        if(i === 0) {
+            this.cells[cx][cy] = Tile.STAIRS;
+        } else {
+            var done = false;
+            
+            while(done === false) {
+                switch(Math.adjustedRandom(0, 4)) {
+                    case 0: // Water treasure
+                        if(dx >= 4 && dy >= 4) {
+                            var r = Math.adjustedRandom(0, 100);
+                            if(r > 90) {
+                                this.items.push(new Item(cx, cy, Items.random(undefined, this.level + 1))); // dungeon level + 1
+                            } else if(r > 75) {
+                                this.items.push(new Item(cx, cy, Items.random(undefined, this.level + 2))); // dungeon level + 2
+                            } else {
+                                this.items.push(new Item(cx, cy, Items.random(undefined, 6))); // unique
+                            }
+                        
+                            this.cells[cx][cy - 1] = Tile.WATER;
+                            this.cells[cx + 1][cy - 1] = Tile.WATER;
+                            this.cells[cx + 1][cy] = Tile.WATER;
+                            this.cells[cx + 1][cy + 1] = Tile.WATER;
+                            this.cells[cx][cy + 1] = Tile.WATER;
+                            this.cells[cx - 1][cy + 1] = Tile.WATER;
+                            this.cells[cx - 1][cy] = Tile.WATER;
+                            this.cells[cx - 1][cy - 1] = Tile.WATER;
+                        
+                            done = true;
+                        }
+                        break;
+                    case 1: // Trapped treasure
+                        if(dx >= 4 && dy >= 4) {
+                            var r = Math.adjustedRandom(0, 100);
+                            if(r > 65) {
+                                this.items.push(new Item(cx, cy, Items.random(undefined, 6))); // unique
+                            } else {
+                                this.items.push(new Item(cx, cy, Items.random(undefined, this.level + 1))); // dungeon level + 1
+                            }
+                        
+                            this.cells[cx][cy - 1] = Tile.BARS;
+                            this.cells[cx + 1][cy - 1] = Tile.BARS;
+                            this.cells[cx + 1][cy] = Tile.BARS;
+                            this.cells[cx + 1][cy + 1] = Tile.BARS;
+                            this.cells[cx][cy + 1] = Tile.BARS_TRAP;
+                            this.cells[cx - 1][cy + 1] = Tile.BARS;
+                            this.cells[cx - 1][cy] = Tile.BARS;
+                            this.cells[cx - 1][cy - 1] = Tile.BARS;
+                        
+                            done = true;
+                        }
+                            done = true;
+                        break;
+                    case 2: // Monster treasure
+                        this.cells[cx][cy] = Tile.MONSTER_SPAWNER;
+                        var r = Math.adjustedRandom(0, 100);
+                        if(r > 50) {
+                            this.items.push(new Item(cx, cy, Items.random(undefined, 6))); // unique
+                        } else {
+                            this.items.push(new Item(cx, cy, Items.random(undefined, this.level + 1))); // dungeon level + 1
+                        }
+                        done = true;
+                        break;
+                    case 3: // Shrine
+                    this.cells[cx][cy] = Tile.SHRINE;
+                        done = true;
+                        break;
+                    case 4: // Pillar
+                        if(dx >= 4 && dy >= 4) {
+                            this.cells[cx + 1][cy - 1] = Tile.PILLAR;
+                            this.cells[cx + 1][cy + 1] = Tile.PILLAR;
+                            this.cells[cx - 1][cy + 1] = Tile.PILLAR;
+                            this.cells[cx - 1][cy - 1] = Tile.PILLAR;
+                            done = true;
+                        }
+                        break;
+                }
+            }
+        }
+        
+        // Loop over the rooms
+        // Obligatory features:
+        //  Stairs down
+        
+    }
+    
+    // Place items
+    var item, placed, rx, ry, free;
+    for(i = 0; i < 10; i += 1) {
+        placed = false;
+        do {
+            free = true;
+
+            rx = Math.adjustedRandom(2, this.width - 2);
+            ry = Math.adjustedRandom(2, this.height - 2);
+            item = new Item(rx, ry, Items.random(undefined, this.level));
+
+            if(rx !== Math.floor(this.width / 2) && ry !== Math.floor(this.height / 2)
+                && this.cells[rx][ry].id === Tile.FLOOR.id              // Tile is a floor
+                && this.cells[rx + 1][ry].id === Tile.FLOOR.id      // Adjacent tiles are floor
+                && this.cells[rx - 1][ry].id === Tile.FLOOR.id
+                && this.cells[rx][ry + 1].id === Tile.FLOOR.id
+                && this.cells[rx][ry - 1].id === Tile.FLOOR.id
+                && this.itemAt(rx, ry) === undefined) {             // No item at the position
+
+                // loop and see if there is a similar item within 10 tiles
+                for(x = rx - 5; x < rx + 5; x += 1) {
+                    for(y = ry - 5; y < ry + 5; y += 1) {
+                        if(this.itemAt(x, y) !== undefined && this.itemAt(x, y).type === item.type) {
+                            free = false;
+                        }
+                    }
+                }
+
+                if(free === true) {
+                    this.items.push(item);
+                    placed = true;
+                }
+            }
+
+        } while(placed === false);
+    }
+    
+    // Place monsters
+    for(i = 0; i < 20; i += 1) {
+        placed = false;
+        do {
+
+            rx = Math.adjustedRandom(2, this.width - 2);
+            ry = Math.adjustedRandom(2, this.height - 2);
+            if(rx !== Math.floor(this.width / 2) && ry !== Math.floor(this.height / 2)
+                && this.cells[rx][ry].id === Tile.FLOOR.id
+                && this.cells[rx + 1][ry].id === Tile.FLOOR.id
+                && this.cells[rx - 1][ry].id === Tile.FLOOR.id
+                && this.cells[rx][ry + 1].id === Tile.FLOOR.id
+                && this.cells[rx][ry - 1].id === Tile.FLOOR.id
+                && this.monsterAt(rx, ry) === undefined) {
+                
+                if(rx < Math.floor(this.width / 2) - 5 || rx > Math.floor(this.width / 2) + 5 || ry < Math.floor(this.height / 2) - 5 || ry > Math.floor(this.height / 2) + 5) {
+                    this.monsters.push(new Monster(rx, ry, Monsters.random(this.level)));
+                    placed = true;
+                }
+            }
+
+        } while(placed === false);
+    }
     
     var x, y;
     for(x = 1; x < this.width - 1; x += 1) {

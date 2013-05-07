@@ -101,7 +101,7 @@ Game.prototype.newRender = function() {
             //if(x > 0 && y > 0 && x < this.dungeon.width && y < this.dungeon.height) {
 
                 if(this.dungeon.cells[x][y].id !== Tile.EMPTY.id && this.dungeon.cells[x][y].id !== Tile.BOSS_FOV_FIX.id) {
-                    t = this.dungeon.cells[x][y].image();
+                    t = this.dungeon.cells[x][y].image(Tile.EMPTY, this.player);
                     this.canvas.drawImage(this.images.tileset, t.x * 16, t.y * 16, 16, 16, x * this.tileSize, y * this.tileSize, this.tileSize, this.tileSize);
                 }
 

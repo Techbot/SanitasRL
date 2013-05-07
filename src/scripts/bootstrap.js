@@ -13,6 +13,9 @@ $(function() {
     // Create the game instance
     var game = new Game();
     
+    $('.window').hide();
+    game.state = 'running';
+    
     // Bind the resize and keydown methods to the game
     $(window).resize(function() {
         game.resize();
