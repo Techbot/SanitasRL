@@ -228,8 +228,10 @@ Game.prototype.updateAmulet = function() {
     }
 };
 
-Game.prototype.keydown = function(e) {
+Game.prototype.keydown = function(code, key) {
     'use strict';
+    
+    console.log(code, key);
     
     if(this.state === 'running') {
     
@@ -240,56 +242,49 @@ Game.prototype.keydown = function(e) {
         };
         
         // Movement north
-        if(Keys.VK_MOVEMENT_NORTH.indexOf(e.which) !== -1) {
+        //if(Keys.VK_MOVEMENT_NORTH.indexOf(e.which) !== -1) {
+        if(key === 'numpad8' || key === 'k') {
             newPosition.y -= 1;
         // Movement north east
-        } else if(Keys.VK_MOVEMENT_NORTH_EAST.indexOf(e.which) !== -1) {
+        //} else if(Keys.VK_MOVEMENT_NORTH_EAST.indexOf(e.which) !== -1) {
+        } else if(key === 'numpad9' || key === 'u') {
             newPosition.x += 1;
             newPosition.y -= 1;
         // Movement east
-        } else if(Keys.VK_MOVEMENT_EAST.indexOf(e.which) !== -1) {
+        //} else if(Keys.VK_MOVEMENT_EAST.indexOf(e.which) !== -1) {
+        } else if(key === 'numpad6' || key === 'l') {
             newPosition.x += 1;
         // Movement south east
-        } else if(Keys.VK_MOVEMENT_SOUTH_EAST.indexOf(e.which) !== -1) {
+        //} else if(Keys.VK_MOVEMENT_SOUTH_EAST.indexOf(e.which) !== -1) {
+        } else if(key === 'numpad3' || key === 'n') {
             newPosition.x += 1;
             newPosition.y += 1;
         // Movement south
-        } else if(Keys.VK_MOVEMENT_SOUTH.indexOf(e.which) !== -1) {
+        //} else if(Keys.VK_MOVEMENT_SOUTH.indexOf(e.which) !== -1) {
+        } else if(key === 'numpad2' || key === 'j') {
             newPosition.y += 1;
         // Movement south west
-        } else if(Keys.VK_MOVEMENT_SOUTH_WEST.indexOf(e.which) !== -1) {
+        //} else if(Keys.VK_MOVEMENT_SOUTH_WEST.indexOf(e.which) !== -1) {
+        } else if(key === 'numpad1' || key === 'b') {
             newPosition.x -= 1;
             newPosition.y += 1;
         // Movement west
-        } else if(Keys.VK_MOVEMENT_WEST.indexOf(e.which) !== -1) {
+        //} else if(Keys.VK_MOVEMENT_WEST.indexOf(e.which) !== -1) {
+        } else if(key === 'numpad4' || key === 'h') {
             newPosition.x -= 1;
         // Movement north west
-        } else if(Keys.VK_MOVEMENT_NORTH_WEST.indexOf(e.which) !== -1) {
+        //} else if(Keys.VK_MOVEMENT_NORTH_WEST.indexOf(e.which) !== -1) {
+        } else if(key === 'numpad7' || key === 'y') {
             newPosition.x -= 1;
             newPosition.y -= 1;
         // Wait
-        } else if(Keys.VK_WAIT.indexOf(e.which) !== -1) {
-        
-            // We pressed DOT and held the SHIFT key
-            // This is > on American keyboards
-            if(e.which === 190 && e.shiftKey === true) {
-                if(this.dungeon.cells[this.player.x][this.player.y].id === Tile.STAIRS.id) {
-                    // Generate a new level
-                    this.dungeon.level += 1;
-                    this.dungeon.generate();
-                    
-                    // Move the player to  the center
-                    newPosition.x = Math.floor(this.dungeon.width / 2);
-                    newPosition.y = Math.floor(this.dungeon.height / 2);
-                    
-                    // UPDATE THE TURN COUNTER
-                    this.turn();
-                }
-            } else {
-                this.turn();
-            }
+        //} else if(Keys.VK_WAIT.indexOf(e.which) !== -1) {
+        } else if(key === 'numpad5' || key === '.') {
+            // UPDATE THE TURN COUNTER
+            this.turn();
         // Stairs (THE SWEDISH <> KEY OR ENTER)
-        } else if(Keys.VK_STAIRS.indexOf(e.which) !== -1) {
+        //} else if(Keys.VK_STAIRS.indexOf(e.which) !== -1) {
+        } else if(key === '>') {
             if(this.dungeon.cells[this.player.x][this.player.y].id === Tile.STAIRS.id) {
                 // Generate a new level
                 this.dungeon.level += 1;
@@ -304,9 +299,10 @@ Game.prototype.keydown = function(e) {
             }
         // Switch for other keys
         } else {
-            switch(e.which) {
+            switch(key) {
                 // Get / Grab / Pick up
-                case Keys.VK_G:
+                //case Keys.VK_G:
+                case 'g':
                     if(this.dungeon.itemAt(this.player.x, this.player.y) !== undefined) {
                         var olditem;
                         
@@ -345,7 +341,8 @@ Game.prototype.keydown = function(e) {
                     }
                     break;
                 // Telekinesis
-                case Keys.VK_T:
+                //case Keys.VK_T:
+                case 't':
                     // cloudcleaver is the only item with telekinesis
                     if(this.player.weapon.id === 'cloudcleaver') {
                         if(this.mode === this.modes.TELEKINESIS) {
@@ -414,7 +411,8 @@ Game.prototype.keydown = function(e) {
                     }
                     break;
                 // Examine / Look
-                case Keys.VK_X:
+                //case Keys.VK_X:
+                case 'x':
                     if(this.mode === this.modes.LOOK) {
                         // Go back to movement mode and reset the newPosition
                         this.mode = this.modes.MOVEMENT;
@@ -433,7 +431,8 @@ Game.prototype.keydown = function(e) {
                     }
                     break;
                 // Pray
-                case Keys.VK_Q:
+                //case Keys.VK_Q:
+                case 'q':
                     if(this.dungeon.cells[this.player.x][this.player.y - 1].id === Tile.SHRINE.id) {
                         this.player.health += 1 + (this.dungeon.level / 2);
                         this.player.updateInterface();
@@ -473,7 +472,8 @@ Game.prototype.keydown = function(e) {
                     }
                     break;
                 // Escape - Show information
-                case Keys.VK_ESC:
+                //case Keys.VK_ESC:
+                case 'escape':
                     this.state = 'welcome';
                     $('.background').fadeIn();
                     $('.welcome .bottom').html('Press <span>ENTER</span> to return');
