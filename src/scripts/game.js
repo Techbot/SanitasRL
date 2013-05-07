@@ -507,7 +507,7 @@ Game.prototype.keydown = function(e) {
                     }
                 } else {
                     // Fight
-                    if(Math.adjustedRandom(0, 100) <= this.player.hit() + (5 * this.dungeon.monsterAt(newPosition.x, newPosition.y).calcDefence())) {
+                    if(ROT.RNG.getRangeUniform(0, 100) <= this.player.hit() + (5 * this.dungeon.monsterAt(newPosition.x, newPosition.y).calcDefence())) {
                         if(this.player.calcDamage() - this.dungeon.monsterAt(newPosition.x, newPosition.y).calcDefence() > 0) {
                         
                             this.dungeon.monsterAt(newPosition.x, newPosition.y).health -= (this.player.calcDamage() - this.dungeon.monsterAt(newPosition.x, newPosition.y).calcDefence());
@@ -534,7 +534,7 @@ Game.prototype.keydown = function(e) {
                                 
                                 // if the monster has items, drop one of them
                                 if(this.dungeon.monsterAt(newPosition.x, newPosition.y).weapon !== undefined) {
-                                    var which = Math.adjustedRandom(0, 1), i;
+                                    var which = ROT.RNG.getRangeUniform(0, 1), i;
                                     if(which === 0) {
                                         i = this.dungeon.monsterAt(newPosition.x, newPosition.y).weapon;
                                     } else {

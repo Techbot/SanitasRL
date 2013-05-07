@@ -131,8 +131,8 @@ Dungeon.prototype.generate = function() {
     while(numberOfTries < 1000) {
 
         // 3. Pick a wall of any room
-        var randomX = Math.adjustedRandom(0, this.width - 1),
-            randomY = Math.adjustedRandom(0, this.height - 1),
+        var randomX = ROT.RNG.getRangeUniform(0, this.width - 1),
+            randomY = ROT.RNG.getRangeUniform(0, this.height - 1),
             direction,                      // The direction of the new room
             corner = 0,                     // Number of surrounding empty cells, used to detemine if the cell is a corner wall
             startX, startY, endX, endY;     // The start and ending X and Y coordinates of the new room
@@ -233,7 +233,7 @@ Dungeon.prototype.generate = function() {
         } else {
             var fits = false;
             while(fits === false) {
-                feature = Math.adjustedRandom(0, 4);
+                feature = ROT.RNG.getRangeUniform(0, 4);
                 switch(feature) {
                     case this.feature.NORMAL:
                         fits = true;
@@ -246,7 +246,7 @@ Dungeon.prototype.generate = function() {
                         break;
                     case this.feature.MONSTER_TREASURE:
                         // random because there was just too many rooms of this kind
-                        if(Math.adjustedRandom(0, 2) === 0 && ((room.width >= 7 && room.height >= 7) || (room.width >= 7 && room.height >= 5))) {
+                        if(ROT.RNG.getRangeUniform(0, 2) === 0 && ((room.width >= 7 && room.height >= 7) || (room.width >= 7 && room.height >= 5))) {
                             fits = true;
                         }
                         break;
@@ -262,7 +262,7 @@ Dungeon.prototype.generate = function() {
         // Which cell should be used for the corridor?
         var corridorCell,
             floorCell = Tile.FLOOR,
-            random = Math.adjustedRandom(0, 5);
+            random = ROT.RNG.getRangeUniform(0, 5);
 
         if(feature === this.feature.BOSS) {
             corridorCell = Tile.BOSS_DOOR;
@@ -339,20 +339,20 @@ Dungeon.prototype.generate = function() {
                     // #2 3#
                     // #####
                     case 0:
-                        randomX = Math.adjustedRandom(1, this.width / 2);
-                        randomY = Math.adjustedRandom(1, this.height / 2);
+                        randomX = ROT.RNG.getRangeUniform(1, this.width / 2);
+                        randomY = ROT.RNG.getRangeUniform(1, this.height / 2);
                         break;
                     case 1:
-                        randomX = Math.adjustedRandom(this.width / 2, this.width - 2);
-                        randomY = Math.adjustedRandom(1, this.height / 2);
+                        randomX = ROT.RNG.getRangeUniform(this.width / 2, this.width - 2);
+                        randomY = ROT.RNG.getRangeUniform(1, this.height / 2);
                         break;
                     case 2:
-                        randomX = Math.adjustedRandom(1, this.width / 2);
-                        randomY = Math.adjustedRandom(this.height / 2, this.height - 2);
+                        randomX = ROT.RNG.getRangeUniform(1, this.width / 2);
+                        randomY = ROT.RNG.getRangeUniform(this.height / 2, this.height - 2);
                         break;
                     case 3:
-                        randomX = Math.adjustedRandom(this.width / 2, this.width - 2);
-                        randomY = Math.adjustedRandom(this.height / 2, this.height - 2);
+                        randomX = ROT.RNG.getRangeUniform(this.width / 2, this.width - 2);
+                        randomY = ROT.RNG.getRangeUniform(this.height / 2, this.height - 2);
                         break;
                 }
                 i = 0;
@@ -385,8 +385,8 @@ Dungeon.prototype.generate = function() {
         do {
             free = true;
 
-            rx = Math.adjustedRandom(2, this.width - 2);
-            ry = Math.adjustedRandom(2, this.height - 2);
+            rx = ROT.RNG.getRangeUniform(2, this.width - 2);
+            ry = ROT.RNG.getRangeUniform(2, this.height - 2);
             item = new Item(rx, ry, Items.random(undefined, this.level));
 
             if(rx !== Math.floor(this.width / 2) && ry !== Math.floor(this.height / 2)
@@ -420,8 +420,8 @@ Dungeon.prototype.generate = function() {
         placed = false;
         do {
 
-            rx = Math.adjustedRandom(2, this.width - 2);
-            ry = Math.adjustedRandom(2, this.height - 2);
+            rx = ROT.RNG.getRangeUniform(2, this.width - 2);
+            ry = ROT.RNG.getRangeUniform(2, this.height - 2);
             if(rx !== Math.floor(this.width / 2) && ry !== Math.floor(this.height / 2)
                 && this.cells[rx][ry].id === Tile.FLOOR.id
                 && this.cells[rx + 1][ry].id === Tile.FLOOR.id
@@ -456,16 +456,16 @@ Dungeon.prototype.generateRectangle = function() {
     var minSize = 5,
         maxSize = 11,
         room = {
-            width: Math.adjustedRandom(minSize, maxSize),
-            height: Math.adjustedRandom(minSize, maxSize)
+            width: ROT.RNG.getRangeUniform(minSize, maxSize),
+            height: ROT.RNG.getRangeUniform(minSize, maxSize)
         };
 
     while(room.width % 2 === 0) {
-        room.width = Math.adjustedRandom(minSize, maxSize);
+        room.width = ROT.RNG.getRangeUniform(minSize, maxSize);
     }
 
     while(room.height % 2 === 0) {
-        room.height = Math.adjustedRandom(minSize, maxSize);
+        room.height = ROT.RNG.getRangeUniform(minSize, maxSize);
     }
 
     return room;
@@ -574,7 +574,7 @@ Dungeon.prototype.placeRoom = function(startX, startY, endX, endY, feature) {
                     } else if(x === centerX && y === centerY) {
                         this.cells[x][y] = Tile.FLOOR;
 
-                        var r = Math.adjustedRandom(0, 100);
+                        var r = ROT.RNG.getRangeUniform(0, 100);
                         if(r > 65) {
                             this.items.push(new Item(x, y, Items.random(undefined, 6))); // unique
                         } else {
@@ -582,7 +582,7 @@ Dungeon.prototype.placeRoom = function(startX, startY, endX, endY, feature) {
                         }
                     // (Trap) door
                     } else if(y === centerY + 1 && x === centerX) {
-                        if(Math.adjustedRandom(0, 4) === 0) {
+                        if(ROT.RNG.getRangeUniform(0, 4) === 0) {
                             this.cells[x][y] = Tile.BARS_DOOR;
                         } else {
                             this.cells[x][y] = Tile.BARS_TRAP;
@@ -608,7 +608,7 @@ Dungeon.prototype.placeRoom = function(startX, startY, endX, endY, feature) {
                     } else if(x === centerX && y === centerY) {
                         this.cells[x][y] = Tile.FLOOR;
 
-                        var r = Math.adjustedRandom(0, 100);
+                        var r = ROT.RNG.getRangeUniform(0, 100);
                         if(r > 90) {
                             this.items.push(new Item(x, y, Items.random(undefined, this.level + 1))); // dungeon level + 1
                         } else if(r > 75) {
@@ -661,7 +661,7 @@ Dungeon.prototype.placeRoom = function(startX, startY, endX, endY, feature) {
                     } else if(x === centerX && y === centerY) {
                         this.cells[x][y] = Tile.MONSTER_SPAWNER;
 
-                        var r = Math.adjustedRandom(0, 100);
+                        var r = ROT.RNG.getRangeUniform(0, 100);
                         if(r > 50) {
                             this.items.push(new Item(x, y, Items.random(undefined, 6))); // unique
                         } else {

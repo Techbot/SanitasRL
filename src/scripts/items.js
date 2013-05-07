@@ -517,18 +517,18 @@ var Items = {
             }
         }
 
-        item = this[items[Math.adjustedRandom(0, items.length - 1)]];
+        item = this[items[ROT.RNG.getRangeUniform(0, items.length - 1)]];
         if(type !== undefined && level !== undefined) {
             while(item.type !== type || item.level !== level) {
-                item = this[items[Math.adjustedRandom(0, items.length - 1)]];
+                item = this[items[ROT.RNG.getRangeUniform(0, items.length - 1)]];
             }
         } else if(type !== undefined) {
             while(item.type !== type) {
-                item = this[items[Math.adjustedRandom(0, items.length - 1)]];
+                item = this[items[ROT.RNG.getRangeUniform(0, items.length - 1)]];
             }
         } else if(level !== undefined) {
             while(item.level !== level) {
-                item = this[items[Math.adjustedRandom(0, items.length - 1)]];
+                item = this[items[ROT.RNG.getRangeUniform(0, items.length - 1)]];
             }
         }
 
