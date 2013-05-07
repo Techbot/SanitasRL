@@ -1200,6 +1200,17 @@ ROT.RNG = {
 		this._s2 = t - this._c;
 		return this._s2;
 	},
+    
+    /**
+     * This function does not come with the standard ROT.js library
+     * @param {int} min Minimum returned integer
+     * @param {int] max Maximum returned integer
+     * @returns {int} Pseudorandom value [min,max]
+     */
+    getRangeUniform: function(min, max) {
+        // Using Math.floor() will give you a non-uniform distribution!
+        return Math.floor(this.getUniform() * (max - min + 1)) + min;
+    },
 
 	/**
 	 * @param {float} [mean=0] Mean value
