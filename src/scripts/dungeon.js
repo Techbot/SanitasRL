@@ -93,7 +93,7 @@ Dungeon.prototype.generate = function() {
     
     generator.create(generatorCallback.bind(this));
     
-    var rooms = Array.shuffle(generator.getRooms()), i;
+    var rooms = generator.getRooms().randomize(), i;
     for(i = 0; i < rooms.length; i += 1) {
         // Add stairs to the first room
         var dx = rooms[i]._x2 - rooms[i]._x1,
