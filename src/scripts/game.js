@@ -136,25 +136,24 @@ Game.prototype.render = function() {
     }
     
     // Foreground
-    var i, t, c;
+    var i, obj;
     // Items
     for(i = 0; i < this.dungeon.items.length; i += 1) {
-        t = this.dungeon.items[i].image;
-        c = this.dungeon.items[i].color;
-        
-        this.canvas.drawImage(this.images.items, t.x * 16, t.y * 16, 16, 16, this.dungeon.items[i].x * this.tileSize, this.dungeon.items[i].y * this.tileSize, this.tileSize, this.tileSize);
+        obj = this.dungeon.items[i];
+
+        this.canvas.drawImage(this.images.items, obj.image.x * 16, obj.image.y * 16, 16, 16, obj.x * this.tileSize, obj.y * this.tileSize, this.tileSize, this.tileSize);
         
         // Draw the blending colour above the tile
         this.canvas.globalCompositeOperation = 'source-atop';
-        this.canvas.fillStyle = c;
+        this.canvas.fillStyle = obj.color;
         this.canvas.fillRect(this.dungeon.items[i].x * 16, this.dungeon.items[i].y * 16, 16, 16);
         this.canvas.globalCompositeOperation = 'source-over';
     }
 
     // Monsters
     for(i = 0; i < this.dungeon.monsters.length; i += 1) {
-        t = this.dungeon.monsters[i].image;
-        this.canvas.drawImage(this.images.monsters, t.x * 16, t.y * 16, 16, 16, this.dungeon.monsters[i].x * this.tileSize, this.dungeon.monsters[i].y * this.tileSize, this.tileSize, this.tileSize);
+        obj = this.dungeon.monsters[i];
+        this.canvas.drawImage(this.images.monsters, obj.image.x * 16, obj.image.y * 16, 16, 16, obj.x * this.tileSize, obj.y * this.tileSize, this.tileSize, this.tileSize);
     }
 
     this.canvas.drawImage(this.images.player, 0, 0, 16, 16, this.player.x * this.tileSize, this.player.y * this.tileSize, this.tileSize, this.tileSize);
