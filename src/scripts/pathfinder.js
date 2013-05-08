@@ -29,7 +29,7 @@ Monster.prototype.pathfind = function(sx, sy, dx, dy, dungeon) {
     }
 
     // 2. If we can move to the new position, do it
-    if(dungeon.cells[suggestedPosition.x][suggestedPosition.y].solid === false
+    if(dungeon.cells[suggestedPosition.x][suggestedPosition.y].solidPasses === true
         && dungeon.cells[suggestedPosition.x][suggestedPosition.y].id !== Tile.BARS_DOOR
         && dungeon.cells[suggestedPosition.x][suggestedPosition.y].id !== Tile.BARS_DOOR_OPEN
         && dungeon.monsterAt(suggestedPosition.x, suggestedPosition.y) === undefined) {
@@ -39,7 +39,7 @@ Monster.prototype.pathfind = function(sx, sy, dx, dy, dungeon) {
     // 3. If we can't move to the new position
 
     // Check if we can move left / right
-    if(dungeon.cells[suggestedPosition.x][sy].solid === false
+    if(dungeon.cells[suggestedPosition.x][sy].solidPasses === true
         && dungeon.cells[suggestedPosition.x][sy].id !== Tile.BARS_DOOR
         && dungeon.cells[suggestedPosition.x][sy].id !== Tile.BARS_DOOR_OPEN
         && dungeon.monsterAt(suggestedPosition.x, sy) === undefined) {
@@ -50,7 +50,7 @@ Monster.prototype.pathfind = function(sx, sy, dx, dy, dungeon) {
     }
 
     // Check if we can move up / down
-    if(dungeon.cells[sx][suggestedPosition.y].solid === false
+    if(dungeon.cells[sx][suggestedPosition.y].solidPasses === true
         && dungeon.cells[sx][suggestedPosition.y].id !== Tile.BARS_DOOR
         && dungeon.cells[sx][suggestedPosition.y].id !== Tile.BARS_DOOR_OPEN
         && dungeon.monsterAt(sx, suggestedPosition.y) === undefined) {
@@ -74,7 +74,7 @@ Monster.prototype.pathfind = function(sx, sy, dx, dy, dungeon) {
     if(suggestedPosition.x === sx
         && (suggestedPosition.y === sy + 1 || suggestedPosition.y === sy - 1)) {
         // try right - diagonally
-        if(dungeon.cells[suggestedPosition.x + 1][suggestedPosition.y].solid === false
+        if(dungeon.cells[suggestedPosition.x + 1][suggestedPosition.y].solidPasses === true
             && dungeon.cells[suggestedPosition.x + 1][suggestedPosition.y].id !== Tile.BARS_DOOR
             && dungeon.cells[suggestedPosition.x + 1][suggestedPosition.y].id !== Tile.BARS_DOOR_OPEN
             && dungeon.monsterAt(suggestedPosition.x + 1, suggestedPosition.y) === undefined) {
@@ -84,7 +84,7 @@ Monster.prototype.pathfind = function(sx, sy, dx, dy, dungeon) {
             };
         }
         // try left - diagonally
-        if(dungeon.cells[suggestedPosition.x - 1][suggestedPosition.y].solid === false
+        if(dungeon.cells[suggestedPosition.x - 1][suggestedPosition.y].solidPasses === true
             && dungeon.cells[suggestedPosition.x - 1][suggestedPosition.y].id !== Tile.BARS_DOOR
             && dungeon.cells[suggestedPosition.x - 1][suggestedPosition.y].id !== Tile.BARS_DOOR_OPEN
             && dungeon.monsterAt(suggestedPosition.x - 1, suggestedPosition.y) === undefined) {
@@ -99,7 +99,7 @@ Monster.prototype.pathfind = function(sx, sy, dx, dy, dungeon) {
     if(suggestedPosition.y === sy
         && (suggestedPosition.x === sx + 1 || suggestedPosition.x === sx - 1)) {
         // try up - diagonally
-        if(dungeon.cells[suggestedPosition.x][suggestedPosition.y - 1].solid === false
+        if(dungeon.cells[suggestedPosition.x][suggestedPosition.y - 1].solidPasses === true
             && dungeon.cells[suggestedPosition.x][suggestedPosition.y - 1].id !== Tile.BARS_DOOR
             && dungeon.cells[suggestedPosition.x][suggestedPosition.y - 1].id !== Tile.BARS_DOOR_OPEN
             && dungeon.monsterAt(suggestedPosition.x, suggestedPosition.y - 1) === undefined) {
@@ -109,7 +109,7 @@ Monster.prototype.pathfind = function(sx, sy, dx, dy, dungeon) {
             };
         }
         // try down - diagonally
-        if(dungeon.cells[suggestedPosition.x][suggestedPosition.y + 1].solid === false
+        if(dungeon.cells[suggestedPosition.x][suggestedPosition.y + 1].solidPasses === true
             && dungeon.cells[suggestedPosition.x][suggestedPosition.y + 1].id !== Tile.BARS_DOOR
             && dungeon.cells[suggestedPosition.x][suggestedPosition.y + 1].id !== Tile.BARS_DOOR_OPEN
             && dungeon.monsterAt(suggestedPosition.x, suggestedPosition.y + 1) === undefined) {
