@@ -7,10 +7,7 @@ var Tile = {
         id: 0,
         solid: false,
         transparent: true,
-        look: function() {
-            'use strict';
-            return undefined;
-        },
+        look: undefined,
         image: { x: 0, y: 0 },
         color: '#444'
     },
@@ -18,10 +15,7 @@ var Tile = {
         id: 1,
         solid: true,
         transparent: false,
-        look: function() {
-            'use strict';
-            return 'A wall';
-        },
+        look: 'A wall',
         image: { x: 1, y: 0 },
         color: '#a2a2a2'
     },
@@ -29,10 +23,7 @@ var Tile = {
         id: 2,
         solid: true,
         transparent: true,
-        look: function() {
-            'use strict';
-            return 'Some water';
-        },
+        look: 'Some water',
         image: { x: 0, y: 0 },
         color: '#175ba9'
     },
@@ -40,10 +31,7 @@ var Tile = {
         id: 3,
         solid: false,
         transparent: true,
-        look: function() {
-            'use strict';
-            return 'A staircase leading down';
-        },
+        look: 'A staircase leading down',
         image: { x: 3, y: 0 },
         color: '#a2a2a2'
     },
@@ -51,10 +39,7 @@ var Tile = {
         id: 4,
         solid: false,
         transparent: false,
-        look: function() {
-            'use strict';
-            return 'A closed door';
-        },
+        look: 'A closed door',
         image: { x: 4, y: 0 },
         color: '#a2a2a2'
     },
@@ -62,10 +47,7 @@ var Tile = {
         id: 5,
         solid: false,
         transparent: false,
-        look: function() {
-            'use strict';
-            return 'An open door';
-        },
+        look:'An open door',
         image: { x: 6, y: 0 },
         color: '#444'
     },
@@ -73,10 +55,7 @@ var Tile = {
         id: 8,
         solid: true,
         transparent: true,
-        look: function() {
-            'use strict';
-            return 'A water-filled well';
-        },
+        look: 'A water-filled well',
         image: { x: 1, y: 0 },
         color: '#8a1e51'
     },
@@ -84,10 +63,7 @@ var Tile = {
         id: 9,
         solid: true,
         transparent: true,
-        look: function() {
-            'use strict';
-            return 'An empty well';
-        },
+        look: 'An empty well',
         image: { x: 1, y: 0 },
         color: '#682444'
     },
@@ -95,10 +71,7 @@ var Tile = {
         id: 10,
         solid: true,
         transparent: true,
-        look: function() {
-            'use strict';
-            return 'A pillar reaching the ceiling';
-        },
+        look: 'A pillar reaching the ceiling',
         image: { x: 1, y: 0 },
         color: '#666'
     },
@@ -106,10 +79,7 @@ var Tile = {
         id: 11,
         solid: true,
         transparent: true,
-        look: function() {
-            'use strict';
-            return 'Iron bars';
-        },
+        look: 'Iron bars',
         image: { x: 2, y: 0 },
         color: '#a2a2a2'
     },
@@ -117,10 +87,7 @@ var Tile = {
         id: 14,
         solid: false,
         transparent: true,
-        look: function() {
-            'use strict';
-            return 'A corpse';
-        },
+        look: 'A corpse',
         image: { x: 0, y: 0 },
         color: '#c00'
     },
@@ -128,10 +95,7 @@ var Tile = {
         id: 15,
         solid: false,
         transparent: true,
-        look: function() {
-            'use strict';
-            return 'A closed iron bars door';
-        },
+        look: 'A closed iron bars door',
         image: { x: 4, y: 0 },
         color: '#a2a2a2'
     },
@@ -139,10 +103,7 @@ var Tile = {
         id: 23,
         solid: false,
         transparent: true,
-        look: function() {
-            'use strict';
-            return 'An open iron bars door';
-        },
+        look: 'An open iron bars door',
         image: { x: 6, y: 0 },
         color: '#444'
     },
@@ -150,10 +111,7 @@ var Tile = {
         id: 16,
         solid: false,
         transparent: true,
-        look: function() {
-            'use strict';
-            return 'A strange looking floor';
-        },
+        look: 'A strange looking floor',
         image: { x: 0, y: 0 },
         color: '#a2a2a2'
     },
@@ -161,10 +119,7 @@ var Tile = {
         id: 30,
         solid: false,
         transparent: true,
-        look: function() {
-            'use strict';
-            return 'A fire';
-        },
+        look: 'A fire',
         image: { x: 0, y: 0 },
         color: '#ff7300'
     }

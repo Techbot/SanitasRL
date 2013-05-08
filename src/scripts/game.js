@@ -260,8 +260,8 @@ Game.prototype.updateInterface = function() {
         };
     
     //if(this.pointIsInsideFOV(position.x, position.y) === true) {
-        if(this.dungeon.cells[position.x][position.y].look(this.player) !== undefined) {
-            look += this.dungeon.cells[position.x][position.y].look(this.player) + '<br>';
+        if(this.dungeon.cells[position.x][position.y] !== null && this.dungeon.cells[position.x][position.y].look !== undefined) {
+            look += this.dungeon.cells[position.x][position.y].look + '<br>';
         }
         if(this.dungeon.monsterAt(position.x, position.y) !== undefined) {
             look += this.dungeon.monsterAt(position.x, position.y).displayName() + '<br>';
