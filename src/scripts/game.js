@@ -165,7 +165,7 @@ Game.prototype.render = function() {
     }
     
     // Foreground
-    var i, t;
+    var i, t, c;
     // Items
     for(i = 0; i < this.dungeon.items.length; i += 1) {
         if(this.dungeon.items[i].x >= this.camera.x
@@ -175,7 +175,15 @@ Game.prototype.render = function() {
             /*&& this.dungeon.visited[this.dungeon.items[i].x][this.dungeon.items[i].y] === true*/) {
 
             t = this.dungeon.items[i].image;
+            c = this.dungeon.items[i].color;
+            
             this.canvas.drawImage(this.images.items, t.x * 16, t.y * 16, 16, 16, this.dungeon.items[i].x * this.tileSize, this.dungeon.items[i].y * this.tileSize, this.tileSize, this.tileSize);
+            
+            // Draw the blending colour above the tile
+            this.canvas.globalCompositeOperation = 'source-atop';
+            this.canvas.fillStyle = c;
+            this.canvas.fillRect(this.dungeon.items[i].x * 16, this.dungeon.items[i].y * 16, 16, 16);
+            this.canvas.globalCompositeOperation = 'source-over';
         }
     }
 

@@ -18,6 +18,7 @@ var Item = function(x, y, item) {
     this.level = item.level;
     this.effect = item.effect;
     this.image = item.image;
+    this.color = item.color;
 };
 
 Item.prototype.displayName = function() {
@@ -50,7 +51,8 @@ var Items = {
         image: {
             x: 0,
             y: 0
-        }
+        },
+        color: '#a2a2a2'
     },
     leather_armour: {
         id: 'leather_armour',
@@ -64,7 +66,8 @@ var Items = {
         image: {
             x: 0,
             y: 0
-        }
+        },
+        color: '#a2a2a2'
     },
     studded_leather_armour: {
         id: 'studded_leather_armour',
@@ -78,7 +81,8 @@ var Items = {
         image: {
             x: 0,
             y: 0
-        }
+        },
+        color: '#a2a2a2'
     },
     ringmail: {
         id: 'ringmail',
@@ -106,7 +110,8 @@ var Items = {
         image: {
             x: 0,
             y: 0
-        }
+        },
+        color: '#a2a2a2'
     },
     scalemail: {
         id: 'scalemail',
@@ -120,7 +125,8 @@ var Items = {
         image: {
             x: 0,
             y: 0
-        }
+        },
+        color: '#a2a2a2'
     },
     splintmail: {
         id: 'splintmail',
@@ -134,7 +140,8 @@ var Items = {
         image: {
             x: 0,
             y: 0
-        }
+        },
+        color: '#a2a2a2'
     },
     light_platemail: {
         id: 'light_platemail',
@@ -148,7 +155,8 @@ var Items = {
         image: {
             x: 0,
             y: 0
-        }
+        },
+        color: '#a2a2a2'
     },
     heavy_platemail: {
         id: 'heavy_platemail',
@@ -162,7 +170,8 @@ var Items = {
         image: {
             x: 0,
             y: 0
-        }
+        },
+        color: '#a2a2a2'
     },
     rogues_hide: {
         id: 'rogues_hide',
@@ -176,7 +185,8 @@ var Items = {
         image: {
             x: 0,
             y: 0
-        }
+        },
+        color: '#f0f'
     },
     aaidrics_defence: {
         id: 'aaidrics_defence',
@@ -190,7 +200,8 @@ var Items = {
         image: {
             x: 0,
             y: 0
-        }
+        },
+        color: '#f0f'
     },
     icyveins: {
         id: 'icyveins',
@@ -204,7 +215,8 @@ var Items = {
         image: {
             x: 0,
             y: 0
-        }
+        },
+        color: '#f0f'
     },
     // Equipment - Jewelry
     necklace_of_luck: {
@@ -218,7 +230,8 @@ var Items = {
         image: {
             x: 2,
             y: 0
-        }
+        },
+        color: '#a2a2a2'
     },
     amulet_of_detection: {
         id: 'amulet_of_detection',
@@ -231,7 +244,8 @@ var Items = {
         image: {
             x: 2,
             y: 0
-        }
+        },
+        color: '#f0f'
     },
     fargoths_ring: {
         id: 'fargoths_ring',
@@ -244,7 +258,8 @@ var Items = {
         image: {
             x: 2,
             y: 0
-        }
+        },
+        color: '#f0f'
     },
     // Equipment - Weapons
     axe: {
@@ -259,7 +274,8 @@ var Items = {
         image: {
             x: 1,
             y: 0
-        }
+        },
+        color: '#a2a2a2'
     },
     heavy_axe: {
         id: 'heavy_axe',
@@ -273,7 +289,8 @@ var Items = {
         image: {
             x: 1,
             y: 0
-        }
+        },
+        color: '#a2a2a2'
     },
     double_sided_axe: {
         id: 'double_sided_axe',
@@ -287,7 +304,8 @@ var Items = {
         image: {
             x: 1,
             y: 0
-        }
+        },
+        color: '#a2a2a2'
     },
     war_axe: {
         id: 'war_axe',
@@ -301,7 +319,8 @@ var Items = {
         image: {
             x: 1,
             y: 0
-        }
+        },
+        color: '#a2a2a2'
     },
     battle_axe: {
         id: 'battle_axe',
@@ -315,7 +334,8 @@ var Items = {
         image: {
             x: 1,
             y: 0
-        }
+        },
+        color: '#a2a2a2'
     },
     club: {
         id: 'club',
@@ -329,7 +349,8 @@ var Items = {
         image: {
             x: 1,
             y: 0
-        }
+        },
+        color: '#a2a2a2'
     },
     spiked_club: {
         id: 'spiked_club',
@@ -343,7 +364,8 @@ var Items = {
         image: {
             x: 1,
             y: 0
-        }
+        },
+        color: '#a2a2a2'
     },
     mace: {
         id: 'mace',
@@ -357,7 +379,8 @@ var Items = {
         image: {
             x: 1,
             y: 0
-        }
+        },
+        color: '#a2a2a2'
     },
     morning_star: {
         id: 'morning_star',
@@ -371,7 +394,8 @@ var Items = {
         image: {
             x: 1,
             y: 0
-        }
+        },
+        color: '#a2a2a2'
     },
     flail: {
         id: 'flail',
@@ -385,7 +409,8 @@ var Items = {
         image: {
             x: 1,
             y: 0
-        }
+        },
+        color: '#a2a2a2'
     },
     warhammer: {
         id: 'warhammer',
@@ -399,7 +424,8 @@ var Items = {
         image: {
             x: 1,
             y: 0
-        }
+        },
+        color: '#a2a2a2'
     },
     dagger: {
         id: 'dagger',
@@ -413,7 +439,8 @@ var Items = {
         image: {
             x: 1,
             y: 0
-        }
+        },
+        color: '#a2a2a2'
     },
     shortsword: {
         id: 'shortsword',
@@ -427,7 +454,8 @@ var Items = {
         image: {
             x: 1,
             y: 0
-        }
+        },
+        color: '#a2a2a2'
     },
     broadsword: {
         id: 'broadsword',
@@ -441,7 +469,8 @@ var Items = {
         image: {
             x: 1,
             y: 0
-        }
+        },
+        color: '#a2a2a2'
     },
     longsword: {
         id: 'longsword',
@@ -455,7 +484,8 @@ var Items = {
         image: {
             x: 1,
             y: 0
-        }
+        },
+        color: '#a2a2a2'
     },
     claymore: {
         id: 'claymore',
@@ -469,7 +499,8 @@ var Items = {
         image: {
             x: 1,
             y: 0
-        }
+        },
+        color: '#a2a2a2'
     },
     cloudcleaver: {
         id: 'cloudcleaver',
@@ -483,7 +514,8 @@ var Items = {
         image: {
             x: 1,
             y: 0
-        }
+        },
+        color: '#f0f'
     },
     warplauge: {
         id: 'warplauge',
@@ -497,7 +529,8 @@ var Items = {
         image: {
             x: 1,
             y: 0
-        }
+        },
+        color: '#f0f'
     },
     // Returns a random item of a specified type and level
     random: function(type, level) {
