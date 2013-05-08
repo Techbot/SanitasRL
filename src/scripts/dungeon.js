@@ -76,18 +76,20 @@ Dungeon.prototype.generate = function() {
     // Level 5 should work differently, we should generate a large room on level 5 for the boss
     if(this.level < 5) {
         var generator = new ROT.Map.Digger(this.width, this.height);
+        var floors = [];
         
         var x, y;
         for(x = 0; x < this.width; x += 1) {
             this.cells[x] = [];
             for(y = 0; y < this.height; y += 1) {
-                this.cells[x][y] = Tile.EMPTY;
+                this.cells[x][y] = null;
             }
         }
         
         var generatorCallback = function(x, y, value) {
             if(value === 0) {
                 this.cells[x][y] = Tile.FLOOR;
+                floors.push({ x: x, y: y });
             }
         };
         
@@ -188,67 +190,24 @@ Dungeon.prototype.generate = function() {
         
         // Place items
         this.items.length = 0;
-        
-        var item, placed, rx, ry, free;
+
         for(i = 0; i < 10; i += 1) {
-            placed = false;
-            do {
-                free = true;
-
-                rx = ROT.RNG.getInt(2, this.width - 2);
-                ry = ROT.RNG.getInt(2, this.height - 2);
-                item = new Item(rx, ry, Items.random(undefined, this.level));
-
-                if(rx !== Math.floor(this.width / 2) && ry !== Math.floor(this.height / 2)
-                    && this.cells[rx][ry].id === Tile.FLOOR.id              // Tile is a floor
-                    && this.cells[rx + 1][ry].id === Tile.FLOOR.id      // Adjacent tiles are floor
-                    && this.cells[rx - 1][ry].id === Tile.FLOOR.id
-                    && this.cells[rx][ry + 1].id === Tile.FLOOR.id
-                    && this.cells[rx][ry - 1].id === Tile.FLOOR.id
-                    && this.itemAt(rx, ry) === undefined) {             // No item at the position
-
-                    // loop and see if there is a similar item within 10 tiles
-                    for(x = rx - 5; x < rx + 5; x += 1) {
-                        for(y = ry - 5; y < ry + 5; y += 1) {
-                            if(this.itemAt(x, y) !== undefined && this.itemAt(x, y).type === item.type) {
-                                free = false;
-                            }
-                        }
-                    }
-
-                    if(free === true) {
-                        this.items.push(item);
-                        placed = true;
-                    }
-                }
-
-            } while(placed === false);
+            // Pick a random floor cell
+            var cell = floors.random();
+            if(this.itemAt(cell.x, cell.y) === undefined) {
+                this.items.push(new Item(cell.x, cell.y, Items.random(undefined, this.level)));
+            }
         }
         
         // Place monsters
         this.monsters.length = 0;
         
         for(i = 0; i < 20; i += 1) {
-            placed = false;
-            do {
-
-                rx = ROT.RNG.getInt(2, this.width - 2);
-                ry = ROT.RNG.getInt(2, this.height - 2);
-                if(rx !== Math.floor(this.width / 2) && ry !== Math.floor(this.height / 2)
-                    && this.cells[rx][ry].id === Tile.FLOOR.id
-                    && this.cells[rx + 1][ry].id === Tile.FLOOR.id
-                    && this.cells[rx - 1][ry].id === Tile.FLOOR.id
-                    && this.cells[rx][ry + 1].id === Tile.FLOOR.id
-                    && this.cells[rx][ry - 1].id === Tile.FLOOR.id
-                    && this.monsterAt(rx, ry) === undefined) {
-                    
-                    if(rx < Math.floor(this.width / 2) - 5 || rx > Math.floor(this.width / 2) + 5 || ry < Math.floor(this.height / 2) - 5 || ry > Math.floor(this.height / 2) + 5) {
-                        this.monsters.push(new Monster(rx, ry, Monsters.random(this.level)));
-                        placed = true;
-                    }
-                }
-
-            } while(placed === false);
+            // Pick a random floor cell
+            var cell = floors.random();
+            if(this.monsterAt(cell.x, cell.y) === undefined) {
+                this.monsters.push(new Monster(cell.x, cell.y, Monsters.random(this.level)));
+            }
         }
     // Level 5
     } else {
@@ -259,7 +218,7 @@ Dungeon.prototype.generate = function() {
         for(x = 0; x < this.width; x += 1) {
             this.cells[x] = [];
             for(y = 0; y < this.height; y += 1) {
-                this.cells[x][y] = Tile.EMPTY;
+                this.cells[x][y] = null;
                 
                 if(x === 0 || x === this.width - 1 || y === 0 || y === this.height - 1) {
                     this.cells[x][y] = Tile.WALL;
@@ -291,44 +250,44 @@ Dungeon.prototype.generate = function() {
     var x, y;
     for(x = 1; x < this.width - 1; x += 1) {
         for(y = 1; y < this.height - 1; y += 1) {            
-            if(this.cells[x][y].id === Tile.FLOOR.id) {
+            if(this.cells[x][y] !== null && this.cells[x][y].id === Tile.FLOOR.id) {
                 // North
-                if(this.cells[x][y - 1].id === Tile.EMPTY.id) {
+                if(this.cells[x][y - 1] === null) {
                     this.cells[x][y - 1] = Tile.WALL;
                 }
                 
                 // North East
-                if(this.cells[x + 1][y - 1].id === Tile.EMPTY.id) {
+                if(this.cells[x + 1][y - 1] === null) {
                     this.cells[x + 1][y - 1] = Tile.WALL;
                 }
                 
                 // East
-                if(this.cells[x + 1][y].id === Tile.EMPTY.id) {
+                if(this.cells[x + 1][y] === null) {
                     this.cells[x + 1][y] = Tile.WALL;
                 }
                 
                 // South East
-                if(this.cells[x + 1][y + 1].id === Tile.EMPTY.id) {
+                if(this.cells[x + 1][y + 1] === null) {
                     this.cells[x + 1][y + 1] = Tile.WALL;
                 }
                 
                 // South
-                if(this.cells[x][y + 1].id === Tile.EMPTY.id) {
+                if(this.cells[x][y + 1] === null) {
                     this.cells[x][y + 1] = Tile.WALL;
                 }
                 
                 // South West
-                if(this.cells[x - 1][y + 1].id === Tile.EMPTY.id) {
+                if(this.cells[x - 1][y + 1] === null) {
                     this.cells[x - 1][y + 1] = Tile.WALL;
                 }
                 
                 // West
-                if(this.cells[x - 1][y].id === Tile.EMPTY.id) {
+                if(this.cells[x - 1][y] === null) {
                     this.cells[x - 1][y] = Tile.WALL;
                 }
                 
                 // North West
-                if(this.cells[x - 1][y - 1].id === Tile.EMPTY.id) {
+                if(this.cells[x - 1][y - 1] === null) {
                     this.cells[x - 1][y - 1] = Tile.WALL;
                 }
             }

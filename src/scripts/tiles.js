@@ -1,25 +1,8 @@
-/*
- * SanitasRL - 7DRL2013
- * Developer: codejunkie
- * URL: http://codejunkie.se/sanitasrl/
- */
-
 // solid: Whether an entity can move through this tile
 // transparent: Whether the FOV can move through this tile
 // look: The message displayed when this tile is looked at
 // image: The image displayed when this tile is drawn
 var Tile = {
-    EMPTY: {
-        id: -1,
-        solid: undefined,
-        transparent: undefined,
-        look: function() {
-            'use strict';
-            return undefined;
-        },
-        image: undefined,
-        color: undefined
-    },
     FLOOR: {
         id: 0,
         solid: false,

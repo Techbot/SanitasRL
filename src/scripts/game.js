@@ -146,7 +146,7 @@ Game.prototype.render = function() {
         for(y = 0; y < 36; y += 1) {
             //if(x > 0 && y > 0 && x < this.dungeon.width && y < this.dungeon.height) {
 
-                if(this.dungeon.cells[x][y].id !== Tile.EMPTY.id) {
+                if(this.dungeon.cells[x][y] !== null) {
                     cell = this.dungeon.cells[x][y];
 
                     // Draw the tile
