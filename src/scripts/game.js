@@ -66,14 +66,6 @@ Game.prototype.initialize = function() {
         y: undefined
     };
 
-    // The positions of the camera
-    this.camera = {
-        x: undefined,
-        y: undefined,
-        x2: undefined,
-        y2: undefined
-    };
-
     // Set the paths for the tilesets
     this.images.items.src = 'images/items.png';
     this.images.tileset.src = 'images/tileset.png';
@@ -102,24 +94,6 @@ Game.prototype.initialize = function() {
     this.render();
 };
 
-/*
- * Positions the camera to center around a point (dx, dy)
- */
-Game.prototype.updateCamera = function(dx, dy) {
-    'use strict';
-
-    this.camera = {
-        //x: dx - Math.ceil(this.width.cells / 2),
-        //y: dy - Math.ceil(this.height.cells / 2),
-        //x2: dx + Math.ceil(this.width.cells / 2),
-        //y2: dy + Math.ceil(this.height.cells / 2)
-        x: dx - 30,
-        y: dy - 18,
-        x2: dx + 29,
-        y2: dy + 17,
-    };
-};
-
 Game.prototype.resize = function(e) {
     'use strict';
 
@@ -135,9 +109,6 @@ Game.prototype.resize = function(e) {
 
 Game.prototype.render = function() {
     'use strict';
- 
-    this.updateCamera(this.player.x, this.player.y);
-    
     this.canvas.clearRect(0, 0, 960, 576);
 
     // Background
@@ -168,40 +139,24 @@ Game.prototype.render = function() {
     var i, t, c;
     // Items
     for(i = 0; i < this.dungeon.items.length; i += 1) {
-        if(this.dungeon.items[i].x >= this.camera.x
-            && this.dungeon.items[i].x <= this.camera.x2
-            && this.dungeon.items[i].y >= this.camera.y
-            && this.dungeon.items[i].y <= this.camera.y2
-            /*&& this.dungeon.visited[this.dungeon.items[i].x][this.dungeon.items[i].y] === true*/) {
-
-            t = this.dungeon.items[i].image;
-            c = this.dungeon.items[i].color;
-            
-            this.canvas.drawImage(this.images.items, t.x * 16, t.y * 16, 16, 16, this.dungeon.items[i].x * this.tileSize, this.dungeon.items[i].y * this.tileSize, this.tileSize, this.tileSize);
-            
-            // Draw the blending colour above the tile
-            this.canvas.globalCompositeOperation = 'source-atop';
-            this.canvas.fillStyle = c;
-            this.canvas.fillRect(this.dungeon.items[i].x * 16, this.dungeon.items[i].y * 16, 16, 16);
-            this.canvas.globalCompositeOperation = 'source-over';
-        }
+        t = this.dungeon.items[i].image;
+        c = this.dungeon.items[i].color;
+        
+        this.canvas.drawImage(this.images.items, t.x * 16, t.y * 16, 16, 16, this.dungeon.items[i].x * this.tileSize, this.dungeon.items[i].y * this.tileSize, this.tileSize, this.tileSize);
+        
+        // Draw the blending colour above the tile
+        this.canvas.globalCompositeOperation = 'source-atop';
+        this.canvas.fillStyle = c;
+        this.canvas.fillRect(this.dungeon.items[i].x * 16, this.dungeon.items[i].y * 16, 16, 16);
+        this.canvas.globalCompositeOperation = 'source-over';
     }
 
     // Monsters
     for(i = 0; i < this.dungeon.monsters.length; i += 1) {
-        if(this.dungeon.monsters[i].x >= this.camera.x
-            && this.dungeon.monsters[i].x <= this.camera.x2
-            && this.dungeon.monsters[i].y >= this.camera.y
-            && this.dungeon.monsters[i].y <= this.camera.y2
-            /*&& this.pointIsInsideFOV(this.dungeon.monsters[i].x, this.dungeon.monsters[i].y)*/) {
-
-            t = this.dungeon.monsters[i].image;
-            this.canvas.drawImage(this.images.monsters, t.x * 16, t.y * 16, 16, 16, this.dungeon.monsters[i].x * this.tileSize, this.dungeon.monsters[i].y * this.tileSize, this.tileSize, this.tileSize);
-
-        }
+        t = this.dungeon.monsters[i].image;
+        this.canvas.drawImage(this.images.monsters, t.x * 16, t.y * 16, 16, 16, this.dungeon.monsters[i].x * this.tileSize, this.dungeon.monsters[i].y * this.tileSize, this.tileSize, this.tileSize);
     }
 
-    //this.canvas.drawImage(this.images.player, (this.player.x - this.camera.x) * this.tileSize, (this.player.y - this.camera.y) * this.tileSize);
     this.canvas.drawImage(this.images.player, 0, 0, 16, 16, this.player.x * this.tileSize, this.player.y * this.tileSize, this.tileSize, this.tileSize);
     
     if(this.mode === this.modes.LOOK || this.mode === this.modes.TELEKINESIS) {
