@@ -28,21 +28,12 @@ var Game = function() {
     // Get the canvas context from the DOM
     this.canvas = document.getElementById('canvas').getContext('2d');
     
-    // The images used as tilesets
-    this.tileset = new Image();
-    
     // welcome - showing welcome screen
     // death - showing death screen
     // score - showing score screen
     // running - running / gameplay
     this.state = 'welcome';
-};
-
-Game.prototype.initialize = function() {
-    'use strict';
-   
-    this.bossClosed = false;
-   
+    
     // 
     this.turnCounter = 0;
     
@@ -57,9 +48,6 @@ Game.prototype.initialize = function() {
         x: undefined,
         y: undefined
     };
-
-    // Set the paths for the tilesets
-    this.tileset.src = 'images/tileset.png';
     
     // The different modes the player can be in
     this.modes = {
@@ -80,7 +68,16 @@ Game.prototype.initialize = function() {
     // ???
     //this.dungeon.updateVisitedCells(this.fov);
     
-    this.render();
+    // The images used as tilesets
+    this.tileset = new Image();
+    
+    this.tileset.onload = function() {
+        this.render();
+    }.bind(this);
+    
+
+    // Set the paths for the tilesets
+    this.tileset.src = 'images/tileset.png';
 };
 
 Game.prototype.render = function() {
