@@ -21,7 +21,7 @@ var ROT = {
 	/** Default height for display and map generators */
 	DEFAULT_HEIGHT: 25,
 
-	/** Directional constants. */
+	/** Directional constants */
     NORTH:      0,
     NORTH_EAST: 1,
     EAST:       2,
