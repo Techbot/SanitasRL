@@ -175,7 +175,7 @@ var Items = {
         effect: 3.5,
         image: {
             x: 0,
-            y: 1
+            y: 0
         }
     },
     aaidrics_defence: {
@@ -189,7 +189,7 @@ var Items = {
         effect: 6,
         image: {
             x: 0,
-            y: 1
+            y: 0
         }
     },
     icyveins: {
@@ -203,7 +203,7 @@ var Items = {
         effect: 4.5,
         image: {
             x: 0,
-            y: 1
+            y: 0
         }
     },
     // Equipment - Jewelry
@@ -230,7 +230,7 @@ var Items = {
         level: 6,
         image: {
             x: 2,
-            y: 1
+            y: 0
         }
     },
     fargoths_ring: {
@@ -243,7 +243,7 @@ var Items = {
         level: 6,
         image: {
             x: 2,
-            y: 1
+            y: 0
         }
     },
     // Equipment - Weapons
@@ -482,7 +482,7 @@ var Items = {
         effect: 1.5,
         image: {
             x: 1,
-            y: 1
+            y: 0
         }
     },
     warplauge: {
@@ -496,7 +496,7 @@ var Items = {
         effect: 3,
         image: {
             x: 1,
-            y: 1
+            y: 0
         }
     },
     // Returns a random item of a specified type and level
