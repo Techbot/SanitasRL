@@ -1,7 +1,9 @@
-// solid: Whether an entity can move through this tile
-// transparent: Whether the FOV can move through this tile
-// look: The message displayed when this tile is looked at
-// image: The image displayed when this tile is drawn
+// id:              the identifier of the tile type
+// solid:           whether an entity can move through the tile
+// transparent:     whether light passes through the tile
+// look:            the message displayed when the tile is described
+// image:           the coordinates of the tile in the tileset (in 16x16 cells)
+// color:           the color to blend the tile with
 var Tile = {
     FLOOR: {
         id: 0,
