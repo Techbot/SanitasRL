@@ -33,10 +33,7 @@ var Game = function() {
     
     // The images used as tilesets
     this.images = {
-        items: new Image(),
-        tileset: new Image(),
-        monsters: new Image(),
-        player: new Image()
+        tileset: new Image()
     };
     
     // welcome - showing welcome screen
@@ -67,10 +64,7 @@ Game.prototype.initialize = function() {
     };
 
     // Set the paths for the tilesets
-    this.images.items.src = 'images/items.png';
     this.images.tileset.src = 'images/tileset.png';
-    this.images.monsters.src = 'images/monsters.png';
-    this.images.player.src = 'images/player.png';
     
     // The different modes the player can be in
     this.modes = {
@@ -141,7 +135,7 @@ Game.prototype.render = function() {
     for(i = 0; i < this.dungeon.items.length; i += 1) {
         obj = this.dungeon.items[i];
 
-        this.canvas.drawImage(this.images.items, obj.image.x * 16, obj.image.y * 16, 16, 16, obj.x * this.tileSize, obj.y * this.tileSize, this.tileSize, this.tileSize);
+        this.canvas.drawImage(this.images.tileset, obj.image.x * 16, obj.image.y * 16, 16, 16, obj.x * this.tileSize, obj.y * this.tileSize, this.tileSize, this.tileSize);
         
         // Draw the blending colour above the tile
         this.canvas.globalCompositeOperation = 'source-atop';
@@ -153,10 +147,10 @@ Game.prototype.render = function() {
     // Monsters
     for(i = 0; i < this.dungeon.monsters.length; i += 1) {
         obj = this.dungeon.monsters[i];
-        this.canvas.drawImage(this.images.monsters, obj.image.x * 16, obj.image.y * 16, 16, 16, obj.x * this.tileSize, obj.y * this.tileSize, this.tileSize, this.tileSize);
+        this.canvas.drawImage(this.images.tileset, obj.image.x * 16, obj.image.y * 16, 16, 16, obj.x * this.tileSize, obj.y * this.tileSize, this.tileSize, this.tileSize);
     }
 
-    this.canvas.drawImage(this.images.player, 0, 0, 16, 16, this.player.x * this.tileSize, this.player.y * this.tileSize, this.tileSize, this.tileSize);
+    this.canvas.drawImage(this.images.tileset, 3 * 16, 2 * 16, 16, 16, this.player.x * this.tileSize, this.player.y * this.tileSize, this.tileSize, this.tileSize);
     
     if(this.mode === this.modes.LOOK || this.mode === this.modes.TELEKINESIS) {
         this.canvas.strokeStyle = '#0f0';

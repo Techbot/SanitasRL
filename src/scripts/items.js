@@ -50,7 +50,7 @@ var Items = {
         effect: 0,
         image: {
             x: 0,
-            y: 0
+            y: 1
         },
         color: '#a2a2a2'
     },
@@ -65,7 +65,7 @@ var Items = {
         effect: 1,
         image: {
             x: 0,
-            y: 0
+            y: 1
         },
         color: '#a2a2a2'
     },
@@ -80,7 +80,7 @@ var Items = {
         effect: 2,
         image: {
             x: 0,
-            y: 0
+            y: 1
         },
         color: '#a2a2a2'
     },
@@ -95,7 +95,7 @@ var Items = {
         effect: 3,
         image: {
             x: 0,
-            y: 0
+            y: 1
         }
     },
     chainmail: {
@@ -109,7 +109,7 @@ var Items = {
         effect: 4,
         image: {
             x: 0,
-            y: 0
+            y: 1
         },
         color: '#a2a2a2'
     },
@@ -124,7 +124,7 @@ var Items = {
         effect: 5,
         image: {
             x: 0,
-            y: 0
+            y: 1
         },
         color: '#a2a2a2'
     },
@@ -139,7 +139,7 @@ var Items = {
         effect: 6,
         image: {
             x: 0,
-            y: 0
+            y: 1
         },
         color: '#a2a2a2'
     },
@@ -154,7 +154,7 @@ var Items = {
         effect: 7,
         image: {
             x: 0,
-            y: 0
+            y: 1
         },
         color: '#a2a2a2'
     },
@@ -169,7 +169,7 @@ var Items = {
         effect: 8,
         image: {
             x: 0,
-            y: 0
+            y: 1
         },
         color: '#a2a2a2'
     },
@@ -184,7 +184,7 @@ var Items = {
         effect: 3.5,
         image: {
             x: 0,
-            y: 0
+            y: 1
         },
         color: '#f0f'
     },
@@ -199,7 +199,7 @@ var Items = {
         effect: 6,
         image: {
             x: 0,
-            y: 0
+            y: 1
         },
         color: '#f0f'
     },
@@ -214,7 +214,7 @@ var Items = {
         effect: 4.5,
         image: {
             x: 0,
-            y: 0
+            y: 1
         },
         color: '#f0f'
     },
@@ -229,7 +229,7 @@ var Items = {
         level: 0,
         image: {
             x: 2,
-            y: 0
+            y: 1
         },
         color: '#a2a2a2'
     },
@@ -243,7 +243,7 @@ var Items = {
         level: 6,
         image: {
             x: 2,
-            y: 0
+            y: 1
         },
         color: '#f0f'
     },
@@ -257,7 +257,7 @@ var Items = {
         level: 6,
         image: {
             x: 2,
-            y: 0
+            y: 1
         },
         color: '#f0f'
     },
@@ -273,7 +273,7 @@ var Items = {
         effect: 1.5,
         image: {
             x: 1,
-            y: 0
+            y: 1
         },
         color: '#a2a2a2'
     },
@@ -288,7 +288,7 @@ var Items = {
         effect: 2,
         image: {
             x: 1,
-            y: 0
+            y: 1
         },
         color: '#a2a2a2'
     },
@@ -303,7 +303,7 @@ var Items = {
         effect: 2.5,
         image: {
             x: 1,
-            y: 0
+            y: 1
         },
         color: '#a2a2a2'
     },
@@ -318,7 +318,7 @@ var Items = {
         effect: 3,
         image: {
             x: 1,
-            y: 0
+            y: 1
         },
         color: '#a2a2a2'
     },
@@ -333,7 +333,7 @@ var Items = {
         effect: 3.5,
         image: {
             x: 1,
-            y: 0
+            y: 1
         },
         color: '#a2a2a2'
     },
@@ -348,7 +348,7 @@ var Items = {
         effect: 1,
         image: {
             x: 1,
-            y: 0
+            y: 1
         },
         color: '#a2a2a2'
     },
@@ -363,7 +363,7 @@ var Items = {
         effect: 1.5,
         image: {
             x: 1,
-            y: 0
+            y: 1
         },
         color: '#a2a2a2'
     },
@@ -378,7 +378,7 @@ var Items = {
         effect: 2,
         image: {
             x: 1,
-            y: 0
+            y: 1
         },
         color: '#a2a2a2'
     },
@@ -393,7 +393,7 @@ var Items = {
         effect: 2.5,
         image: {
             x: 1,
-            y: 0
+            y: 1
         },
         color: '#a2a2a2'
     },
@@ -408,7 +408,7 @@ var Items = {
         effect: 3,
         image: {
             x: 1,
-            y: 0
+            y: 1
         },
         color: '#a2a2a2'
     },
@@ -423,7 +423,7 @@ var Items = {
         effect: 3.5,
         image: {
             x: 1,
-            y: 0
+            y: 1
         },
         color: '#a2a2a2'
     },
@@ -438,7 +438,7 @@ var Items = {
         effect: 1.5,
         image: {
             x: 1,
-            y: 0
+            y: 1
         },
         color: '#a2a2a2'
     },
@@ -453,7 +453,7 @@ var Items = {
         effect: 2,
         image: {
             x: 1,
-            y: 0
+            y: 1
         },
         color: '#a2a2a2'
     },
@@ -468,7 +468,7 @@ var Items = {
         effect: 2.5,
         image: {
             x: 1,
-            y: 0
+            y: 1
         },
         color: '#a2a2a2'
     },
@@ -483,7 +483,7 @@ var Items = {
         effect: 3,
         image: {
             x: 1,
-            y: 0
+            y: 1
         },
         color: '#a2a2a2'
     },
@@ -498,7 +498,7 @@ var Items = {
         effect: 3.5,
         image: {
             x: 1,
-            y: 0
+            y: 1
         },
         color: '#a2a2a2'
     },
@@ -513,7 +513,7 @@ var Items = {
         effect: 1.5,
         image: {
             x: 1,
-            y: 0
+            y: 1
         },
         color: '#f0f'
     },
@@ -528,7 +528,7 @@ var Items = {
         effect: 3,
         image: {
             x: 1,
-            y: 0
+            y: 1
         },
         color: '#f0f'
     },

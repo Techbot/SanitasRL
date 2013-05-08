@@ -201,7 +201,7 @@ var Monsters = {
         humanoid: false,
         image: {
             x: 0,
-            y: 0
+            y: 2
         }
     },
     snake: {
@@ -215,7 +215,7 @@ var Monsters = {
         humanoid: false,
         image: {
             x: 1,
-            y: 0
+            y: 2
         }
     },
     hound: {
@@ -229,7 +229,7 @@ var Monsters = {
         humanoid: false,
         image: {
             x: 2,
-            y: 0
+            y: 2
         }
     },
     // Dungeon Level 2
@@ -244,7 +244,7 @@ var Monsters = {
         humanoid: true,
         image: {
             x: 0,
-            y: 1
+            y: 3
         }
     },
     kobold: {
@@ -258,7 +258,7 @@ var Monsters = {
         humanoid: true,
         image: {
             x: 1,
-            y: 1
+            y: 3
         }
     },
     gnoll: {
@@ -272,7 +272,7 @@ var Monsters = {
         humanoid: true,
         image: {
             x: 2,
-            y: 1
+            y: 3
         }
     },
     // Dungeon Level 3
@@ -287,7 +287,7 @@ var Monsters = {
         humanoid: true,
         image: {
             x: 0,
-            y: 2
+            y: 4
         }
     },
     zombie: {
@@ -301,7 +301,7 @@ var Monsters = {
         humanoid: false,
         image: {
             x: 1,
-            y: 2
+            y: 4
         }
     },
     troll: {
@@ -315,7 +315,7 @@ var Monsters = {
         humanoid: false,
         image: {
             x: 2,
-            y: 2
+            y: 4
         }
     },
     // Dungeon Level 4
@@ -330,7 +330,7 @@ var Monsters = {
         humanoid: true,
         image: {
             x: 0,
-            y: 3
+            y: 5
         }
     },
     hobgoblin: {
@@ -344,7 +344,7 @@ var Monsters = {
         humanoid: true,
         image: {
             x: 1,
-            y: 3
+            y: 5
         }
     },
     wraith: {
@@ -358,7 +358,7 @@ var Monsters = {
         humanoid: false,
         image: {
             x: 2,
-            y: 3
+            y: 5
         }
     },
     // Dungeon Level 5
@@ -373,7 +373,7 @@ var Monsters = {
         humanoid: false,
         image: {
             x: 0,
-            y: 4
+            y: 6
         }
     },
     bonelord: {
@@ -387,7 +387,7 @@ var Monsters = {
         humanoid: false,
         image: {
             x: 1,
-            y: 4
+            y: 6
         }
     },
     // Dungeon Level 5 (6) - Boss
@@ -402,7 +402,7 @@ var Monsters = {
         humanoid: false,
         image: {
             x: 2,
-            y: 4
+            y: 6
         }
     },
     // Returns a random monster of a specified level
