@@ -90,7 +90,7 @@ Monster.prototype.turn = function(player, dungeon, turn) {
             if(this.pointIsAdjecent(this.x, this.y, player.x, player.y) === true) {
 
                 // check if we can hit the player
-                if(ROT.RNG.getRangeUniform(0, 100) > this.hit + (5 * player.calcDefence())) {
+                if(ROT.RNG.getInt(0, 100) > this.hit + (5 * player.calcDefence())) {
                     // TODO: Notify user about the monster missing you
                 } else {
                     dmg = Math.max(0.25, this.calcDamage() - player.calcDefence());
@@ -138,7 +138,7 @@ Monster.prototype.turn = function(player, dungeon, turn) {
                     if(this.pointIsAdjecent(this.x, this.y, player.x, player.y) === true) {
 
                         // check if we can hit the player
-                        if(ROT.RNG.getRangeUniform(0, 100) > this.hit + (5 * player.calcDefence())) {
+                        if(ROT.RNG.getInt(0, 100) > this.hit + (5 * player.calcDefence())) {
                             // TODO: Notify user about the dragon missing you
                         } else {
                             dmg = Math.max(0.25, this.calcDamage() - player.calcDefence());
@@ -419,10 +419,10 @@ var Monsters = {
             }
         }
 
-        monster = this[monsters[ROT.RNG.getRangeUniform(0, monsters.length - 1)]];
+        monster = this[monsters[ROT.RNG.getInt(0, monsters.length - 1)]];
         if(level !== undefined) {
             while(monster.level !== level) {
-                monster = this[monsters[ROT.RNG.getRangeUniform(0, monsters.length - 1)]];
+                monster = this[monsters[ROT.RNG.getInt(0, monsters.length - 1)]];
             }
         }
 

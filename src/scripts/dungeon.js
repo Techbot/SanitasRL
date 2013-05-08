@@ -107,10 +107,10 @@ Dungeon.prototype.generate = function() {
                 var done = false;
                 
                 while(done === false) {
-                    switch(ROT.RNG.getRangeUniform(0, 4)) {
+                    switch(ROT.RNG.getInt(0, 4)) {
                         case 0: // Water treasure
                             if(dx >= 4 && dy >= 4) {
-                                var r = ROT.RNG.getRangeUniform(0, 100);
+                                var r = ROT.RNG.getInt(0, 100);
                                 if(r > 90) {
                                     this.items.push(new Item(cx, cy, Items.random(undefined, this.level + 1))); // dungeon level + 1
                                 } else if(r > 75) {
@@ -133,7 +133,7 @@ Dungeon.prototype.generate = function() {
                             break;
                         case 1: // Trapped treasure
                             if(dx >= 4 && dy >= 4) {
-                                var r = ROT.RNG.getRangeUniform(0, 100);
+                                var r = ROT.RNG.getInt(0, 100);
                                 if(r > 65) {
                                     this.items.push(new Item(cx, cy, Items.random(undefined, 6))); // unique
                                 } else {
@@ -155,7 +155,7 @@ Dungeon.prototype.generate = function() {
                             break;
                         case 2: // Monster treasure
                             this.cells[cx][cy] = Tile.MONSTER_SPAWNER;
-                            var r = ROT.RNG.getRangeUniform(0, 100);
+                            var r = ROT.RNG.getInt(0, 100);
                             if(r > 50) {
                                 this.items.push(new Item(cx, cy, Items.random(undefined, 6))); // unique
                             } else {
@@ -195,8 +195,8 @@ Dungeon.prototype.generate = function() {
             do {
                 free = true;
 
-                rx = ROT.RNG.getRangeUniform(2, this.width - 2);
-                ry = ROT.RNG.getRangeUniform(2, this.height - 2);
+                rx = ROT.RNG.getInt(2, this.width - 2);
+                ry = ROT.RNG.getInt(2, this.height - 2);
                 item = new Item(rx, ry, Items.random(undefined, this.level));
 
                 if(rx !== Math.floor(this.width / 2) && ry !== Math.floor(this.height / 2)
@@ -232,8 +232,8 @@ Dungeon.prototype.generate = function() {
             placed = false;
             do {
 
-                rx = ROT.RNG.getRangeUniform(2, this.width - 2);
-                ry = ROT.RNG.getRangeUniform(2, this.height - 2);
+                rx = ROT.RNG.getInt(2, this.width - 2);
+                ry = ROT.RNG.getInt(2, this.height - 2);
                 if(rx !== Math.floor(this.width / 2) && ry !== Math.floor(this.height / 2)
                     && this.cells[rx][ry].id === Tile.FLOOR.id
                     && this.cells[rx + 1][ry].id === Tile.FLOOR.id
@@ -280,7 +280,7 @@ Dungeon.prototype.generate = function() {
         generator.create();
         generator.create(generatorCallback.bind(this));
         
-        this.monsters.push(new Monster(ROT.RNG.getRangeUniform(2, this.width - 4), ROT.RNG.getRangeUniform(2, this.height - 4), Monsters.dragon));
+        this.monsters.push(new Monster(ROT.RNG.getInt(2, this.width - 4), ROT.RNG.getInt(2, this.height - 4), Monsters.dragon));
         this.items.push(new Item(2, 2, Items.random(undefined, this.level + 1))); // dungeon level + 1
         this.items.push(new Item(2, 3, Items.random(undefined, this.level + 1))); // dungeon level + 1
         this.items.push(new Item(2, 4, Items.random(undefined, this.level + 1))); // dungeon level + 1
