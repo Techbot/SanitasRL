@@ -105,57 +105,45 @@ Game.prototype.render = function() {
     'use strict';
     this.canvas.clearRect(0, 0, 960, 576);
 
-    // Background
-    var x, y, cell;
-    for(x = 0; x < 60; x += 1) {
-        for(y = 0; y < 36; y += 1) {
-            //if(x > 0 && y > 0 && x < this.dungeon.width && y < this.dungeon.height) {
-
-                if(this.dungeon.cells[x][y] !== null) {
-                    cell = this.dungeon.cells[x][y];
-
-                    // Draw the tile
-                    this.canvas.drawImage(this.images.tileset, cell.image.x * 16, cell.image.y * 16, 16, 16, x * this.tileSize, y * this.tileSize, this.tileSize, this.tileSize);
-                    
-                    // Draw the blending colour above the tile
+    var x, y, tile, color;
+    for(x = 0; x < this.dungeon.width; x += 1) {
+        for(y = 0; y < this.dungeon.height; y += 1) {
+            tile = null;
+            // Check if the player is in this cell
+            if(x === this.player.x && y === this.player.y) {
+                tile = { x: 3, y: 2 };
+                color = undefined;
+            // Check if there's a monster in this cell
+            } else if(this.dungeon.monsterAt(x, y) !== undefined) {
+                tile = this.dungeon.monsterAt(x, y).image;
+                color = undefined;
+            // Check if there's an item in this cell
+            } else if(this.dungeon.itemAt(x, y) !== undefined) {
+                tile = this.dungeon.itemAt(x, y).image;
+                color = this.dungeon.itemAt(x, y).color;
+            // Draw the cell otherwise
+            } else if(this.dungeon.cells[x][y] !== null) {
+                tile = this.dungeon.cells[x][y].image;
+                color = this.dungeon.cells[x][y].color;
+            }
+            
+            if(tile != null) {
+                this.canvas.drawImage(this.images.tileset, tile.x * 16, tile.y * 16, 16, 16, x * this.tileSize, y * this.tileSize, this.tileSize, this.tileSize);
+        
+                if(color !== undefined) {
                     this.canvas.globalCompositeOperation = 'source-atop';
-                    this.canvas.fillStyle = cell.color;
+                    this.canvas.fillStyle = color;
                     this.canvas.fillRect(x * 16, y * 16, 16, 16);
                     this.canvas.globalCompositeOperation = 'source-over';
-                    
                 }
-
-            //}
+            }
         }
     }
     
-    // Foreground
-    var i, obj;
-    // Items
-    for(i = 0; i < this.dungeon.items.length; i += 1) {
-        obj = this.dungeon.items[i];
-
-        this.canvas.drawImage(this.images.tileset, obj.image.x * 16, obj.image.y * 16, 16, 16, obj.x * this.tileSize, obj.y * this.tileSize, this.tileSize, this.tileSize);
-        
-        // Draw the blending colour above the tile
-        this.canvas.globalCompositeOperation = 'source-atop';
-        this.canvas.fillStyle = obj.color;
-        this.canvas.fillRect(this.dungeon.items[i].x * 16, this.dungeon.items[i].y * 16, 16, 16);
-        this.canvas.globalCompositeOperation = 'source-over';
-    }
-
-    // Monsters
-    for(i = 0; i < this.dungeon.monsters.length; i += 1) {
-        obj = this.dungeon.monsters[i];
-        this.canvas.drawImage(this.images.tileset, obj.image.x * 16, obj.image.y * 16, 16, 16, obj.x * this.tileSize, obj.y * this.tileSize, this.tileSize, this.tileSize);
-    }
-
-    this.canvas.drawImage(this.images.tileset, 3 * 16, 2 * 16, 16, 16, this.player.x * this.tileSize, this.player.y * this.tileSize, this.tileSize, this.tileSize);
-    
     if(this.mode === this.modes.LOOK || this.mode === this.modes.TELEKINESIS) {
         this.canvas.strokeStyle = '#0f0';
-        this.canvas.lineWidth = 2;
-        this.canvas.strokeRect(this.cursor.x * this.tileSize + 1, this.cursor.y * this.tileSize + 1, this.tileSize - 2, this.tileSize - 2);
+        this.canvas.lineWidth = 1;
+        this.canvas.strokeRect(this.cursor.x * this.tileSize + .5, this.cursor.y * this.tileSize + .5, this.tileSize - 1, this.tileSize - 1); // .5 to create a 1px line instead of blurry 2px
     }
     
     window.requestAnimationFrame(this.render.bind(this));
