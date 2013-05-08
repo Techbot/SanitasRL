@@ -28,13 +28,8 @@ var Game = function() {
     // Get the canvas context from the DOM
     this.canvas = document.getElementById('canvas').getContext('2d');
     
-    // The size of the individual tiles for the viewport
-    this.tileSize = 16;
-    
     // The images used as tilesets
-    this.images = {
-        tileset: new Image()
-    };
+    this.tileset = new Image();
     
     // welcome - showing welcome screen
     // death - showing death screen
@@ -64,7 +59,7 @@ Game.prototype.initialize = function() {
     };
 
     // Set the paths for the tilesets
-    this.images.tileset.src = 'images/tileset.png';
+    this.tileset.src = 'images/tileset.png';
     
     // The different modes the player can be in
     this.modes = {
@@ -86,19 +81,6 @@ Game.prototype.initialize = function() {
     //this.dungeon.updateVisitedCells(this.fov);
     
     this.render();
-};
-
-Game.prototype.resize = function(e) {
-    'use strict';
-
-    console.log('resize');
-    
-    // Get the width and height of the window
-    var width = parseInt($(window).width(), 10),
-        height = parseInt($(window).height(), 10);
-
-    // Update the canvases with the new width and height
-    $('canvas#canvas').attr({ 'width': 960, 'height': 576});
 };
 
 Game.prototype.render = function() {
@@ -128,7 +110,7 @@ Game.prototype.render = function() {
             }
             
             if(tile != null) {
-                this.canvas.drawImage(this.images.tileset, tile.x * 16, tile.y * 16, 16, 16, x * this.tileSize, y * this.tileSize, this.tileSize, this.tileSize);
+                this.canvas.drawImage(this.tileset, tile.x * 16, tile.y * 16, 16, 16, x * 16, y * 16, 16, 16);
         
                 if(color !== undefined) {
                     this.canvas.globalCompositeOperation = 'source-atop';
@@ -143,7 +125,7 @@ Game.prototype.render = function() {
     if(this.mode === this.modes.LOOK || this.mode === this.modes.TELEKINESIS) {
         this.canvas.strokeStyle = '#0f0';
         this.canvas.lineWidth = 1;
-        this.canvas.strokeRect(this.cursor.x * this.tileSize + .5, this.cursor.y * this.tileSize + .5, this.tileSize - 1, this.tileSize - 1); // .5 to create a 1px line instead of blurry 2px
+        this.canvas.strokeRect(this.cursor.x * 16 + .5, this.cursor.y * 16 + .5, 16 - 1, 16 - 1); // .5 to create a 1px line instead of blurry 2px
     }
     
     window.requestAnimationFrame(this.render.bind(this));
