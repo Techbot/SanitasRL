@@ -1,5 +1,5 @@
 // id:              the identifier of the tile type
-// solidPasses:     whether an entity can move through the tile
+// entityPasses:    whether an entity can move through the tile
 // lightPasses:     whether light passes through the tile
 // look:            the message displayed when the tile is described
 // image:           the coordinates of the tile in the tileset (in 16x16 cells)
@@ -7,7 +7,7 @@
 var Tile = {
     FLOOR: {
         id: 0,
-        solidPasses: true,
+        entityPasses: true,
         lightPasses: true,
         look: undefined,
         image: { x: 0, y: 0 },
@@ -15,7 +15,7 @@ var Tile = {
     },
     WALL: {
         id: 1,
-        solidPasses: false,
+        entityPasses: false,
         lightPasses: false,
         look: 'A wall',
         image: { x: 1, y: 0 },
@@ -23,7 +23,7 @@ var Tile = {
     },
     WATER: {
         id: 2,
-        solidPasses: false,
+        entityPasses: false,
         lightPasses: true,
         look: 'Some water',
         image: { x: 0, y: 0 },
@@ -31,7 +31,7 @@ var Tile = {
     },
     STAIRS: {
         id: 3,
-        solidPasses: true,
+        entityPasses: true,
         lightPasses: true,
         look: 'A staircase leading down',
         image: { x: 3, y: 0 },
@@ -39,7 +39,7 @@ var Tile = {
     },
     DOOR: {
         id: 4,
-        solidPasses: true,
+        entityPasses: true,
         lightPasses: false,
         look: 'A closed door',
         image: { x: 4, y: 0 },
@@ -47,7 +47,7 @@ var Tile = {
     },
     DOOR_OPEN: {
         id: 5,
-        solidPasses: true,
+        entityPasses: true,
         lightPasses: false,
         look:'An open door',
         image: { x: 6, y: 0 },
@@ -55,7 +55,7 @@ var Tile = {
     },
     SHRINE: {
         id: 8,
-        solidPasses: false,
+        entityPasses: false,
         lightPasses: true,
         look: 'A water-filled well',
         image: { x: 1, y: 0 },
@@ -63,7 +63,7 @@ var Tile = {
     },
     SHRINE_USED: {
         id: 9,
-        solidPasses: false,
+        entityPasses: false,
         lightPasses: true,
         look: 'An empty well',
         image: { x: 1, y: 0 },
@@ -71,7 +71,7 @@ var Tile = {
     },
     PILLAR: {
         id: 10,
-        solidPasses: false,
+        entityPasses: false,
         lightPasses: true,
         look: 'A pillar reaching the ceiling',
         image: { x: 1, y: 0 },
@@ -79,7 +79,7 @@ var Tile = {
     },
     BARS: {
         id: 11,
-        solidPasses: false,
+        entityPasses: false,
         lightPasses: true,
         look: 'Iron bars',
         image: { x: 2, y: 0 },
@@ -87,7 +87,7 @@ var Tile = {
     },
     BLOOD_STAINED_FLOOR: {
         id: 14,
-        solidPasses: true,
+        entityPasses: true,
         lightPasses: true,
         look: 'A corpse',
         image: { x: 0, y: 0 },
@@ -95,7 +95,7 @@ var Tile = {
     },
     BARS_DOOR: {
         id: 15,
-        solidPasses: true,
+        entityPasses: true,
         lightPasses: true,
         look: 'A closed iron bars door',
         image: { x: 4, y: 0 },
@@ -103,7 +103,7 @@ var Tile = {
     },
     BARS_DOOR_OPEN: {
         id: 23,
-        solidPasses: true,
+        entityPasses: true,
         lightPasses: true,
         look: 'An open iron bars door',
         image: { x: 6, y: 0 },
@@ -111,7 +111,7 @@ var Tile = {
     },
     MONSTER_SPAWNER: { // MAYBE OTHER TYPE?
         id: 16,
-        solidPasses: true,
+        entityPasses: true,
         lightPasses: true,
         look: 'A strange looking floor',
         image: { x: 0, y: 0 },
@@ -119,7 +119,7 @@ var Tile = {
     },
     FIREBALL: {
         id: 30,
-        solidPasses: true,
+        entityPasses: true,
         lightPasses: true,
         look: 'A fire',
         image: { x: 0, y: 0 },

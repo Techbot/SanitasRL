@@ -492,7 +492,7 @@ Game.prototype.keydown = function(code, key) {
             this.cursor.y = newPosition.y;
         // If there has been a change to the newPosition
         } else if(this.player.x !== newPosition.x || this.player.y !== newPosition.y) {
-            if(this.dungeon.cells[newPosition.x][newPosition.y].solidPasses === true) {
+            if(this.dungeon.cells[newPosition.x][newPosition.y].entityPasses === true) {
                 if(this.dungeon.monsterAt(newPosition.x, newPosition.y) === undefined) {
                     // Move
                     
@@ -587,7 +587,7 @@ Game.prototype.keydown = function(code, key) {
                                                     tempPosition.x = newPosition.x - 1;
                                                     tempPosition.y = newPosition.y - 1;
                                             }
-                                            if(this.dungeon.itemAt(tempPosition.x, tempPosition.y) === undefined && this.dungeon.cells[tempPosition.x][tempPosition.y].solidPasses === true) {
+                                            if(this.dungeon.itemAt(tempPosition.x, tempPosition.y) === undefined && this.dungeon.cells[tempPosition.x][tempPosition.y].entityPasses === true) {
                                                 i.x = tempPosition.x;
                                                 i.y = tempPosition.y;
                                             }
