@@ -159,27 +159,6 @@ Game.prototype.render = function() {
  * Goes to the next turn, also updates all monsters
  */
 Game.prototype.turn = function() {
-    var i;
-
-    // Death
-    if(this.player.health <= 0) {
-        // Set HP to 0 if it's less than 0
-        this.player.health = 0;
-        this.player.updateInterface();
-        
-        // Show the death message
-        this.state = 'death';
-        $('.death span.turns').text(this.turnCounter);
-        $('.death span.lastHit').text(this.player.lastHitPro);
-        $('.death span.enemy').text(this.player.lastHit);
-        $('.death span.level').text(this.dungeon.level);
-        $('.death span.weapon').text(this.player.weapon.displayName());
-        $('.death span.armour').text(this.player.armour.displayName());
-        $('.death span.jewelry').text(this.player.jewelry.displayName());
-        $('.background').fadeIn(1500);
-        $('.death').fadeIn(1500);
-    }
-    
     this.turnCounter += 1;
 };
 
@@ -323,8 +302,6 @@ Game.prototype.keydown = function(code, key) {
                 //case Keys.VK_Q:
                 case 'q':
                     if(this.dungeon.cells[this.player.x][this.player.y - 1] === Tile.SHRINE) {
-                        this.player.health += 1 + (this.dungeon.level / 2);
-                        this.player.updateInterface();
                         this.dungeon.cells[this.player.x][this.player.y - 1] = Tile.SHRINE_USED;
                         
                         // TODO: Notify user about gaining health from drinking and the well being exhausted
@@ -332,8 +309,6 @@ Game.prototype.keydown = function(code, key) {
                         // UPDATE THE TURN COUNTER
                         this.turn();
                     } else if(this.dungeon.cells[this.player.x + 1][this.player.y] === Tile.SHRINE) {
-                        this.player.health += 1 + (this.dungeon.level / 2);
-                        this.player.updateInterface();
                         this.dungeon.cells[this.player.x + 1][this.player.y] = Tile.SHRINE_USED;
                         
                         // TODO: Notify user about gaining health from drinking and the well being exhausted
@@ -341,8 +316,6 @@ Game.prototype.keydown = function(code, key) {
                         // UPDATE THE TURN COUNTER
                         this.turn();
                     } else if(this.dungeon.cells[this.player.x][this.player.y + 1] === Tile.SHRINE) {
-                        this.player.health += 1 + (this.dungeon.level / 2);
-                        this.player.updateInterface();
                         this.dungeon.cells[this.player.x][this.player.y + 1] = Tile.SHRINE_USED;
                         
                         // TODO: Notify user about gaining health from drinking and the well being exhausted
@@ -350,8 +323,6 @@ Game.prototype.keydown = function(code, key) {
                         // UPDATE THE TURN COUNTER
                         this.turn();
                     } else if(this.dungeon.cells[this.player.x - 1][this.player.y] === Tile.SHRINE) {
-                        this.player.health += 1 + (this.dungeon.level / 2);
-                        this.player.updateInterface();
                         this.dungeon.cells[this.player.x - 1][this.player.y] = Tile.SHRINE_USED;
                         
                         // TODO: Notify user about gaining health from drinking and the well being exhausted
@@ -399,19 +370,9 @@ Game.prototype.keydown = function(code, key) {
                     this.dungeon.cells[this.player.x][this.player.y] = Tile.DOOR_OPEN;
                     break;
                 case Tile.MONSTER_SPAWNER:
-                    if(this.player.armour.id !== 'icyveins') {
-                        // spawn monsters
-
-                        // TODO: Notify user about you triggering the monster trap
-                    } else {
-                        // TODO: Notify user about you noticing the monster trap
-                    }
                     this.dungeon.cells[this.player.x][this.player.y] = Tile.FLOOR;
                     break;
                 case Tile.FIREBALL:
-                    this.player.health -= 2;
-                    this.player.lastHitPro = 'by stepping into';
-                    this.player.lastHit = 'a fire';
                     // TODO: Notify user about taking 2 damage from the fire
                     break;
             }
