@@ -5,23 +5,9 @@ var Dungeon = function() {
     this.level = 1;
     
     this.cells = [];
-    this.monsters = [];
     this.items = [];
     
     this.generate();
-};
-
-Dungeon.prototype.monsterAt = function(x, y) {
-    'use strict';
-
-    var i;
-    for(i = 0; i < this.monsters.length; i += 1) {
-        if(this.monsters[i].x === x && this.monsters[i].y === y) {
-            return this.monsters[i];
-        }
-    }
-
-    return undefined;
 };
 
 Dungeon.prototype.itemAt = function(x, y) {
@@ -35,18 +21,6 @@ Dungeon.prototype.itemAt = function(x, y) {
     }
 
     return undefined;
-};
-
-Dungeon.prototype.removeMonsterAt = function(x, y) {
-    'use strict';
-
-    var i;
-    for(i = 0; i < this.monsters.length; i += 1) {
-        if(this.monsters[i].x === x && this.monsters[i].y === y) {
-            this.monsters.splice(i, 1);
-            return true;
-        }
-    }
 };
 
 Dungeon.prototype.replaceItemAt = function(x, y, item) {
@@ -70,6 +44,29 @@ Dungeon.prototype.updateVisitedCells = function(bounds) {
             this.visited[x][y] = true;
         }
     }
+};
+
+// Returns the tile and color of the monster, item or tile at position x, y
+Dungeon.prototype.at = function(x, y) {
+    var item = this.itemAt(x, y),
+        tile = this.cells[x][y];
+
+    if(item !== undefined) {
+        return {
+            x: item.image.x,
+            y: item.image.y,
+            color: item.color
+        };
+    } else if(tile !== null) {
+        tile = Tile[tile];
+        return {
+            x: tile.image.x,
+            y: tile.image.y,
+            color: tile.color
+        };
+    }
+    
+    return null;
 };
 
 Dungeon.prototype.generate = function() {
@@ -199,16 +196,6 @@ Dungeon.prototype.generate = function() {
             }
         }
         
-        // Place monsters
-        this.monsters.length = 0;
-        
-        for(i = 0; i < 20; i += 1) {
-            // Pick a random floor cell
-            var cell = floors.random();
-            if(this.monsterAt(cell.x, cell.y) === undefined) {
-                this.monsters.push(new Monster(cell.x, cell.y, Monsters.random(this.level)));
-            }
-        }
     // Level 5
     } else {
         var generator = new ROT.Map.Cellular(this.width - 4, this.height - 4);
@@ -239,7 +226,6 @@ Dungeon.prototype.generate = function() {
         generator.create();
         generator.create(generatorCallback.bind(this));
         
-        this.monsters.push(new Monster(ROT.RNG.getInt(2, this.width - 4), ROT.RNG.getInt(2, this.height - 4), Monsters.dragon));
         this.items.push(new Item(2, 2, Items.random(undefined, this.level + 1))); // dungeon level + 1
         this.items.push(new Item(2, 3, Items.random(undefined, this.level + 1))); // dungeon level + 1
         this.items.push(new Item(2, 4, Items.random(undefined, this.level + 1))); // dungeon level + 1
@@ -250,7 +236,7 @@ Dungeon.prototype.generate = function() {
     var x, y;
     for(x = 1; x < this.width - 1; x += 1) {
         for(y = 1; y < this.height - 1; y += 1) {            
-            if(this.cells[x][y] !== null && this.cells[x][y].id === Tile.FLOOR.id) {
+            if(this.cells[x][y] !== null && this.cells[x][y] === Tile.FLOOR) {
                 // North
                 if(this.cells[x][y - 1] === null) {
                     this.cells[x][y - 1] = Tile.WALL;

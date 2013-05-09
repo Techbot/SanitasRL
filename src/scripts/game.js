@@ -87,31 +87,19 @@ Game.prototype.render = function() {
     var x, y, tile, color;
     for(x = 0; x < this.dungeon.width; x += 1) {
         for(y = 0; y < this.dungeon.height; y += 1) {
-            tile = null;
-            // Check if the player is in this cell
+            var tile;
             if(x === this.player.x && y === this.player.y) {
-                tile = { x: 3, y: 2 };
-                color = undefined;
-            // Check if there's a monster in this cell
-            } else if(this.dungeon.monsterAt(x, y) !== undefined) {
-                tile = this.dungeon.monsterAt(x, y).image;
-                color = undefined;
-            // Check if there's an item in this cell
-            } else if(this.dungeon.itemAt(x, y) !== undefined) {
-                tile = this.dungeon.itemAt(x, y).image;
-                color = this.dungeon.itemAt(x, y).color;
-            // Draw the cell otherwise
-            } else if(this.dungeon.cells[x][y] !== null) {
-                tile = this.dungeon.cells[x][y].image;
-                color = this.dungeon.cells[x][y].color;
+                tile = { x: 3, y: 2, color: undefined };
+            } else {
+                tile = this.dungeon.at(x, y);
             }
             
-            if(tile != null) {
+            if(tile !== null) {
                 this.canvas.drawImage(this.tileset, tile.x * 16, tile.y * 16, 16, 16, x * 16, y * 16, 16, 16);
         
-                if(color !== undefined) {
+                if(tile.color !== undefined) {
                     this.canvas.globalCompositeOperation = 'source-atop';
-                    this.canvas.fillStyle = color;
+                    this.canvas.fillStyle = tile.color;
                     this.canvas.fillRect(x * 16, y * 16, 16, 16);
                     this.canvas.globalCompositeOperation = 'source-over';
                 }
@@ -122,7 +110,7 @@ Game.prototype.render = function() {
     if(this.mode === this.modes.LOOK || this.mode === this.modes.TELEKINESIS) {
         this.canvas.strokeStyle = '#0f0';
         this.canvas.lineWidth = 1;
-        this.canvas.strokeRect(this.cursor.x * 16 + .5, this.cursor.y * 16 + .5, 16 - 1, 16 - 1); // .5 to create a 1px line instead of blurry 2px
+        this.canvas.strokeRect(this.cursor.x * 16 + 0.5, this.cursor.y * 16 + 0.5, 16 - 1, 16 - 1); // .5 to create a 1px line instead of blurry 2px
     }
     
     window.requestAnimationFrame(this.render.bind(this));
@@ -133,7 +121,7 @@ Game.prototype.render = function() {
  */
 Game.prototype.turn = function() {
     var i;
-    for(i = 0; i < this.dungeon.monsters.length; i += 1) {
+    /*for(i = 0; i < this.dungeon.monsters.length; i += 1) {
         //if(this.pointIsInsideFOV(this.dungeon.monsters[i].x, this.dungeon.monsters[i].y)) {
             this.dungeon.monsters[i].lastKnownPositionOfPlayer = {
                 x: this.player.x,
@@ -144,7 +132,7 @@ Game.prototype.turn = function() {
         if(this.dungeon.monsters[i].lastKnownPositionOfPlayer !== undefined) {
             this.dungeon.monsters[i].turn(this.player, this.dungeon, this.turnCounter);
         }
-    }
+    }*/
     
     // Death
     if(this.player.health <= 0) {
@@ -183,11 +171,8 @@ Game.prototype.updateInterface = function() {
         };
     
     //if(this.pointIsInsideFOV(position.x, position.y) === true) {
-        if(this.dungeon.cells[position.x][position.y] !== null && this.dungeon.cells[position.x][position.y].look !== undefined) {
-            look += this.dungeon.cells[position.x][position.y].look + '<br>';
-        }
-        if(this.dungeon.monsterAt(position.x, position.y) !== undefined) {
-            look += this.dungeon.monsterAt(position.x, position.y).displayName() + '<br>';
+        if(this.dungeon.cells[position.x][position.y] !== null && Tile[this.dungeon.cells[position.x][position.y]].look !== undefined) {
+            look += Tile[this.dungeon.cells[position.x][position.y]].look + '<br>';
         }
         if(this.dungeon.itemAt(position.x, position.y) !== undefined) {
             look += this.dungeon.itemAt(position.x, position.y).displayName() + '<br>';
@@ -205,15 +190,7 @@ Game.prototype.updateAmulet = function() {
         var x, y, enemies = false;
         for(x = this.player.x - 7; x <= this.player.x + 7; x += 1) {
             for(y = this.player.y - 7; y <= this.player.y + 7; y += 1) {
-                if(this.dungeon.monsterAt(x, y) !== undefined) {
-                    enemies = true;
-                    
-                    if(this.amulet_glowing === false) {
-                        this.amulet_glowing = true;
-                        // TODO: Notify user about amulet glowing
-                    }
-                
-                }
+
             }
         }
 
@@ -298,7 +275,7 @@ Game.prototype.keydown = function(code, key) {
         // Stairs (THE SWEDISH <> KEY OR ENTER)
         //} else if(Keys.VK_STAIRS.indexOf(e.which) !== -1) {
         } else if(key === '>') {
-            if(this.dungeon.cells[this.player.x][this.player.y].id === Tile.STAIRS.id) {
+            if(this.dungeon.cells[this.player.x][this.player.y] === Tile.STAIRS) {
                 // Generate a new level
                 this.dungeon.level += 1;
                 this.dungeon.generate();
@@ -381,7 +358,7 @@ Game.prototype.keydown = function(code, key) {
                                 this.dungeon.replaceItemAt(this.cursor.x, this.cursor.y, olditem);
 
                                 // FARGOTH'S RING EQUIP
-                                if(lditem.type === Item.type.jewelry && this.player.jewelry.id === 'fargoths_ring') {
+                                if(olditem.type === Item.type.jewelry && this.player.jewelry.id === 'fargoths_ring') {
                                     this.player.health += 2;
                                 // UNEQUIP
                                 } else if(olditem.id === 'fargoths_ring') {
@@ -396,10 +373,8 @@ Game.prototype.keydown = function(code, key) {
                                 this.turn();
                             }
                             
-                            switch(this.dungeon.cells[this.cursor.x][this.cursor.y].id) {
-                                case Tile.DOOR.id:
-                                    this.dungeon.cells[this.cursor.x][this.cursor.y] = Tile.DOOR_OPEN;
-                                    break;
+                            if(this.dungeon.cells[this.cursor.x][this.cursor.y] === Tile.DOOR) {
+                                this.dungeon.cells[this.cursor.x][this.cursor.y] = Tile.DOOR_OPEN;
                             }
                             
                             // Go back to movement mode and reset the newPosition
@@ -438,7 +413,7 @@ Game.prototype.keydown = function(code, key) {
                 // Pray
                 //case Keys.VK_Q:
                 case 'q':
-                    if(this.dungeon.cells[this.player.x][this.player.y - 1].id === Tile.SHRINE.id) {
+                    if(this.dungeon.cells[this.player.x][this.player.y - 1] === Tile.SHRINE) {
                         this.player.health += 1 + (this.dungeon.level / 2);
                         this.player.updateInterface();
                         this.dungeon.cells[this.player.x][this.player.y - 1] = Tile.SHRINE_USED;
@@ -447,7 +422,7 @@ Game.prototype.keydown = function(code, key) {
                         
                         // UPDATE THE TURN COUNTER
                         this.turn();
-                    } else if(this.dungeon.cells[this.player.x + 1][this.player.y].id === Tile.SHRINE.id) {
+                    } else if(this.dungeon.cells[this.player.x + 1][this.player.y] === Tile.SHRINE) {
                         this.player.health += 1 + (this.dungeon.level / 2);
                         this.player.updateInterface();
                         this.dungeon.cells[this.player.x + 1][this.player.y] = Tile.SHRINE_USED;
@@ -456,7 +431,7 @@ Game.prototype.keydown = function(code, key) {
                         
                         // UPDATE THE TURN COUNTER
                         this.turn();
-                    } else if(this.dungeon.cells[this.player.x][this.player.y + 1].id === Tile.SHRINE.id) {
+                    } else if(this.dungeon.cells[this.player.x][this.player.y + 1] === Tile.SHRINE) {
                         this.player.health += 1 + (this.dungeon.level / 2);
                         this.player.updateInterface();
                         this.dungeon.cells[this.player.x][this.player.y + 1] = Tile.SHRINE_USED;
@@ -465,7 +440,7 @@ Game.prototype.keydown = function(code, key) {
                         
                         // UPDATE THE TURN COUNTER
                         this.turn();
-                    } else if(this.dungeon.cells[this.player.x - 1][this.player.y].id === Tile.SHRINE.id) {
+                    } else if(this.dungeon.cells[this.player.x - 1][this.player.y] === Tile.SHRINE) {
                         this.player.health += 1 + (this.dungeon.level / 2);
                         this.player.updateInterface();
                         this.dungeon.cells[this.player.x - 1][this.player.y] = Tile.SHRINE_USED;
@@ -492,181 +467,37 @@ Game.prototype.keydown = function(code, key) {
             this.cursor.y = newPosition.y;
         // If there has been a change to the newPosition
         } else if(this.player.x !== newPosition.x || this.player.y !== newPosition.y) {
-            if(this.dungeon.cells[newPosition.x][newPosition.y].entityPasses === true) {
-                if(this.dungeon.monsterAt(newPosition.x, newPosition.y) === undefined) {
-                    // Move
+            if(Tile[this.dungeon.cells[newPosition.x][newPosition.y]].entityPasses === true) {
+                this.player.x = newPosition.x;
+                this.player.y = newPosition.y;
                     
-                    /*if(this.dungeon.cells[newPosition.x][newPosition.y].id === Tile.BOSS_DOOR.id) {
-                        // TODO: Notify user about entering the boss lair
-                        this.dungeon.cells[newPosition.x][newPosition.y] = Tile.BOSS_SECOND_DOOR;
-                    } else {*/
-                        this.player.x = newPosition.x;
-                        this.player.y = newPosition.y;
-                            
-                        //this.fov = this.calculateFOV();
-                        
-                        // update all other entities
-                        // they should attack here?
-                        this.turn();
-                    //}
-                } else {
-                    // Fight
-                    if(ROT.RNG.getInt(0, 100) <= this.player.hit() + (5 * this.dungeon.monsterAt(newPosition.x, newPosition.y).calcDefence())) {
-                        if(this.player.calcDamage() - this.dungeon.monsterAt(newPosition.x, newPosition.y).calcDefence() > 0) {
-                        
-                            this.dungeon.monsterAt(newPosition.x, newPosition.y).health -= (this.player.calcDamage() - this.dungeon.monsterAt(newPosition.x, newPosition.y).calcDefence());
-                        
-                            var mess = 'You dealt ' + (this.player.calcDamage() - this.dungeon.monsterAt(newPosition.x, newPosition.y).calcDefence()) + ' damage to the ' + this.dungeon.monsterAt(newPosition.x, newPosition.y).name;
-                            if(this.dungeon.monsterAt(newPosition.x, newPosition.y).health > 0) {
-                                mess += ', ' + this.dungeon.monsterAt(newPosition.x, newPosition.y).health + ' health remaining.';
-                            }
-                        
-                            // TODO: Notify user about combat (variable: mess)
-                            
-                            if(this.dungeon.monsterAt(newPosition.x, newPosition.y).health <= 0) {
-                            
-                                if(this.dungeon.monsterAt(newPosition.x, newPosition.y).name === 'Dragon') {
-                                    this.state = 'score';
-                                    $('.score span.weapon').text(this.player.weapon.displayName());
-                                    $('.score span.armour').text(this.player.armour.displayName());
-                                    $('.score span.jewelry').text(this.player.jewelry.displayName());
-                                    $('.background').fadeIn(1500);
-                                    $('.score').fadeIn(1500);
-                                }
-                                
-                                // TODO: Notify user about the monster dying
-                                
-                                // if the monster has items, drop one of them
-                                if(this.dungeon.monsterAt(newPosition.x, newPosition.y).weapon !== undefined) {
-                                    var which = ROT.RNG.getInt(0, 1), i;
-                                    if(which === 0) {
-                                        i = this.dungeon.monsterAt(newPosition.x, newPosition.y).weapon;
-                                    } else {
-                                        i = this.dungeon.monsterAt(newPosition.x, newPosition.y).armour;
-                                    }
-                                    
-                                    if(this.dungeon.itemAt(newPosition.x, newPosition.y) === undefined) {
-                                        i.x = newPosition.x;
-                                        i.y = newPosition.y;
-                                    } else {
-                                        var dir, tries = 0, tempPosition = {
-                                            x: undefined,
-                                            y: undefined
-                                        };
-                                        while((i.x === undefined && i.y === undefined) || tries < 8) {
-                                            switch(tries) {
-                                                case ROT.NORTH:
-                                                    tempPosition.x = newPosition.x;
-                                                    tempPosition.y = newPosition.y - 1;
-                                                    break;
-                                                case ROT.NORTH_EAST:
-                                                    tempPosition.x = newPosition.x + 1;
-                                                    tempPosition.y = newPosition.y - 1;
-                                                    break;
-                                                case ROT.EAST:
-                                                    tempPosition.x = newPosition.x + 1;
-                                                    tempPosition.y = newPosition.y;
-                                                    break;
-                                                case ROT.SOUTH_EAST:
-                                                    tempPosition.x = newPosition.x + 1;
-                                                    tempPosition.y = newPosition.y + 1;
-                                                    break;
-                                                case ROT.SOUTH:
-                                                    tempPosition.x = newPosition.x;
-                                                    tempPosition.y = newPosition.y + 1;
-                                                    break;
-                                                case ROT.SOUTH_WEST:
-                                                    tempPosition.x = newPosition.x - 1;
-                                                    tempPosition.y = newPosition.y + 1;
-                                                    break;
-                                                case ROT.WEST:
-                                                    tempPosition.x = newPosition.x - 1;
-                                                    tempPosition.y = newPosition.y;
-                                                    break;
-                                                case ROT.NORTH_WEST:
-                                                    tempPosition.x = newPosition.x - 1;
-                                                    tempPosition.y = newPosition.y - 1;
-                                            }
-                                            if(this.dungeon.itemAt(tempPosition.x, tempPosition.y) === undefined && this.dungeon.cells[tempPosition.x][tempPosition.y].entityPasses === true) {
-                                                i.x = tempPosition.x;
-                                                i.y = tempPosition.y;
-                                            }
-                                            tries += 1;
-                                        }
-                                    }
-                                    if(i.x !== undefined && i.y !== undefined) {
-                                        this.dungeon.items.push(i);
-                                    }
-                                }
-                                
-                                this.dungeon.removeMonsterAt(newPosition.x, newPosition.y);
-                                if(this.dungeon.cells[newPosition.x][newPosition.y].id === Tile.FLOOR.id) {
-                                    this.dungeon.cells[newPosition.x][newPosition.y] = Tile.BLOOD_STAINED_FLOOR;
-                                }
-                            }
-                    
-                        } else {
-                            // TODO: Notify user about you hitting but not dealing any damage
-                        }
-                    } else {
-                        // TODO: Notify user about you missing
-                    }
-                    
-                    // update all other entities
-                    this.turn();
-                }
+                //this.fov = this.calculateFOV();
+                
+                // update all other entities
+                // they should attack here?
+                this.turn();
             }
             //this.dungeon.updateVisitedCells(this.fov);
             
             // Check for special behaviour on tiles
-            switch(this.dungeon.cells[this.player.x][this.player.y].id) {
-                case Tile.BARS_DOOR.id:
+            switch(this.dungeon.cells[this.player.x][this.player.y]) {
+                case Tile.BARS_DOOR:
                     this.dungeon.cells[this.player.x][this.player.y] = Tile.BARS_DOOR_OPEN;
                     break;
-                case Tile.DOOR.id:
+                case Tile.DOOR:
                     this.dungeon.cells[this.player.x][this.player.y] = Tile.DOOR_OPEN;
                     break;
-                case Tile.MONSTER_SPAWNER.id:
+                case Tile.MONSTER_SPAWNER:
                     if(this.player.armour.id !== 'icyveins') {
                         // spawn monsters
-                        this.dungeon.monsters.push(new Monster(this.player.x + 1, this.player.y, Monsters.random(this.dungeon.level)));
-                        this.dungeon.monsters.push(new Monster(this.player.x, this.player.y + 1, Monsters.random(this.dungeon.level)));
-                        this.dungeon.monsters.push(new Monster(this.player.x - 1, this.player.y, Monsters.random(this.dungeon.level)));
-                        this.dungeon.monsters.push(new Monster(this.player.x, this.player.y - 1, Monsters.random(this.dungeon.level)));
-                        
+
                         // TODO: Notify user about you triggering the monster trap
                     } else {
                         // TODO: Notify user about you noticing the monster trap
                     }
                     this.dungeon.cells[this.player.x][this.player.y] = Tile.FLOOR;
                     break;
-                /*case Tile.BOSS_SECOND_DOOR.id:
-                    this.dungeon.cells[this.player.x][this.player.y] = Tile.BOSS_HALLWAY;
-                    
-                    var i;
-                    for(i = 0; i < this.dungeon.monsters.length; i += 1) {
-                        if(this.dungeon.monsters[i].name === 'Dragon') {
-                            this.dungeon.monsters[i].startTurn = this.turnCounter;
-                        }
-                    }
-                    
-                    break;
-                case Tile.BOSS_FLOOR.id:
-                    
-                    if(this.bossClosed === false) {
-                        var x, y;
-                        for(x = 0; x < this.dungeon.width; x += 1) {
-                            for(y = 0; y < this.dungeon.height; y += 1) {
-                                if(this.dungeon.cells[x][y].id === Tile.BOSS_HALLWAY.id) {
-                                    this.dungeon.cells[x][y] = Tile.WALL;
-                                }
-                            }
-                        }
-                        this.bossClosed = true;
-                    }
-                
-                    break;*/
-                case Tile.FIREBALL.id:
+                case Tile.FIREBALL:
                     this.player.health -= 2;
                     this.player.lastHitPro = 'by stepping into';
                     this.player.lastHit = 'a fire';

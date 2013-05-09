@@ -5,7 +5,23 @@
 // image:           the coordinates of the tile in the tileset (in 16x16 cells)
 // color:           the color to blend the tile with
 var Tile = {
-    FLOOR: {
+    FLOOR:             0,
+    WALL:              1,
+    WATER:             2,
+    STAIRS:            3,
+    DOOR:              4,
+    DOOR_OPEN:         5,
+    SHRINE:            6,
+    SHRINE_USED:       7,
+    PILLAR:            8,
+    BARS:              9,
+    BLOOD:            10,
+    BARS_DOOR:        11,
+    BARS_DOOR_OPEN:   12,
+    MONSTER_SPAWNER:  13,
+    FIREBALL:         14,
+    
+    0: {
         id: 0,
         entityPasses: true,
         lightPasses: true,
@@ -13,7 +29,7 @@ var Tile = {
         image: { x: 0, y: 0 },
         color: '#444'
     },
-    WALL: {
+    1: {
         id: 1,
         entityPasses: false,
         lightPasses: false,
@@ -21,7 +37,7 @@ var Tile = {
         image: { x: 1, y: 0 },
         color: '#a2a2a2'
     },
-    WATER: {
+    2: {
         id: 2,
         entityPasses: false,
         lightPasses: true,
@@ -29,7 +45,7 @@ var Tile = {
         image: { x: 0, y: 0 },
         color: '#175ba9'
     },
-    STAIRS: {
+    3: {
         id: 3,
         entityPasses: true,
         lightPasses: true,
@@ -37,7 +53,7 @@ var Tile = {
         image: { x: 3, y: 0 },
         color: '#a2a2a2'
     },
-    DOOR: {
+    4: {
         id: 4,
         entityPasses: true,
         lightPasses: false,
@@ -45,7 +61,7 @@ var Tile = {
         image: { x: 4, y: 0 },
         color: '#a2a2a2'
     },
-    DOOR_OPEN: {
+    5: {
         id: 5,
         entityPasses: true,
         lightPasses: false,
@@ -53,7 +69,7 @@ var Tile = {
         image: { x: 6, y: 0 },
         color: '#444'
     },
-    SHRINE: {
+    6: {
         id: 8,
         entityPasses: false,
         lightPasses: true,
@@ -61,7 +77,7 @@ var Tile = {
         image: { x: 1, y: 0 },
         color: '#8a1e51'
     },
-    SHRINE_USED: {
+    7: {
         id: 9,
         entityPasses: false,
         lightPasses: true,
@@ -69,7 +85,7 @@ var Tile = {
         image: { x: 1, y: 0 },
         color: '#682444'
     },
-    PILLAR: {
+    8: {
         id: 10,
         entityPasses: false,
         lightPasses: true,
@@ -77,7 +93,7 @@ var Tile = {
         image: { x: 1, y: 0 },
         color: '#666'
     },
-    BARS: {
+    9: {
         id: 11,
         entityPasses: false,
         lightPasses: true,
@@ -85,7 +101,7 @@ var Tile = {
         image: { x: 2, y: 0 },
         color: '#a2a2a2'
     },
-    BLOOD_STAINED_FLOOR: {
+    10: {
         id: 14,
         entityPasses: true,
         lightPasses: true,
@@ -93,7 +109,7 @@ var Tile = {
         image: { x: 0, y: 0 },
         color: '#c00'
     },
-    BARS_DOOR: {
+    11: {
         id: 15,
         entityPasses: true,
         lightPasses: true,
@@ -101,7 +117,7 @@ var Tile = {
         image: { x: 4, y: 0 },
         color: '#a2a2a2'
     },
-    BARS_DOOR_OPEN: {
+    12: {
         id: 23,
         entityPasses: true,
         lightPasses: true,
@@ -109,7 +125,7 @@ var Tile = {
         image: { x: 6, y: 0 },
         color: '#444'
     },
-    MONSTER_SPAWNER: { // MAYBE OTHER TYPE?
+    13: { // MAYBE OTHER TYPE?
         id: 16,
         entityPasses: true,
         lightPasses: true,
@@ -117,7 +133,7 @@ var Tile = {
         image: { x: 0, y: 0 },
         color: '#a2a2a2'
     },
-    FIREBALL: {
+    14: {
         id: 30,
         entityPasses: true,
         lightPasses: true,
