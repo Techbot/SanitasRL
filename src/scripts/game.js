@@ -1,8 +1,3 @@
-/*
- * SanitasRL - 7DRL2013
- * Developer: codejunkie
- * URL: http://codejunkie.se/sanitasrl/
- */
 var Game = function() {
     'use strict';
 
@@ -40,18 +35,12 @@ var Game = function() {
     
     // Create the player instance and position him in the center of the dungenon
     this.player = new Player(Math.floor(this.dungeon.width / 2), Math.floor(this.dungeon.height / 2));
-
-    // The position of the cursor
-    this.cursor = {
-        x: undefined,
-        y: undefined
-    };
+    this.cursor = new Cursor();
     
     // The different modes the player can be in
     this.modes = {
         MOVEMENT: 0,    // Player movement
-        LOOK: 1,        // Look (move the cursor)
-        TELEKINESIS: 2  // Telekinesis (move the cursor, use telekinesis on the targeted object)
+        LOOK: 1         // Look (move the cursor)
     };
     // Set the current mode to player movement
     this.mode = this.modes.MOVEMENT;
@@ -140,7 +129,7 @@ Game.prototype.render = function() {
         }
     }
     
-    if(this.mode === this.modes.LOOK || this.mode === this.modes.TELEKINESIS) {
+    if(this.mode === this.modes.LOOK) {
         this.canvas.strokeStyle = '#0f0';
         this.canvas.lineWidth = 1;
         this.canvas.strokeRect(this.cursor.x * 16 + 0.5, this.cursor.y * 16 + 0.5, 16 - 1, 16 - 1); // .5 to create a 1px line instead of blurry 2px
@@ -296,7 +285,7 @@ Game.prototype.keydown = function(code, key) {
             }
         }
         
-        if(this.mode === this.modes.LOOK || this.mode === this.modes.TELEKINESIS) {
+        if(this.mode === this.modes.LOOK) {
             this.cursor.x = newPosition.x;
             this.cursor.y = newPosition.y;
         // If there has been a change to the newPosition

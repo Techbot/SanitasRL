@@ -134,7 +134,7 @@ Dungeon.prototype.generateLighting = function(x, y, color) {
     }
 };
 
-// Returns the tile and color of the monster, item or tile at position x, y
+// Returns the tile at position x, y
 Dungeon.prototype.at = function(x, y) {
     var tile = this.cells[x][y];
 
