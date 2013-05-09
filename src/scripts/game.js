@@ -81,11 +81,24 @@ var Game = function() {
     this.tileset.src = 'images/tileset.png';
     
     this.debug = false;
+    
+    this.pulseDir = true; // true = addition, false = subtraction
+    this.pulse = 0;
 };
 
 Game.prototype.render = function() {
     'use strict';
     this.canvas.clearRect(0, 0, 960, 576);
+    
+    if(this.pulseDir === true) {
+        this.pulse += 0.2;
+    } else {
+        this.pulse -= 0.2;
+    }
+    
+    if(this.pulse >= 0 || this.pulse <= -30) {
+        this.pulseDir = !this.pulseDir;
+    }
 
     var x, y, tile, color;
     for(x = 0; x < this.dungeon.width; x += 1) {
@@ -116,7 +129,16 @@ Game.prototype.render = function() {
                 
                 if(tile.color !== undefined) {
                     this.canvas.globalCompositeOperation = 'source-atop';
-                    this.canvas.fillStyle = tile.color;
+                    
+                    if(this.dungeon.light[x][y] !== undefined && this.dungeon.fov[x][y] > 0.1) {
+                        var light = ROT.Color.add(this.dungeon.light[x][y], [Math.round(this.pulse), Math.round(this.pulse), Math.round(this.pulse)]);
+                        var finalLight = ROT.Color.add(ROT.Color.fromString(tile.color), light);
+                        
+                        this.canvas.fillStyle = ROT.Color.toRGB(finalLight);
+                    } else {
+                        this.canvas.fillStyle = tile.color;
+                    }
+                    
                     this.canvas.fillRect(x * 16, y * 16, 16, 16);
                     this.canvas.globalCompositeOperation = 'source-over';
                 }

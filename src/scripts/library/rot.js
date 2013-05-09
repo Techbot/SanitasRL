@@ -563,6 +563,22 @@ ROT.Text = {
 		return tokens[tokenIndex].value.substring(0, breakIndex);
 	}
 }
+
+Array.prototype.max = function(comparer) {
+
+    if (this.length === 0) return null;
+    if (this.length === 1) return this[0];
+
+    comparer = (comparer || Math.max);
+
+    var v = this[0];
+    for (var i = 1; i < this.length; i++) {
+        v = comparer(this[i], v);    
+    }
+
+    return v;
+};
+
 /**
  * @returns {any} Randomly picked item, null when length=0
  */

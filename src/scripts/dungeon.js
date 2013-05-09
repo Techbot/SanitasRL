@@ -8,10 +8,24 @@ var Dungeon = function() {
     this.seenCells = []; // All cells that we have seen (used for fog of war)
     this.items = [];
     
+    for(this.fov = []; this.fov.length < this.width; this.fov.push([])); // generate a 2d array for field of view
+    for(this.light = []; this.light.length < this.width; this.light.push([])); // generate a 2d array for lighting
+    
     this.shadowcasting = new ROT.FOV.PreciseShadowcasting(this.lightPasses.bind(this));
-    for(this.fov = []; this.fov.length < this.width; this.fov.push([])); // generate a 2d array
+    this.lighting = new ROT.Lighting(this.reflectivity.bind(this), { range: 3, passes: 1 });
+    this.lighting.setFOV(this.shadowcasting);
+    
+    this.lightSources = []; // generate a 2d array for lightsources, these cells should not be lighted
+    var x, y;
+    for(x = 0; x < this.width; x += 1) {
+        this.lightSources[x] = [];
+        for(y = 0; y < this.height; y += 1) {
+            this.lightSources[x][y] = false;
+        }
+    }
     
     this.generate();
+    this.lighting.compute(this.generateLighting.bind(this));
 };
 
 Dungeon.prototype.itemAt = function(x, y) {
@@ -46,6 +60,14 @@ Dungeon.prototype.lightPasses = function(x, y) {
     return false;
 };
 
+Dungeon.prototype.reflectivity = function(x, y) {
+    if(x > 0 && x < this.width && y > 0 && y < this.height && this.cells[x][y] !== Tile.WALL) {
+        return 0.3;
+    }
+    
+    return 0;
+};
+
 Dungeon.prototype.generateFOV = function(x, y) {
     var ex, ey;
     for(ex = 0; ex < this.width; ex += 1) {
@@ -63,8 +85,12 @@ Dungeon.prototype.generateFOV = function(x, y) {
         
         this.seenCells[x][y] = true;
     }.bind(this));
-    
-    
+};
+
+Dungeon.prototype.generateLighting = function(x, y, color) {
+    if(this.lightSources[x][y] === false) {
+        this.light[x][y] = color;
+    }
 };
 
 // Returns the tile and color of the monster, item or tile at position x, y
@@ -186,7 +212,11 @@ Dungeon.prototype.generate = function() {
                             done = true;
                             break;
                         case 3: // Shrine
-                        this.cells[cx][cy] = Tile.SHRINE;
+                            this.cells[cx][cy] = Tile.SHRINE;
+                            
+                            this.lighting.setLight(cx, cy, [138, 30, 81]);
+                            this.lightSources[cx][cy] = true;
+                            
                             done = true;
                             break;
                         case 4: // Pillar
