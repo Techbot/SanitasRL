@@ -18,8 +18,6 @@ var Tile = {
     BLOOD:            10,
     BARS_DOOR:        11,
     BARS_DOOR_OPEN:   12,
-    MONSTER_SPAWNER:  13,
-    FIREBALL:         14,
     
     0: {
         id: 0,
@@ -124,21 +122,5 @@ var Tile = {
         look: 'An open iron bars door',
         image: { x: 6, y: 0 },
         color: '#444'
-    },
-    13: { // MAYBE OTHER TYPE?
-        id: 16,
-        entityPasses: true,
-        lightPasses: true,
-        look: 'A strange looking floor',
-        image: { x: 0, y: 0 },
-        color: '#a2a2a2'
-    },
-    14: {
-        id: 30,
-        entityPasses: true,
-        lightPasses: true,
-        look: 'A fire',
-        image: { x: 0, y: 0 },
-        color: '#ff7300'
     }
 };

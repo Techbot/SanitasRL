@@ -189,7 +189,7 @@ Dungeon.prototype.generate = function() {
                 var done = false;
                 
                 while(done === false) {
-                    switch(ROT.RNG.getInt(0, 4)) {
+                    switch(ROT.RNG.getInt(0, 3)) {
                         case 0: // Water treasure
                             if(dx >= 4 && dy >= 4) {
                                 this.cells[cx][cy - 1] = Tile.WATER;
@@ -210,7 +210,7 @@ Dungeon.prototype.generate = function() {
                                 this.cells[cx + 1][cy - 1] = Tile.BARS;
                                 this.cells[cx + 1][cy] = Tile.BARS;
                                 this.cells[cx + 1][cy + 1] = Tile.BARS;
-                                this.cells[cx][cy + 1] = Tile.DOOR;
+                                this.cells[cx][cy + 1] = Tile.BARS_DOOR;
                                 this.cells[cx - 1][cy + 1] = Tile.BARS;
                                 this.cells[cx - 1][cy] = Tile.BARS;
                                 this.cells[cx - 1][cy - 1] = Tile.BARS;
@@ -219,15 +219,11 @@ Dungeon.prototype.generate = function() {
                             }
                                 done = true;
                             break;
-                        case 2: // Monster treasure
-                            this.cells[cx][cy] = Tile.MONSTER_SPAWNER;
-                            done = true;
-                            break;
-                        case 3: // Shrine
+                        case 2: // Shrine
                             this.cells[cx][cy] = Tile.SHRINE;
                             done = true;
                             break;
-                        case 4: // Pillar
+                        case 3: // Pillar
                             if(dx >= 4 && dy >= 4) {
                                 this.cells[cx + 1][cy - 1] = Tile.PILLAR;
                                 this.cells[cx + 1][cy + 1] = Tile.PILLAR;

@@ -29,8 +29,6 @@ var Game = function() {
     this.canvas = document.getElementById('canvas').getContext('2d');
     
     // welcome - showing welcome screen
-    // death - showing death screen
-    // score - showing score screen
     // running - running / gameplay
     this.state = 'welcome';
     
@@ -58,16 +56,12 @@ var Game = function() {
     // Set the current mode to player movement
     this.mode = this.modes.MOVEMENT;
     
-    // If you have the Amulet of Detection this variable will help controlling if the amulet is currently glowing
-    this.amulet_glowing = false;
-    
     
     // ???
     this.updateInterface();
     
     // ???
     this.dungeon.generateFOV(this.player.x, this.player.y);
-    //this.dungeon.updateVisitedCells(this.fov);
     
     // The images used as tilesets
     this.tileset = new Image();
@@ -156,7 +150,7 @@ Game.prototype.render = function() {
 };
 
 /*
- * Goes to the next turn, also updates all monsters
+ * Goes to the next turn
  */
 Game.prototype.turn = function() {
     this.turnCounter += 1;
@@ -196,16 +190,6 @@ Game.prototype.keydown = function(code, key) {
                 $('.window').fadeOut();
                 this.state = 'running';
                 break;
-            case 'death':
-                $('.window').fadeOut();
-                this.initialize();
-                this.state = 'running';
-                break;
-            case 'score':
-                $('.window').fadeOut();
-                this.initialize();
-                this.state = 'running';
-                break;
         }
     }
     
@@ -218,55 +202,43 @@ Game.prototype.keydown = function(code, key) {
         };
         
         // Movement north
-        //if(Keys.VK_MOVEMENT_NORTH.indexOf(e.which) !== -1) {
         if(key === 'numpad8' || key === 'k') {
             newPosition.y -= 1;
         // Movement north east
-        //} else if(Keys.VK_MOVEMENT_NORTH_EAST.indexOf(e.which) !== -1) {
         } else if(key === 'numpad9' || key === 'u') {
             newPosition.x += 1;
             newPosition.y -= 1;
         // Movement east
-        //} else if(Keys.VK_MOVEMENT_EAST.indexOf(e.which) !== -1) {
         } else if(key === 'numpad6' || key === 'l') {
             newPosition.x += 1;
         // Movement south east
-        //} else if(Keys.VK_MOVEMENT_SOUTH_EAST.indexOf(e.which) !== -1) {
         } else if(key === 'numpad3' || key === 'n') {
             newPosition.x += 1;
             newPosition.y += 1;
         // Movement south
-        //} else if(Keys.VK_MOVEMENT_SOUTH.indexOf(e.which) !== -1) {
         } else if(key === 'numpad2' || key === 'j') {
             newPosition.y += 1;
         // Movement south west
-        //} else if(Keys.VK_MOVEMENT_SOUTH_WEST.indexOf(e.which) !== -1) {
         } else if(key === 'numpad1' || key === 'b') {
             newPosition.x -= 1;
             newPosition.y += 1;
         // Movement west
-        //} else if(Keys.VK_MOVEMENT_WEST.indexOf(e.which) !== -1) {
         } else if(key === 'numpad4' || key === 'h') {
             newPosition.x -= 1;
         // Movement north west
-        //} else if(Keys.VK_MOVEMENT_NORTH_WEST.indexOf(e.which) !== -1) {
         } else if(key === 'numpad7' || key === 'y') {
             newPosition.x -= 1;
             newPosition.y -= 1;
         // Wait
-        //} else if(Keys.VK_WAIT.indexOf(e.which) !== -1) {
         } else if(key === 'numpad5' || key === '.') {
-            // UPDATE THE TURN COUNTER
             this.turn();
-        // Stairs (THE SWEDISH <> KEY OR ENTER)
-        //} else if(Keys.VK_STAIRS.indexOf(e.which) !== -1) {
         } else if(key === '>') {
             if(this.dungeon.cells[this.player.x][this.player.y] === Tile.STAIRS) {
                 // Generate a new level
                 this.dungeon.level += 1;
                 this.dungeon.generate();
                 
-                // Move the player to  the center
+                // Move the player to the center
                 newPosition.x = Math.floor(this.dungeon.width / 2);
                 newPosition.y = Math.floor(this.dungeon.height / 2);
                 
@@ -303,31 +275,15 @@ Game.prototype.keydown = function(code, key) {
                 case 'q':
                     if(this.dungeon.cells[this.player.x][this.player.y - 1] === Tile.SHRINE) {
                         this.dungeon.cells[this.player.x][this.player.y - 1] = Tile.SHRINE_USED;
-                        
-                        // TODO: Notify user about gaining health from drinking and the well being exhausted
-                        
-                        // UPDATE THE TURN COUNTER
                         this.turn();
                     } else if(this.dungeon.cells[this.player.x + 1][this.player.y] === Tile.SHRINE) {
                         this.dungeon.cells[this.player.x + 1][this.player.y] = Tile.SHRINE_USED;
-                        
-                        // TODO: Notify user about gaining health from drinking and the well being exhausted
-                        
-                        // UPDATE THE TURN COUNTER
                         this.turn();
                     } else if(this.dungeon.cells[this.player.x][this.player.y + 1] === Tile.SHRINE) {
                         this.dungeon.cells[this.player.x][this.player.y + 1] = Tile.SHRINE_USED;
-                        
-                        // TODO: Notify user about gaining health from drinking and the well being exhausted
-                        
-                        // UPDATE THE TURN COUNTER
                         this.turn();
                     } else if(this.dungeon.cells[this.player.x - 1][this.player.y] === Tile.SHRINE) {
                         this.dungeon.cells[this.player.x - 1][this.player.y] = Tile.SHRINE_USED;
-                        
-                        // TODO: Notify user about gaining health from drinking and the well being exhausted
-                        
-                        // UPDATE THE TURN COUNTER
                         this.turn();
                     }
                     break;
@@ -335,8 +291,6 @@ Game.prototype.keydown = function(code, key) {
                 //case Keys.VK_ESC:
                 case 'escape':
                     this.state = 'welcome';
-                    $('.background').fadeIn();
-                    $('.welcome .bottom').html('Press <span>ENTER</span> to return');
                     $('.welcome').fadeIn();
                     break;
             }
@@ -353,13 +307,8 @@ Game.prototype.keydown = function(code, key) {
                     
                 this.dungeon.generateFOV(this.player.x, this.player.y);
                     
-                //this.fov = this.calculateFOV();
-                
-                // update all other entities
-                // they should attack here?
                 this.turn();
             }
-            //this.dungeon.updateVisitedCells(this.fov);
             
             // Check for special behaviour on tiles
             switch(this.dungeon.cells[this.player.x][this.player.y]) {
@@ -368,12 +317,6 @@ Game.prototype.keydown = function(code, key) {
                     break;
                 case Tile.DOOR:
                     this.dungeon.cells[this.player.x][this.player.y] = Tile.DOOR_OPEN;
-                    break;
-                case Tile.MONSTER_SPAWNER:
-                    this.dungeon.cells[this.player.x][this.player.y] = Tile.FLOOR;
-                    break;
-                case Tile.FIREBALL:
-                    // TODO: Notify user about taking 2 damage from the fire
                     break;
             }
         }
