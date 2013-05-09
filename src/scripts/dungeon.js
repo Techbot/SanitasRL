@@ -5,7 +5,11 @@ var Dungeon = function() {
     this.level = 1;
     
     this.cells = [];
+    this.seenCells = []; // All cells that we have seen (used for fog of war)
     this.items = [];
+    
+    this.shadowcasting = new ROT.FOV.PreciseShadowcasting(this.lightPasses.bind(this));
+    for(this.fov = []; this.fov.length < this.width; this.fov.push([])); // generate a 2d array
     
     this.generate();
 };
@@ -34,16 +38,33 @@ Dungeon.prototype.replaceItemAt = function(x, y, item) {
     }
 };
 
-/*
- * Updates the visited cells to include the passed bounds
- */
-Dungeon.prototype.updateVisitedCells = function(bounds) {
-    var x, y;
-    for(x = bounds.x; x < bounds.x + bounds.w; x++) {
-        for(y = bounds.y; y < bounds.y + bounds.h; y++) {
-            this.visited[x][y] = true;
+Dungeon.prototype.lightPasses = function(x, y) {
+    if(x > 0 && x < this.width && y > 0 && y < this.height && this.cells[x][y] !== null) {
+        return Tile[this.cells[x][y]].lightPasses;
+    }
+    
+    return false;
+};
+
+Dungeon.prototype.generateFOV = function(x, y) {
+    var ex, ey;
+    for(ex = 0; ex < this.width; ex += 1) {
+        for(ey = 0; ey < this.height; ey += 1) {
+            this.fov[ex][ey] = false;
         }
     }
+
+    this.shadowcasting.compute(x, y, 10, function(x, y, r, visibility) {
+        if(r === 0) {
+            this.fov[x][y] = 1;
+        } else {
+            this.fov[x][y] = (1 / r) * 3;
+        }
+        
+        this.seenCells[x][y] = true;
+    }.bind(this));
+    
+    
 };
 
 // Returns the tile and color of the monster, item or tile at position x, y
@@ -78,8 +99,10 @@ Dungeon.prototype.generate = function() {
         var x, y;
         for(x = 0; x < this.width; x += 1) {
             this.cells[x] = [];
+            this.seenCells[x] = [];
             for(y = 0; y < this.height; y += 1) {
                 this.cells[x][y] = null;
+                this.seenCells[x][y] = false;
             }
         }
         
@@ -204,8 +227,10 @@ Dungeon.prototype.generate = function() {
         var x, y;
         for(x = 0; x < this.width; x += 1) {
             this.cells[x] = [];
+            this.seenCells[x] = [];
             for(y = 0; y < this.height; y += 1) {
                 this.cells[x][y] = null;
+                this.seenCells[x][y] = false;
                 
                 if(x === 0 || x === this.width - 1 || y === 0 || y === this.height - 1) {
                     this.cells[x][y] = Tile.WALL;

@@ -66,6 +66,7 @@ var Game = function() {
     this.updateInterface();
     
     // ???
+    this.dungeon.generateFOV(this.player.x, this.player.y);
     //this.dungeon.updateVisitedCells(this.fov);
     
     // The images used as tilesets
@@ -78,6 +79,8 @@ var Game = function() {
 
     // Set the paths for the tilesets
     this.tileset.src = 'images/tileset.png';
+    
+    this.debug = false;
 };
 
 Game.prototype.render = function() {
@@ -93,10 +96,24 @@ Game.prototype.render = function() {
             } else {
                 tile = this.dungeon.at(x, y);
             }
-            
-            if(tile !== null) {
+                                 // DEBUGGING
+            if(tile !== null && (this.debug === true || this.dungeon.seenCells[x][y] === true)) {
+                if(this.dungeon.fov[x][y] < 0.1) {
+                    // This is a seen cell, but it's not in the fov
+                    this.canvas.globalAlpha = 0.3;
+                } else {
+                    // The cell is in the fov
+                    this.canvas.globalAlpha = this.dungeon.fov[x][y];
+                }
+                
+                // THIS IS ONLY FOR DEBUGGING
+                if(this.debug === true) {
+                    this.canvas.globalAlpha = 1;
+                }
+                
                 this.canvas.drawImage(this.tileset, tile.x * 16, tile.y * 16, 16, 16, x * 16, y * 16, 16, 16);
-        
+                this.canvas.globalAlpha = 1;
+                
                 if(tile.color !== undefined) {
                     this.canvas.globalCompositeOperation = 'source-atop';
                     this.canvas.fillStyle = tile.color;
@@ -121,19 +138,7 @@ Game.prototype.render = function() {
  */
 Game.prototype.turn = function() {
     var i;
-    /*for(i = 0; i < this.dungeon.monsters.length; i += 1) {
-        //if(this.pointIsInsideFOV(this.dungeon.monsters[i].x, this.dungeon.monsters[i].y)) {
-            this.dungeon.monsters[i].lastKnownPositionOfPlayer = {
-                x: this.player.x,
-                y: this.player.y
-            };
-        //}
-        
-        if(this.dungeon.monsters[i].lastKnownPositionOfPlayer !== undefined) {
-            this.dungeon.monsters[i].turn(this.player, this.dungeon, this.turnCounter);
-        }
-    }*/
-    
+
     // Death
     if(this.player.health <= 0) {
         // Set HP to 0 if it's less than 0
@@ -170,16 +175,16 @@ Game.prototype.updateInterface = function() {
             y: (this.mode === this.modes.MOVEMENT) ? this.player.y : this.cursor.y
         };
     
-    //if(this.pointIsInsideFOV(position.x, position.y) === true) {
+    if(this.dungeon.fov[position.x][position.y] > 0) {
         if(this.dungeon.cells[position.x][position.y] !== null && Tile[this.dungeon.cells[position.x][position.y]].look !== undefined) {
             look += Tile[this.dungeon.cells[position.x][position.y]].look + '<br>';
         }
         if(this.dungeon.itemAt(position.x, position.y) !== undefined) {
             look += this.dungeon.itemAt(position.x, position.y).displayName() + '<br>';
         }
-    /*} else {
+    } else {
         look = 'You can\'t see that far';
-    }*/
+    }
     
     $('.character-sight').html(look === '' ? 'Nothing' : look);
 };
@@ -290,6 +295,10 @@ Game.prototype.keydown = function(code, key) {
         // Switch for other keys
         } else {
             switch(key) {
+                // Toggle the debug mode
+                case 'd':
+                    this.debug = !this.debug;
+                    break;
                 // Get / Grab / Pick up
                 //case Keys.VK_G:
                 case 'g':
@@ -470,6 +479,8 @@ Game.prototype.keydown = function(code, key) {
             if(Tile[this.dungeon.cells[newPosition.x][newPosition.y]].entityPasses === true) {
                 this.player.x = newPosition.x;
                 this.player.y = newPosition.y;
+                    
+                this.dungeon.generateFOV(this.player.x, this.player.y);
                     
                 //this.fov = this.calculateFOV();
                 
