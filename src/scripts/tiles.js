@@ -42,7 +42,7 @@ var Tile = {
         entityPasses: false,
         lightPasses: true,
         look: 'Some water',
-        image: { x: 0, y: 0 },
+        image: { x: 3, y: 1 },
         color: '#175ba9'
     },
     3: {
