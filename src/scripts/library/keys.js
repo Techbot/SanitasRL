@@ -134,7 +134,7 @@ var Keys = {
     // ctrl + a - z
     465:    'ctrl+a',
     466:    'ctrl+b',
-    467:    'ctrl+c',
+    //467:    'ctrl+c', We should not prevent copying
     468:    'ctrl+d',
     469:    'ctrl+e',
     470:    'ctrl+f',
