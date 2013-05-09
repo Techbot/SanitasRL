@@ -6,7 +6,6 @@ var Dungeon = function() {
     
     this.cells = [];
     this.seenCells = []; // All cells that we have seen (used for fog of war)
-    this.items = [];
     
     for(this.fov = []; this.fov.length < this.width; this.fov.push([])); // generate a 2d array for field of view
     for(this.light = []; this.light.length < this.width; this.light.push([])); // generate a 2d array for lighting
@@ -94,30 +93,6 @@ var Dungeon = function() {
     this.lighting.compute(this.generateLighting.bind(this));
 };
 
-Dungeon.prototype.itemAt = function(x, y) {
-    'use strict';
-
-    var i;
-    for(i = 0; i < this.items.length; i += 1) {
-        if(this.items[i].x === x && this.items[i].y === y) {
-            return this.items[i];
-        }
-    }
-
-    return undefined;
-};
-
-Dungeon.prototype.replaceItemAt = function(x, y, item) {
-    'use strict';
-
-    var i;
-    for(i = 0; i < this.items.length; i += 1) {
-        if(this.items[i].x === x && this.items[i].y === y) {
-           this.items[i] = item;
-        }
-    }
-};
-
 Dungeon.prototype.lightPasses = function(x, y) {
     if(x > 0 && x < this.width && y > 0 && y < this.height && this.cells[x][y] !== null) {
         return Tile[this.cells[x][y]].lightPasses;
@@ -161,16 +136,9 @@ Dungeon.prototype.generateLighting = function(x, y, color) {
 
 // Returns the tile and color of the monster, item or tile at position x, y
 Dungeon.prototype.at = function(x, y) {
-    var item = this.itemAt(x, y),
-        tile = this.cells[x][y];
+    var tile = this.cells[x][y];
 
-    if(item !== undefined) {
-        return {
-            x: item.image.x,
-            y: item.image.y,
-            color: item.color
-        };
-    } else if(tile !== null) {
+    if(tile !== null) {
         tile = Tile[tile];
         return {
             x: tile.image.x,
@@ -224,15 +192,6 @@ Dungeon.prototype.generate = function() {
                     switch(ROT.RNG.getInt(0, 4)) {
                         case 0: // Water treasure
                             if(dx >= 4 && dy >= 4) {
-                                var r = ROT.RNG.getInt(0, 100);
-                                if(r > 90) {
-                                    this.items.push(new Item(cx, cy, Items.random(undefined, this.level + 1))); // dungeon level + 1
-                                } else if(r > 75) {
-                                    this.items.push(new Item(cx, cy, Items.random(undefined, this.level + 2))); // dungeon level + 2
-                                } else {
-                                    this.items.push(new Item(cx, cy, Items.random(undefined, 6))); // unique
-                                }
-                            
                                 this.cells[cx][cy - 1] = Tile.WATER;
                                 this.cells[cx + 1][cy - 1] = Tile.WATER;
                                 this.cells[cx + 1][cy] = Tile.WATER;
@@ -247,13 +206,6 @@ Dungeon.prototype.generate = function() {
                             break;
                         case 1: // Trapped treasure
                             if(dx >= 4 && dy >= 4) {
-                                var r = ROT.RNG.getInt(0, 100);
-                                if(r > 65) {
-                                    this.items.push(new Item(cx, cy, Items.random(undefined, 6))); // unique
-                                } else {
-                                    this.items.push(new Item(cx, cy, Items.random(undefined, this.level + 1))); // dungeon level + 1
-                                }
-                            
                                 this.cells[cx][cy - 1] = Tile.BARS;
                                 this.cells[cx + 1][cy - 1] = Tile.BARS;
                                 this.cells[cx + 1][cy] = Tile.BARS;
@@ -269,12 +221,6 @@ Dungeon.prototype.generate = function() {
                             break;
                         case 2: // Monster treasure
                             this.cells[cx][cy] = Tile.MONSTER_SPAWNER;
-                            var r = ROT.RNG.getInt(0, 100);
-                            if(r > 50) {
-                                this.items.push(new Item(cx, cy, Items.random(undefined, 6))); // unique
-                            } else {
-                                this.items.push(new Item(cx, cy, Items.random(undefined, this.level + 1))); // dungeon level + 1
-                            }
                             done = true;
                             break;
                         case 3: // Shrine
@@ -299,18 +245,7 @@ Dungeon.prototype.generate = function() {
             //  Stairs down
             
         }
-        
-        // Place items
-        this.items.length = 0;
-
-        for(i = 0; i < 10; i += 1) {
-            // Pick a random floor cell
-            var cell = floors.random();
-            if(this.itemAt(cell.x, cell.y) === undefined) {
-                this.items.push(new Item(cell.x, cell.y, Items.random(undefined, this.level)));
-            }
-        }
-        
+    
     // Level 5
     } else {
         var generator = new ROT.Map.Cellular(this.width - 4, this.height - 4);
@@ -342,12 +277,6 @@ Dungeon.prototype.generate = function() {
         generator.create();
         generator.create();
         generator.create(generatorCallback.bind(this));
-        
-        this.items.push(new Item(2, 2, Items.random(undefined, this.level + 1))); // dungeon level + 1
-        this.items.push(new Item(2, 3, Items.random(undefined, this.level + 1))); // dungeon level + 1
-        this.items.push(new Item(2, 4, Items.random(undefined, this.level + 1))); // dungeon level + 1
-        this.items.push(new Item(2, 5, Items.random(undefined, this.level + 1))); // dungeon level + 1
-        this.items.push(new Item(2, 6, Items.random(undefined, this.level + 1))); // dungeon level + 1
     }
     
     var x, y;

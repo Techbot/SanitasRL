@@ -80,9 +80,7 @@ var Game = function() {
     // Set the paths for the tilesets
     this.tileset.src = 'images/tileset.png';
     
-    this.debug = true;
-    $('.window').hide();
-    this.state = 'running';
+    this.debug = false;
     
     this.pulseDir = true; // true = addition, false = subtraction
     this.pulse = 0;
@@ -203,31 +201,11 @@ Game.prototype.updateInterface = function() {
         if(this.dungeon.cells[position.x][position.y] !== null && Tile[this.dungeon.cells[position.x][position.y]].look !== undefined) {
             look += Tile[this.dungeon.cells[position.x][position.y]].look + '<br>';
         }
-        if(this.dungeon.itemAt(position.x, position.y) !== undefined) {
-            look += this.dungeon.itemAt(position.x, position.y).displayName() + '<br>';
-        }
     } else {
         look = 'You can\'t see that far';
     }
     
     $('.character-sight').html(look === '' ? 'Nothing' : look);
-};
-
-Game.prototype.updateAmulet = function() {
-    if(this.player.jewelry.id === 'amulet_of_detection') {
-        // check if there's enemies within a radius of 7 from you
-        var x, y, enemies = false;
-        for(x = this.player.x - 7; x <= this.player.x + 7; x += 1) {
-            for(y = this.player.y - 7; y <= this.player.y + 7; y += 1) {
-
-            }
-        }
-
-        if(enemies === false && this.amulet_glowing === true) {
-            this.amulet_glowing = false;
-            // TODO: Notify user about amulet not glowing
-        }
-    }
 };
 
 Game.prototype.keydown = function(code, key) {
@@ -322,108 +300,6 @@ Game.prototype.keydown = function(code, key) {
                 // Toggle the debug mode
                 case 'd':
                     this.debug = !this.debug;
-                    break;
-                // Get / Grab / Pick up
-                //case Keys.VK_G:
-                case 'g':
-                    if(this.dungeon.itemAt(this.player.x, this.player.y) !== undefined) {
-                        var olditem;
-                        
-                        // equip the new item
-                        if(this.dungeon.itemAt(this.player.x, this.player.y).type === Item.type.weapon) {
-                            olditem = this.player.weapon;
-                            this.player.weapon = this.dungeon.itemAt(this.player.x, this.player.y);
-                        } else if(this.dungeon.itemAt(this.player.x, this.player.y).type === Item.type.jewelry) {
-                            olditem = this.player.jewelry;
-                            this.player.jewelry = this.dungeon.itemAt(this.player.x, this.player.y);
-                        } else {
-                            olditem = this.player.armour;
-                            this.player.armour = this.dungeon.itemAt(this.player.x, this.player.y);
-                        }
-                        
-                        // replace the old item on the ground
-                        olditem.x = this.player.x;
-                        olditem.y = this.player.y;
-                        this.dungeon.replaceItemAt(this.player.x, this.player.y, olditem);
-
-                        
-                        // FARGOTH'S RING EQUIP
-                        if(olditem.type === Item.type.jewelry && this.player.jewelry.id === 'fargoths_ring') {
-                            this.player.health += 2;
-                        // UNEQUIP
-                        } else if(olditem.id === 'fargoths_ring') {
-                            this.player.health -= 2;
-                            this.player.lastHitPro = 'by removing';
-                            this.player.lastHit = 'Fargoth\'s Ring';
-                        }
-                        
-                        this.player.updateInterface();
-                        
-                        // UPDATE THE TURN COUNTER
-                        this.turn();
-                    }
-                    break;
-                // Telekinesis
-                //case Keys.VK_T:
-                case 't':
-                    // cloudcleaver is the only item with telekinesis
-                    if(this.player.weapon.id === 'cloudcleaver') {
-                        if(this.mode === this.modes.TELEKINESIS) {
-                        
-                            if(this.dungeon.itemAt(this.cursor.x, this.cursor.y) !== undefined) {
-                                var olditem;
-                                
-                                // equip the new item
-                                if(this.dungeon.itemAt(this.cursor.x, this.cursor.y).type === Item.type.weapon) {
-                                    olditem = this.player.weapon;
-                                    this.player.weapon = this.dungeon.itemAt(this.cursor.x, this.cursor.y);
-                                } else if(this.dungeon.itemAt(this.player.x, this.player.y).type === Item.type.jewelry) {
-                                    olditem = this.player.jewelry;
-                                    this.player.jewelry = this.dungeon.itemAt(this.player.x, this.player.y);
-                                } else {
-                                    olditem = this.player.armour;
-                                    this.player.armour = this.dungeon.itemAt(this.cursor.x, this.cursor.y);
-                                }
-                                
-                                // replace the old item on the ground
-                                olditem.x = this.player.x;
-                                olditem.y = this.player.y;
-                                this.dungeon.replaceItemAt(this.cursor.x, this.cursor.y, olditem);
-
-                                // FARGOTH'S RING EQUIP
-                                if(olditem.type === Item.type.jewelry && this.player.jewelry.id === 'fargoths_ring') {
-                                    this.player.health += 2;
-                                // UNEQUIP
-                                } else if(olditem.id === 'fargoths_ring') {
-                                    this.player.health -= 2;
-                                    this.player.lastHitPro = 'by removing';
-                                    this.player.lastHit = 'Fargoth\'s Ring';
-                                }
-                                
-                                this.player.updateInterface();
-                                
-                                // UPDATE THE TURN COUNTER
-                                this.turn();
-                            }
-                            
-                            if(this.dungeon.cells[this.cursor.x][this.cursor.y] === Tile.DOOR) {
-                                this.dungeon.cells[this.cursor.x][this.cursor.y] = Tile.DOOR_OPEN;
-                            }
-                            
-                            // Go back to movement mode and reset the newPosition
-                            this.mode = this.modes.MOVEMENT;
-                            newPosition = {
-                                x: this.player.x,
-                                y: this.player.y
-                            };
-                        } else {
-                            this.mode = this.modes.TELEKINESIS;
-                            this.cursor = {
-                                x: this.player.x,
-                                y: this.player.y
-                            };
-                        }
-                    }
                     break;
                 // Examine / Look
                 //case Keys.VK_X:
@@ -540,8 +416,6 @@ Game.prototype.keydown = function(code, key) {
                     break;
             }
         }
-        
-        this.updateAmulet();
         
         // Update the interface
         this.updateInterface();
