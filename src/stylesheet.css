@@ -33,7 +33,9 @@ canvas {
     left: 50%;
     background: #111;
 }
-.window pre {
+.window p, pre {
+    width: 960px;
+    margin: 10px auto;
     font: inherit;
 }
 .window .logo {
