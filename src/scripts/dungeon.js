@@ -12,7 +12,7 @@ var Dungeon = function() {
     for(this.light = []; this.light.length < this.width; this.light.push([])); // generate a 2d array for lighting
     
     this.shadowcasting = new ROT.FOV.PreciseShadowcasting(this.lightPasses.bind(this));
-    this.lighting = new ROT.Lighting(this.reflectivity.bind(this), { range: 3, passes: 1 });
+    this.lighting = new ROT.Lighting(this.reflectivity.bind(this), { range: 3, passes: 2 });
     this.lighting.setFOV(this.shadowcasting);
     
     this.lightSources = []; // generate a 2d array for lightsources, these cells should not be lighted
@@ -24,7 +24,73 @@ var Dungeon = function() {
         }
     }
     
-    this.generate();
+    this.generate();    
+    
+    // Find the first used cell (x, y)
+    var first_x, last_x, first_y, last_y;
+    for(x = 0; x < this.width; x += 1) {
+        for(y = 0; y < this.height; y += 1) {
+            if(this.cells[x][y] !== null && first_x === undefined) {
+                first_x = x;
+            }
+        }
+    }
+    
+    for(x = this.width - 1; x > 0; x -= 1) {
+        for(y = 0; y < this.height; y += 1) {
+            if(this.cells[x][y] !== null && last_x === undefined) {
+                last_x = x + 1;
+            }
+        }
+    }
+    
+    for(y = 0; y < this.height; y += 1) {
+        for(x = 0; x < this.width; x += 1) {
+            if(this.cells[x][y] !== null && first_y === undefined) {
+                first_y = y;
+            }
+        }
+    }
+    
+    for(y = this.height - 1; y > 0; y -= 1) {
+        for(x = this.width - 1; x > 0; x -= 1) {
+            if(this.cells[x][y] !== null && last_y === undefined) {
+                last_y = y + 1;
+            }
+        }
+    }
+    
+    // These are indeces, i.e. they start at 0
+    this.tmp = this.cells.slice(first_x, last_x);
+    for(x = 0; x < this.tmp.length; x += 1) {
+        this.tmp[x] = this.tmp[x].slice(first_y, last_y);
+    }
+    
+    var offset_x = Math.floor((59 - (this.tmp.length - 1)) / 2);
+    var offset_y = Math.floor((35 - (this.tmp[0].length - 1)) / 2);
+    
+    // Place the tmp array into the center of the cells array
+    for(x = 0; x < this.width; x += 1) {
+        for(y = 0; y < this.height; y += 1) {
+            this.cells[x][y] = null;
+            
+            // 
+            if(x >= offset_x && y >= offset_y && x < this.tmp.length + offset_x && y < this.tmp[0].length + offset_y) {
+                this.cells[x][y] = this.tmp[x - offset_x][y - offset_y];
+            }
+        }
+    }
+    
+    // Loop over everything placing lights
+    for(x = 0; x < this.width; x += 1) {
+        for(y = 0; y < this.height; y += 1) {
+            if(this.cells[x][y] === Tile.SHRINE) {
+                this.lightSources[x][y] = true;
+                this.lighting.setLight(x, y, [138, 30, 81]);
+            }
+        }
+    }
+    
     this.lighting.compute(this.generateLighting.bind(this));
 };
 
@@ -213,10 +279,6 @@ Dungeon.prototype.generate = function() {
                             break;
                         case 3: // Shrine
                             this.cells[cx][cy] = Tile.SHRINE;
-                            
-                            this.lighting.setLight(cx, cy, [138, 30, 81]);
-                            this.lightSources[cx][cy] = true;
-                            
                             done = true;
                             break;
                         case 4: // Pillar

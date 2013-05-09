@@ -80,7 +80,9 @@ var Game = function() {
     // Set the paths for the tilesets
     this.tileset.src = 'images/tileset.png';
     
-    this.debug = false;
+    this.debug = true;
+    $('.window').hide();
+    this.state = 'running';
     
     this.pulseDir = true; // true = addition, false = subtraction
     this.pulse = 0;
