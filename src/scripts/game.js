@@ -159,12 +159,18 @@ Game.prototype.updateInterface = function() {
             position = { x: this.cursor.x, y: this.cursor.y };
         }
         
-        if(this.dungeon.fov[position.x][position.y] > 0) {
+        if(this.dungeon.seenCells[position.x][position.y] === true) {
             if(this.dungeon.cells[position.x][position.y] !== null && this.dungeon.cells[position.x][position.y].look !== undefined) {
                 look += this.dungeon.cells[position.x][position.y].look + '<br>';
             }
         } else {
             look = 'You can\'t see that far';
+        }
+        
+        if(this.dungeon.fov[position.x][position.y] > 0) {
+            $('.character-sight-header').text('You see:');
+        } else {
+            $('.character-sight-header').text('You remember seeing:');
         }
         
         $('.character-sight').html(look === '' ? 'Nothing' : look);
