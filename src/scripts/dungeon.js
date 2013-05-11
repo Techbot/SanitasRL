@@ -284,8 +284,8 @@ Dungeon.prototype.generate = function(game) {
     // Loop over everything placing lights
     for(x = 0; x < this.width; x += 1) {
         for(y = 0; y < this.height; y += 1) {
-            if(this.cells[x][y] !== null && this.cells[x][y].id === Tile.WELL.id) {
-                game.lighting.setLight(x, y, [138, 30, 81]);
+            if(this.cells[x][y] !== null && this.cells[x][y].light !== undefined) {
+                game.lighting.setLight(x, y, this.cells[x][y].light);
             }
         }
     }
