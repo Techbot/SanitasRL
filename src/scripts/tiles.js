@@ -1,9 +1,3 @@
-// id:              the identifier of the tile type
-// entityPasses:    whether an entity can move through the tile
-// lightPasses:     whether light passes through the tile
-// look:            the message displayed when the tile is described
-// image:           the coordinates of the tile in the tileset (in 16x16 cells)
-// color:           the color to blend the tile with
 var Tile = {
     FLOOR: {
         id: 0,
@@ -55,7 +49,7 @@ var Tile = {
     },
     DOOR: {
         id: 6,
-        entityPasses: true, // Should actually be false, the move function should check for special behaviour before moving
+        entityPasses: false,
         lightPasses: false,
         look: 'A closed door',
         image: { x: 3, y: 0 },
