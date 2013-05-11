@@ -6,14 +6,14 @@
 }
 
 body {
-    background: #111;
+    background: rgb(17, 17, 17);
     font: normal 400 14px/1.4em 'DejaVu Sans Mono', monospace;
     text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.9);
-    color: #fff;
+    color: rgb(255, 255, 255);
 }
 
-.red  { color: #c00; }
-.cyan { color: #00d3d3; }
+.red  { color: rgb(204, 0, 0); }
+.cyan { color: rgb(0, 211, 211); }
 
 canvas {
     width: 960px;
@@ -31,7 +31,7 @@ canvas {
     position: fixed;
     top: 50%;
     left: 50%;
-    background: #111;
+    background: rgb(17, 17, 17);
 }
 .window p, pre {
     width: 960px;

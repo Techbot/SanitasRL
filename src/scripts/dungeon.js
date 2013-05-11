@@ -38,6 +38,11 @@ var Dungeon = function() {
         }
     }
 
+    this.computeLighting();
+};
+
+Dungeon.prototype.computeLighting = function() {
+    for(this.light = []; this.light.length < this.width; this.light.push([]));
     this.lighting.compute(this.generateLighting.bind(this));
 };
 

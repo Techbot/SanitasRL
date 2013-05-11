@@ -109,7 +109,7 @@ Game.prototype.render = function() {
                     if(tile.color !== undefined) {
                         this.canvas.globalCompositeOperation = 'source-atop';
 
-                        if(this.dungeon.light[x][y] !== undefined && this.dungeon.fov[x][y] > 0.1) {
+                        if(this.dungeon.cells[x][y].reflects === true && this.dungeon.light[x][y] !== undefined && this.dungeon.fov[x][y] > 0.1) {
                             var light = ROT.Color.add(this.dungeon.light[x][y], [Math.round(this.pulse), Math.round(this.pulse), Math.round(this.pulse)]);
                             var finalLight = ROT.Color.add(ROT.Color.fromString(tile.color), light);
 
@@ -126,7 +126,7 @@ Game.prototype.render = function() {
         }
 
         if(this.state.id === State.EXAMINE.id) {
-            this.canvas.strokeStyle = '#0f0';
+            this.canvas.strokeStyle = 'rgb(0, 255, 0)';
             this.canvas.lineWidth = 1;
             this.canvas.strokeRect(this.cursor.x * 16 + 0.5, this.cursor.y * 16 + 0.5, 16 - 1, 16 - 1); // .5 to create a 1px line instead of blurry 2px
         }
