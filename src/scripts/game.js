@@ -5,7 +5,7 @@ var Game = function() {
     window.requestAnimationFrame = (function() {
         return window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame;
     }());
-    
+
     // Bind to the keydown and keypress events
     $(document).on('keydown', function(e) {
         var key = e.which + (e.ctrlKey ? 400 : (e.altKey ? 600 : 0));
@@ -19,47 +19,47 @@ var Game = function() {
             return false;
         }
     }.bind(this));
-    
+
     // Get the canvas context from the DOM
     this.canvas = document.getElementById('canvas').getContext('2d');
-    
+
     this.state = State.WELCOME;
-    
-    // 
+
+    //
     this.turnCounter = 0;
-    
+
     // Create the dungeon instance and generate a dungeon
     this.dungeon = new Dungeon();
-    
+
     // Create the player instance and position him in the center of the dungenon
     this.player = new Player(this.dungeon.startPosition.x, this.dungeon.startPosition.y);
     this.cursor = undefined;
-    
+
     // ???
     //this.updateInterface();
-    
+
     // ???
     this.dungeon.generateFOV(this.player.x, this.player.y);
-    
+
     // The images used as tilesets
     this.tileset = new Image();
-    
+
     this.tileset.onload = function() {
         this.render();
     }.bind(this);
-    
+
 
     // Set the paths for the tilesets
     this.tileset.src = 'images/tileset.png';
-    
+
     this.debug = false;
-    
+
     if(this.debug === true) {
         $('.window').hide();
         //this.state = 'running';
         this.state = State.PLAYER;
     }
-    
+
     this.pulseDir = true; // true = addition, false = subtraction
     this.pulse = 0;
 };
@@ -68,13 +68,13 @@ Game.prototype.render = function() {
     'use strict';
     if(this.state.render === true) {
         this.canvas.clearRect(0, 0, 960, 576);
-        
+
         if(this.pulseDir === true) {
             this.pulse += 0.3;
         } else {
             this.pulse -= 0.3;
         }
-        
+
         if(this.pulse >= 20 || this.pulse <= 0) {
             this.pulseDir = !this.pulseDir;
         }
@@ -97,41 +97,41 @@ Game.prototype.render = function() {
                         // The cell is in the fov
                         this.canvas.globalAlpha = this.dungeon.fov[x][y];
                     }
-                    
+
                     // THIS IS ONLY FOR DEBUGGING
                     if(this.debug === true) {
                         this.canvas.globalAlpha = 1;
                     }
-                    
+
                     this.canvas.drawImage(this.tileset, tile.x * 16, tile.y * 16, 16, 16, x * 16, y * 16, 16, 16);
                     this.canvas.globalAlpha = 1;
-                    
+
                     if(tile.color !== undefined) {
                         this.canvas.globalCompositeOperation = 'source-atop';
-                        
+
                         if(this.dungeon.light[x][y] !== undefined && this.dungeon.fov[x][y] > 0.1) {
                             var light = ROT.Color.add(this.dungeon.light[x][y], [Math.round(this.pulse), Math.round(this.pulse), Math.round(this.pulse)]);
                             var finalLight = ROT.Color.add(ROT.Color.fromString(tile.color), light);
-                            
+
                             this.canvas.fillStyle = ROT.Color.toRGB(finalLight);
                         } else {
                             this.canvas.fillStyle = tile.color;
                         }
-                        
+
                         this.canvas.fillRect(x * 16, y * 16, 16, 16);
                         this.canvas.globalCompositeOperation = 'source-over';
                     }
                 }
             }
         }
-        
+
         if(this.state.id === State.EXAMINE.id) {
             this.canvas.strokeStyle = '#0f0';
             this.canvas.lineWidth = 1;
             this.canvas.strokeRect(this.cursor.x * 16 + 0.5, this.cursor.y * 16 + 0.5, 16 - 1, 16 - 1); // .5 to create a 1px line instead of blurry 2px
         }
     }
-    
+
     window.requestAnimationFrame(this.render.bind(this));
 };
 
@@ -148,17 +148,17 @@ Game.prototype.updateInterface = function() {
 
     if(this.state.id !== State.WELCOME.id) {
         $('.dungeon-level').text(this.dungeon.level);
-        
+
         // DEBUG
         $('.dungeon-turn').text(this.turnCounter);
-        
+
         var look = '', position;
         if(this.state.id === State.PLAYER.id) {
             position = { x: this.player.x, y: this.player.y };
         } else if(this.state.id === State.EXAMINE.id) {
             position = { x: this.cursor.x, y: this.cursor.y };
         }
-        
+
         if(this.dungeon.seenCells[position.x][position.y] === true) {
             if(this.dungeon.cells[position.x][position.y] !== null && this.dungeon.cells[position.x][position.y].look !== undefined) {
                 look += this.dungeon.cells[position.x][position.y].look + '<br>';
@@ -166,13 +166,13 @@ Game.prototype.updateInterface = function() {
         } else {
             look = 'You can\'t see that far';
         }
-        
+
         if(this.dungeon.fov[position.x][position.y] > 0) {
             $('.character-sight-header').text('You see:');
         } else {
             $('.character-sight-header').text('You remember seeing:');
         }
-        
+
         $('.character-sight').html(look === '' ? 'Nothing' : look);
     }
 };
