@@ -33,8 +33,8 @@ var Game = function() {
     // Shadowcaster for field of view
     this.shadowcasting = new ROT.FOV.PreciseShadowcasting(function(x, y) {
         'use strict'; // needed?
-        if(x > 0 && x < this.dungeon.width && y > 0 && y < this.dungeon.height && this.dungeon.cells[x][y] !== null) { // change to this.dungeon.levels[this.level].cells[x][y]
-            return this.dungeon.cells[x][y].lightPasses; // change to this.dungeon.levels[this.level].cells[x][y].lightPasses
+        if(x > 0 && x < this.dungeon.width && y > 0 && y < this.dungeon.height && this.dungeon.levels[this.level].cells[x][y] !== null) { // change to this.dungeon.levels[this.level].levels[this.level].cells[x][y]
+            return this.dungeon.levels[this.level].cells[x][y].lightPasses; // change to this.dungeon.levels[this.level].levels[this.level].cells[x][y].lightPasses
         }
         
         return false;
@@ -69,7 +69,7 @@ var Game = function() {
     this.pulse = 0;
     
     // Set the debug mode
-    this.debug = false;
+    this.debug = true;
     if(this.debug === true) {
         $('.window').hide();
         this.state = State.PLAYER;
@@ -99,7 +99,7 @@ Game.prototype.computeFOV = function(sx, sy) {
     // Compute the new FOV
     this.shadowcasting.compute(sx, sy, 10, function(x, y, r, visibility) {
         this.fov[x][y] = (r === 0 ? 1 : (1 / r) * 3);
-        this.dungeon.seenCells[x][y] = true; // change to this.dungeon.levels[this.level].seenCells[x][y]
+        this.dungeon.levels[this.level].seenCells[x][y] = true; // change to this.dungeon.levels[this.level].levels[this.level].seenCells[x][y]
     }.bind(this));
 };
 
@@ -141,10 +141,10 @@ Game.prototype.render = function() {
                 if(x === this.player.x && y === this.player.y) {
                     tile = { x: 0, y: 2, color: undefined };
                 } else {
-                    tile = this.dungeon.at(x, y);
+                    tile = this.dungeon.at(x, y, this.level);
                 }
                                      // DEBUGGING
-                if(tile !== null && (this.debug === true || this.dungeon.seenCells[x][y] === true)) {
+                if(tile !== null && (this.debug === true || this.dungeon.levels[this.level].seenCells[x][y] === true)) {
                     if(this.fov[x][y] === undefined) {
                         // This is a seen cell, but it's not in the fov
                         this.canvas.globalAlpha = 0.3;
@@ -164,7 +164,7 @@ Game.prototype.render = function() {
                     if(tile.color !== undefined) {
                         this.canvas.globalCompositeOperation = 'source-atop';
 
-                        if(this.dungeon.cells[x][y].reflects === true && this.light[x][y] !== undefined && this.fov[x][y] > 0.1) {
+                        if(this.dungeon.levels[this.level].cells[x][y].reflects === true && this.light[x][y] !== undefined && this.fov[x][y] > 0.1) {
                             var light = ROT.Color.add(this.light[x][y], [Math.round(this.pulse), Math.round(this.pulse), Math.round(this.pulse)]);
                             var finalLight = ROT.Color.add(ROT.Color.fromString(tile.color), light);
 
@@ -216,9 +216,9 @@ Game.prototype.updateInterface = function() {
             position = { x: this.cursor.x, y: this.cursor.y };
         }
 
-        if(this.dungeon.seenCells[position.x][position.y] === true) {
-            if(this.dungeon.cells[position.x][position.y] !== null && this.dungeon.cells[position.x][position.y].look !== undefined) {
-                look += this.dungeon.cells[position.x][position.y].look + '<br>';
+        if(this.dungeon.levels[this.level].seenCells[position.x][position.y] === true) {
+            if(this.dungeon.levels[this.level].cells[position.x][position.y] !== null && this.dungeon.levels[this.level].cells[position.x][position.y].look !== undefined) {
+                look += this.dungeon.levels[this.level].cells[position.x][position.y].look + '<br>';
             }
         } else {
             look = 'You can\'t see that far';

@@ -39,7 +39,7 @@ var Tile = {
         reflects: true,
         look: 'A hole with dirty water',
         image: { x: 9, y: 0 },
-        light: [84, 84, 255],
+        light: undefined,
         color: 'rgb(84, 84, 255)',
         interact: undefined
     },
@@ -76,7 +76,7 @@ var Tile = {
         color: 'rgb(162, 162, 162)',
         interact: function(x, y, game) {
             'use strict';
-            game.dungeon.cells[x][y] = Tile.DOOR_OPEN;
+            game.dungeon.levels[game.level].cells[x][y] = Tile.DOOR_OPEN;
             return true;
         }
     },
@@ -199,7 +199,7 @@ var Tile = {
         color: 'rgb(138, 30, 81)',
         interact: function(x, y, game) {
             'use strict';
-            game.dungeon.cells[x][y] = Tile.WELL_EMPTY;
+            game.dungeon.levels[game.level].cells[x][y] = Tile.WELL_EMPTY;
             game.lighting.setLight(x, y, null);
             return false;
         }

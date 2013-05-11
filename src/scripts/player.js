@@ -11,12 +11,12 @@ Player.prototype.move = function(direction, game) {
         y = game.player.y + ROT.DIRS['8'][direction][1];
 
     var interacted = false, canMoveAfterInteraction = true;
-    if(game.dungeon.cells[x][y].interact !== undefined) {
-        canMoveAfterInteraction = game.dungeon.cells[x][y].interact(x, y, game);
+    if(game.dungeon.levels[game.level].cells[x][y].interact !== undefined) {
+        canMoveAfterInteraction = game.dungeon.levels[game.level].cells[x][y].interact(x, y, game);
         interacted = true;
     }
     
-    if(canMoveAfterInteraction === true && game.dungeon.cells[x][y].entityPasses === true) {
+    if(canMoveAfterInteraction === true && game.dungeon.levels[game.level].cells[x][y].entityPasses === true) {
         game.player.x = x;
         game.player.y = y;
         game.next();
