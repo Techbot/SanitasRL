@@ -2,67 +2,9 @@ var Dungeon = function() {
     'use strict';
     this.width = 60;
     this.height = 36;
-    this.level = 1;
 
     this.cells = [];
     this.seenCells = []; // All cells that we have seen (used for fog of war)
-    this.startPosition = { x: undefined, y: undefined }; // The position the player should start at
-
-    for(this.fov = []; this.fov.length < this.width; this.fov.push([])); // generate a 2d array for field of view
-    for(this.light = []; this.light.length < this.width; this.light.push([])); // generate a 2d array for lighting
-
-    this.shadowcasting = new ROT.FOV.PreciseShadowcasting(this.lightPasses.bind(this));
-    this.lighting = new ROT.Lighting(undefined, { range: 3 });
-    this.lighting.setFOV(this.shadowcasting);
-
-    this.lightSources = []; // generate a 2d array for lightsources, these cells should not be lighted
-    var x, y;
-    for(x = 0; x < this.width; x += 1) {
-        this.lightSources[x] = [];
-        for(y = 0; y < this.height; y += 1) {
-            this.lightSources[x][y] = false;
-        }
-    }
-
-    this.generate();
-};
-
-Dungeon.prototype.computeLighting = function() {
-    for(this.light = []; this.light.length < this.width; this.light.push([]));
-    this.lighting.compute(this.generateLighting.bind(this));
-};
-
-Dungeon.prototype.lightPasses = function(x, y) {
-    if(x > 0 && x < this.width && y > 0 && y < this.height && this.cells[x][y] !== null) {
-        return this.cells[x][y].lightPasses;
-    }
-
-    return false;
-};
-
-Dungeon.prototype.generateFOV = function(x, y) {
-    var ex, ey;
-    for(ex = 0; ex < this.width; ex += 1) {
-        for(ey = 0; ey < this.height; ey += 1) {
-            this.fov[ex][ey] = false;
-        }
-    }
-
-    this.shadowcasting.compute(x, y, 10, function(x, y, r, visibility) {
-        if(r === 0) {
-            this.fov[x][y] = 1;
-        } else {
-            this.fov[x][y] = (1 / r) * 3;
-        }
-
-        this.seenCells[x][y] = true;
-    }.bind(this));
-};
-
-Dungeon.prototype.generateLighting = function(x, y, color) {
-    if(this.lightSources[x][y] === false) {
-        this.light[x][y] = color;
-    }
 };
 
 // Returns the tile at position x, y
@@ -79,9 +21,9 @@ Dungeon.prototype.at = function(x, y) {
 };
 
 // returns all possible locations to place the player
-Dungeon.prototype.generate = function() {
+Dungeon.prototype.generate = function(game) {
     // Level 5 should work differently, we should generate a large room on level 5 for the boss
-    if(this.level < 5) {
+    if(game.level < 5) {
         var generator;
         if(ROT.RNG.getInt(0, 1) === 1) {
             generator = new ROT.Map.Uniform(this.width, this.height);
@@ -339,19 +281,15 @@ Dungeon.prototype.generate = function() {
         }
     }
 
-    this.startPosition = floors.random();
-    
-    
     // Loop over everything placing lights
     for(x = 0; x < this.width; x += 1) {
         for(y = 0; y < this.height; y += 1) {
-            this.lightSources[x][y] = false;
             if(this.cells[x][y] !== null && this.cells[x][y].id === Tile.WELL.id) {
-                this.lightSources[x][y] = true;
-                this.lighting.setLight(x, y, [138, 30, 81]);
+                game.lighting.setLight(x, y, [138, 30, 81]);
             }
         }
     }
 
-    this.computeLighting();
+    // Return a random floor tile for the player to start at
+    return floors.random();
 };

@@ -23,45 +23,100 @@ var Game = function() {
     // Get the canvas context from the DOM
     this.canvas = document.getElementById('canvas').getContext('2d');
 
+    // The game state
     this.state = State.WELCOME;
-
-    //
-    this.turnCounter = 0;
-
+    // The game turn
+    this.turn = 0;
+    // The dungeon level we're currently at
+    this.level = 1;
+    
+    // Shadowcaster for field of view
+    this.shadowcasting = new ROT.FOV.PreciseShadowcasting(function(x, y) {
+        'use strict'; // needed?
+        if(x > 0 && x < this.dungeon.width && y > 0 && y < this.dungeon.height && this.dungeon.cells[x][y] !== null) { // change to this.dungeon.levels[this.level].cells[x][y]
+            return this.dungeon.cells[x][y].lightPasses; // change to this.dungeon.levels[this.level].cells[x][y].lightPasses
+        }
+        
+        return false;
+    }.bind(this));
+    
+    // Lighting
+    this.lighting = new ROT.Lighting(undefined, { range: 3 });
+    this.lighting.setFOV(this.shadowcasting);
+    
+    
     // Create the dungeon instance and generate a dungeon
     this.dungeon = new Dungeon();
+    var position = this.dungeon.generate(this);
 
-    // Create the player instance and position him in the center of the dungenon
-    this.player = new Player(this.dungeon.startPosition.x, this.dungeon.startPosition.y);
+    // Create the player instance
+    this.player = new Player(position.x, position.y);
     this.cursor = undefined;
 
-    // ???
-    //this.updateInterface();
+    /*** TEMPORARY fov AND light 2d-arrays ***/
+    for(this.fov = []; this.fov.length < this.dungeon.width; this.fov.push([])); // generate a 2d array for field of view
+    for(this.light = []; this.light.length < this.dungeon.width; this.light.push([])); // generate a 2d array for lighting
+    /***                                   ***/
+    
+    // Update the field of view
+    this.computeFOV(this.player.x, this.player.y);
+    
+    // Update the lighting
+    this.computeLighting();
 
-    // ???
-    this.dungeon.generateFOV(this.player.x, this.player.y);
-
-    // The images used as tilesets
+    // Pulsation for lighting
+    this.pulseDir = true; // true = addition, false = subtraction
+    this.pulse = 0;
+    
+    // Set the debug mode
+    this.debug = false;
+    if(this.debug === true) {
+        $('.window').hide();
+        this.state = State.PLAYER;
+    }
+    
+    // Load the tileset and begin to render when done
     this.tileset = new Image();
-
     this.tileset.onload = function() {
         this.render();
     }.bind(this);
-
-
-    // Set the paths for the tilesets
     this.tileset.src = 'images/tileset.png';
+    
+    // Update the interface
+    this.updateInterface();
+};
 
-    this.debug = false;
-
-    if(this.debug === true) {
-        $('.window').hide();
-        //this.state = 'running';
-        this.state = State.PLAYER;
+Game.prototype.computeFOV = function(sx, sy) {
+    var x, y;
+    
+    // Clear the FOV
+    for(x = 0; x < this.dungeon.width; x += 1) {
+        for(y = 0; y < this.dungeon.height; y += 1) {
+            this.fov[x][y] = undefined;
+        }
     }
+    
+    // Compute the new FOV
+    this.shadowcasting.compute(sx, sy, 10, function(x, y, r, visibility) {
+        this.fov[x][y] = (r === 0 ? 1 : (1 / r) * 3);
+        this.dungeon.seenCells[x][y] = true; // change to this.dungeon.levels[this.level].seenCells[x][y]
+    }.bind(this));
+};
 
-    this.pulseDir = true; // true = addition, false = subtraction
-    this.pulse = 0;
+Game.prototype.computeLighting = function() {
+    var x, y;
+    
+    // CLear the light
+    for(x = 0; x < this.dungeon.width; x += 1) {
+        for(y = 0; y < this.dungeon.height; y += 1) {
+            this.light[x][y] = undefined;
+        }
+    }
+    
+    // Compute the new light
+    this.lighting.compute(function(x, y, color) {
+        this.light[x][y] = color;
+    }.bind(this));
 };
 
 Game.prototype.render = function() {
@@ -90,12 +145,12 @@ Game.prototype.render = function() {
                 }
                                      // DEBUGGING
                 if(tile !== null && (this.debug === true || this.dungeon.seenCells[x][y] === true)) {
-                    if(this.dungeon.fov[x][y] < 0.1) {
+                    if(this.fov[x][y] === undefined) {
                         // This is a seen cell, but it's not in the fov
                         this.canvas.globalAlpha = 0.3;
                     } else {
                         // The cell is in the fov
-                        this.canvas.globalAlpha = this.dungeon.fov[x][y];
+                        this.canvas.globalAlpha = this.fov[x][y];
                     }
 
                     // THIS IS ONLY FOR DEBUGGING
@@ -109,8 +164,8 @@ Game.prototype.render = function() {
                     if(tile.color !== undefined) {
                         this.canvas.globalCompositeOperation = 'source-atop';
 
-                        if(this.dungeon.cells[x][y].reflects === true && this.dungeon.light[x][y] !== undefined && this.dungeon.fov[x][y] > 0.1) {
-                            var light = ROT.Color.add(this.dungeon.light[x][y], [Math.round(this.pulse), Math.round(this.pulse), Math.round(this.pulse)]);
+                        if(this.dungeon.cells[x][y].reflects === true && this.light[x][y] !== undefined && this.fov[x][y] > 0.1) {
+                            var light = ROT.Color.add(this.light[x][y], [Math.round(this.pulse), Math.round(this.pulse), Math.round(this.pulse)]);
                             var finalLight = ROT.Color.add(ROT.Color.fromString(tile.color), light);
 
                             this.canvas.fillStyle = ROT.Color.toRGB(finalLight);
@@ -138,9 +193,11 @@ Game.prototype.render = function() {
 /*
  * Goes to the next turn
  */
-Game.prototype.turn = function() {
-    this.turnCounter += 1;
-    this.dungeon.generateFOV(this.player.x, this.player.y);
+Game.prototype.next = function() {
+    this.turn += 1;
+    //this.dungeon.generateFOV(this.player.x, this.player.y);
+    this.computeFOV(this.player.x, this.player.y);
+    this.computeLighting();
 };
 
 Game.prototype.updateInterface = function() {
@@ -150,7 +207,7 @@ Game.prototype.updateInterface = function() {
         $('.dungeon-level').text(this.dungeon.level);
 
         // DEBUG
-        $('.dungeon-turn').text(this.turnCounter);
+        $('.dungeon-turn').text(this.turn);
 
         var look = '', position;
         if(this.state.id === State.PLAYER.id) {
@@ -167,7 +224,7 @@ Game.prototype.updateInterface = function() {
             look = 'You can\'t see that far';
         }
 
-        if(this.dungeon.fov[position.x][position.y] > 0) {
+        if(this.fov[position.x][position.y] > 0) {
             $('.character-sight-header').text('You see:');
         } else {
             $('.character-sight-header').text('You remember seeing:');

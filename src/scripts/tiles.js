@@ -104,14 +104,14 @@ var Tile = {
             'use strict';
             // Generate a new level
             //game.dungeon.level += 1;
-            //game.dungeon.generate();
+            //game.dungeon.generate(game);
 
             // Move the player to the center
             //game.player.x = Math.floor(game.dungeon.width / 2);
             //game.player.y = Math.floor(game.dungeon.height / 2);
 
             // UPDATE THE TURN COUNTER
-            //game.turn();
+            //game.next();
             return true;
         }
     },
@@ -127,16 +127,20 @@ var Tile = {
         interact: function(x, y, game) {
             'use strict';
             // Generate a new level
-            game.dungeon.level += 1;
-            game.dungeon.generate();
+            game.level += 1;
+            
+            // Remove all lights
+            game.lighting._lights = {};
+            
+            var position = game.dungeon.generate(game);
 
             // Move the player to the center
-            game.player.x = game.dungeon.startPosition.x;
-            game.player.y = game.dungeon.startPosition.y;
+            game.player.x = position.x;
+            game.player.y = position.y;
 
             // UPDATE THE TURN COUNTER
-            game.turn();
-            return true;
+            game.next();
+            return false;
         }
     },
     COCA_PLANT: {
@@ -196,9 +200,7 @@ var Tile = {
         interact: function(x, y, game) {
             'use strict';
             game.dungeon.cells[x][y] = Tile.WELL_EMPTY;
-            
-            game.dungeon.lighting.setLight(x, y, null);
-            game.dungeon.computeLighting();
+            game.lighting.setLight(x, y, null);
             return false;
         }
     },

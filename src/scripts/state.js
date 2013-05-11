@@ -72,7 +72,7 @@ var State = {
                 // Numpad 5 / . - Wait one turn
                 case 'numpad5':
                 case '.':
-                    game.turn();
+                    game.next();
                     break;
             }
         }
