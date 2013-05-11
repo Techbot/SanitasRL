@@ -227,7 +227,7 @@ Game.prototype.keydown = function(code, key) {
         } else if(key === 'numpad5' || key === '.') {
             this.turn();
         } else if(key === '>') {
-            if(this.dungeon.cells[this.player.x][this.player.y].id === Tile.STAIRS.id) {
+            if(this.dungeon.cells[this.player.x][this.player.y].id === Tile.DOWNWARD_STAIRCASE.id) {
                 // Generate a new level
                 this.dungeon.level += 1;
                 this.dungeon.generate();
@@ -267,17 +267,17 @@ Game.prototype.keydown = function(code, key) {
                 // Pray
                 //case Keys.VK_Q:
                 case 'q':
-                    if(this.dungeon.cells[this.player.x][this.player.y - 1].id === Tile.SHRINE.id) {
-                        this.dungeon.cells[this.player.x][this.player.y - 1] = Tile.SHRINE_USED;
+                    if(this.dungeon.cells[this.player.x][this.player.y - 1].id === Tile.WELL.id) {
+                        this.dungeon.cells[this.player.x][this.player.y - 1] = Tile.WELL_EMPTY;
                         this.turn();
-                    } else if(this.dungeon.cells[this.player.x + 1][this.player.y].id === Tile.SHRINE.id) {
-                        this.dungeon.cells[this.player.x + 1][this.player.y] = Tile.SHRINE_USED;
+                    } else if(this.dungeon.cells[this.player.x + 1][this.player.y].id === Tile.WELL.id) {
+                        this.dungeon.cells[this.player.x + 1][this.player.y] = Tile.WELL_EMPTY;
                         this.turn();
-                    } else if(this.dungeon.cells[this.player.x][this.player.y + 1].id === Tile.SHRINE.id) {
-                        this.dungeon.cells[this.player.x][this.player.y + 1] = Tile.SHRINE_USED;
+                    } else if(this.dungeon.cells[this.player.x][this.player.y + 1].id === Tile.WELL.id) {
+                        this.dungeon.cells[this.player.x][this.player.y + 1] = Tile.WELL_EMPTY;
                         this.turn();
-                    } else if(this.dungeon.cells[this.player.x - 1][this.player.y].id === Tile.SHRINE.id) {
-                        this.dungeon.cells[this.player.x - 1][this.player.y] = Tile.SHRINE_USED;
+                    } else if(this.dungeon.cells[this.player.x - 1][this.player.y].id === Tile.WELL.id) {
+                        this.dungeon.cells[this.player.x - 1][this.player.y] = Tile.WELL_EMPTY;
                         this.turn();
                     }
                     break;
@@ -299,8 +299,6 @@ Game.prototype.keydown = function(code, key) {
                 this.player.x = newPosition.x;
                 this.player.y = newPosition.y;
                     
-                this.dungeon.generateFOV(this.player.x, this.player.y);
-                    
                 this.turn();
             }
             
@@ -310,6 +308,8 @@ Game.prototype.keydown = function(code, key) {
                     this.dungeon.cells[this.player.x][this.player.y] = Tile.DOOR_OPEN;
                     break;
             }
+            
+            this.dungeon.generateFOV(this.player.x, this.player.y);
         }
         
         // Update the interface

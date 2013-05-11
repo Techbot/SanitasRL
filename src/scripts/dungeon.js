@@ -31,7 +31,7 @@ var Dungeon = function() {
     // Loop over everything placing lights
     for(x = 0; x < this.width; x += 1) {
         for(y = 0; y < this.height; y += 1) {
-            if(this.cells[x][y] !== null && this.cells[x][y].id === Tile.SHRINE.id) {
+            if(this.cells[x][y] !== null && this.cells[x][y].id === Tile.WELL.id) {
                 this.lightSources[x][y] = true;
                 this.lighting.setLight(x, y, [138, 30, 81]);
             }
@@ -126,14 +126,14 @@ Dungeon.prototype.generate = function() {
         
         var rooms = generator.getRooms().randomize(), i;
         for(i = 0; i < rooms.length; i += 1) {
-            // Add stairs to the first room
+            // Add DOWNWARD_STAIRCASE to the first room
             var dx = rooms[i]._x2 - rooms[i]._x1,
                 dy = rooms[i]._y2 - rooms[i]._y1,
                 cx = rooms[i]._x1 + Math.ceil(dx / 2),
                 cy = rooms[i]._y1 + Math.ceil(dy / 2);
                 
             if(i === 0) {
-                this.cells[cx][cy] = Tile.STAIRS;
+                this.cells[cx][cy] = Tile.DOWNWARD_STAIRCASE;
             } else {
                 var done = false;
                 
@@ -169,7 +169,7 @@ Dungeon.prototype.generate = function() {
                                 done = true;
                             break;
                         case 2: // Shrine
-                            this.cells[cx][cy] = Tile.SHRINE;
+                            this.cells[cx][cy] = Tile.WELL;
                             done = true;
                             break;
                         case 3: // Pillar
@@ -184,7 +184,11 @@ Dungeon.prototype.generate = function() {
                         case 4: // grass
                             for(x = rooms[i]._x1; x <= rooms[i]._x2; x += 1) {
                                 for(y = rooms[i]._y1; y <= rooms[i]._y2; y += 1) {
-                                    this.cells[x][y] = Tile.GRASS;
+                                    if(ROT.RNG.getInt(0, 1) === 0) {
+                                        this.cells[x][y] = Tile.GRASS;
+                                    } else {
+                                        this.cells[x][y] = Tile.FOILAGE;
+                                    }
                                 }
                             }
                             done = true;
@@ -195,7 +199,7 @@ Dungeon.prototype.generate = function() {
             
             // Loop over the rooms
             // Obligatory features:
-            //  Stairs down
+            //  DOWNWARD_STAIRCASE down
             
         }
     
@@ -234,8 +238,8 @@ Dungeon.prototype.generate = function() {
     
     var x, y;
     for(x = 1; x < this.width - 1; x += 1) {
-        for(y = 1; y < this.height - 1; y += 1) {            
-            if(this.cells[x][y] !== null && (this.cells[x][y].id === Tile.FLOOR.id || this.cells[x][y].id === Tile.GRASS.id)) {
+        for(y = 1; y < this.height - 1; y += 1) {
+            if(this.cells[x][y] !== null && this.cells[x][y].id !== Tile.WALL.id) {
                 // North
                 if(this.cells[x][y - 1] === null) {
                     this.cells[x][y - 1] = Tile.WALL;
