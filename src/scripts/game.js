@@ -204,7 +204,7 @@ Game.prototype.updateInterface = function() {
     'use strict';
 
     if(this.state.id !== State.WELCOME.id) {
-        $('.dungeon-level').text(this.dungeon.level);
+        $('.dungeon-level').text(this.level);
 
         // DEBUG
         $('.dungeon-turn').text(this.turn);
