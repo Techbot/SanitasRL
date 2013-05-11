@@ -131,8 +131,8 @@ var Tile = {
             game.dungeon.generate();
 
             // Move the player to the center
-            game.player.x = Math.floor(game.dungeon.width / 2);
-            game.player.y = Math.floor(game.dungeon.height / 2);
+            game.player.x = game.dungeon.startPosition.x;
+            game.player.y = game.dungeon.startPosition.y;
 
             // UPDATE THE TURN COUNTER
             game.turn();
