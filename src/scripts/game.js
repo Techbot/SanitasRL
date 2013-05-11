@@ -88,7 +88,7 @@ Game.prototype.render = function() {
         for(y = 0; y < this.dungeon.height; y += 1) {
             var tile;
             if(x === this.player.x && y === this.player.y) {
-                tile = { x: 3, y: 2, color: undefined };
+                tile = { x: 0, y: 2, color: undefined };
             } else {
                 tile = this.dungeon.at(x, y);
             }
@@ -301,9 +301,6 @@ Game.prototype.keydown = function(code, key) {
             
             // Check for special behaviour on tiles
             switch(this.dungeon.cells[this.player.x][this.player.y]) {
-                case Tile.BARS_DOOR:
-                    this.dungeon.cells[this.player.x][this.player.y] = Tile.BARS_DOOR_OPEN;
-                    break;
                 case Tile.DOOR:
                     this.dungeon.cells[this.player.x][this.player.y] = Tile.DOOR_OPEN;
                     break;

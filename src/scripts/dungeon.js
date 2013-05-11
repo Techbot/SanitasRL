@@ -153,7 +153,13 @@ Dungeon.prototype.at = function(x, y) {
 Dungeon.prototype.generate = function() {
     // Level 5 should work differently, we should generate a large room on level 5 for the boss
     if(this.level < 5) {
-        var generator = new ROT.Map.Digger(this.width, this.height);
+        var generator;
+        if(ROT.RNG.getInt(0, 1) === 1) {
+            generator = new ROT.Map.Uniform(this.width, this.height);
+        } else {
+            generator = new ROT.Map.Digger(this.width, this.height);
+        }
+            
         var floors = [];
         
         var x, y;
@@ -189,7 +195,7 @@ Dungeon.prototype.generate = function() {
                 var done = false;
                 
                 while(done === false) {
-                    switch(ROT.RNG.getInt(0, 3)) {
+                    switch(ROT.RNG.getInt(0, 4)) {
                         case 0: // Water treasure
                             if(dx >= 4 && dy >= 4) {
                                 this.cells[cx][cy - 1] = Tile.WATER;
@@ -206,14 +212,14 @@ Dungeon.prototype.generate = function() {
                             break;
                         case 1: // Trapped treasure
                             if(dx >= 4 && dy >= 4) {
-                                this.cells[cx][cy - 1] = Tile.BARS;
-                                this.cells[cx + 1][cy - 1] = Tile.BARS;
-                                this.cells[cx + 1][cy] = Tile.BARS;
-                                this.cells[cx + 1][cy + 1] = Tile.BARS;
-                                this.cells[cx][cy + 1] = Tile.BARS_DOOR;
-                                this.cells[cx - 1][cy + 1] = Tile.BARS;
-                                this.cells[cx - 1][cy] = Tile.BARS;
-                                this.cells[cx - 1][cy - 1] = Tile.BARS;
+                                this.cells[cx][cy - 1] = Tile.WALL;
+                                this.cells[cx + 1][cy - 1] = Tile.WALL;
+                                this.cells[cx + 1][cy] = Tile.WALL;
+                                this.cells[cx + 1][cy + 1] = Tile.WALL;
+                                this.cells[cx][cy + 1] = Tile.DOOR;
+                                this.cells[cx - 1][cy + 1] = Tile.WALL;
+                                this.cells[cx - 1][cy] = Tile.WALL;
+                                this.cells[cx - 1][cy - 1] = Tile.WALL;
                             
                                 done = true;
                             }
@@ -231,6 +237,14 @@ Dungeon.prototype.generate = function() {
                                 this.cells[cx - 1][cy - 1] = Tile.PILLAR;
                                 done = true;
                             }
+                            break;
+                        case 4: // grass
+                            for(x = rooms[i]._x1; x <= rooms[i]._x2; x += 1) {
+                                for(y = rooms[i]._y1; y <= rooms[i]._y2; y += 1) {
+                                    this.cells[x][y] = Tile.GRASS;
+                                }
+                            }
+                            done = true;
                             break;
                     }
                 }
@@ -278,7 +292,7 @@ Dungeon.prototype.generate = function() {
     var x, y;
     for(x = 1; x < this.width - 1; x += 1) {
         for(y = 1; y < this.height - 1; y += 1) {            
-            if(this.cells[x][y] !== null && this.cells[x][y] === Tile.FLOOR) {
+            if(this.cells[x][y] !== null && (this.cells[x][y] === Tile.FLOOR || this.cells[x][y] === Tile.GRASS)) {
                 // North
                 if(this.cells[x][y - 1] === null) {
                     this.cells[x][y - 1] = Tile.WALL;
@@ -318,6 +332,16 @@ Dungeon.prototype.generate = function() {
                 if(this.cells[x - 1][y - 1] === null) {
                     this.cells[x - 1][y - 1] = Tile.WALL;
                 }
+            }
+        }
+    }
+    
+    for(i = 0; i < rooms.length; i += 1) {
+        var door;
+        for(var door in rooms[i]._doors) {
+            if(rooms[i]._doors.hasOwnProperty(door)) {
+                var d = door.split(',');
+                this.cells[parseInt(d[0], 10)][parseInt(d[1], 10)] = Tile.DOOR;
             }
         }
     }
