@@ -74,22 +74,6 @@ var State = {
                 case '.':
                     game.turn();
                     break;
-                // q - Drink from nearby well
-                case 'q':
-                    if(game.dungeon.cells[game.player.x][game.player.y - 1].id === Tile.WELL.id) {
-                        game.dungeon.cells[game.player.x][game.player.y - 1] = Tile.WELL_EMPTY;
-                        game.turn();
-                    } else if(game.dungeon.cells[game.player.x + 1][game.player.y].id === Tile.WELL.id) {
-                        game.dungeon.cells[game.player.x + 1][game.player.y] = Tile.WELL_EMPTY;
-                        game.turn();
-                    } else if(game.dungeon.cells[game.player.x][game.player.y + 1].id === Tile.WELL.id) {
-                        game.dungeon.cells[game.player.x][game.player.y + 1] = Tile.WELL_EMPTY;
-                        game.turn();
-                    } else if(game.dungeon.cells[game.player.x - 1][game.player.y].id === Tile.WELL.id) {
-                        game.dungeon.cells[game.player.x - 1][game.player.y] = Tile.WELL_EMPTY;
-                        game.turn();
-                    }
-                    break;
                 // > - Descend a downward staircase
                 case '>':
                     if(game.dungeon.cells[game.player.x][game.player.y].id === Tile.DOWNWARD_STAIRCASE.id) {
