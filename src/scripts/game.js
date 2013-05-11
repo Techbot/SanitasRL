@@ -34,7 +34,7 @@ var Game = function() {
     this.dungeon = new Dungeon();
     
     // Create the player instance and position him in the center of the dungenon
-    this.player = new Player(Math.floor(this.dungeon.width / 2), Math.floor(this.dungeon.height / 2));
+    this.player = new Player(this.dungeon.startPosition.x, this.dungeon.startPosition.y);
     this.cursor = new Cursor();
     
     // The different modes the player can be in
@@ -63,7 +63,12 @@ var Game = function() {
     // Set the paths for the tilesets
     this.tileset.src = 'images/tileset.png';
     
-    this.debug = false;
+    this.debug = true;
+    
+    if(this.debug === true) {
+        $('.window').hide();
+        this.state = 'running';
+    }
     
     this.pulseDir = true; // true = addition, false = subtraction
     this.pulse = 0;

@@ -6,6 +6,7 @@ var Dungeon = function() {
     
     this.cells = [];
     this.seenCells = []; // All cells that we have seen (used for fog of war)
+    this.startPosition = { x: undefined, y: undefined }; // The position the player should start at
     
     for(this.fov = []; this.fov.length < this.width; this.fov.push([])); // generate a 2d array for field of view
     for(this.light = []; this.light.length < this.width; this.light.push([])); // generate a 2d array for lighting
@@ -25,60 +26,7 @@ var Dungeon = function() {
     
     this.generate();    
     
-    // Find the first used cell (x, y)
-    var first_x, last_x, first_y, last_y;
-    for(x = 0; x < this.width; x += 1) {
-        for(y = 0; y < this.height; y += 1) {
-            if(this.cells[x][y] !== null && first_x === undefined) {
-                first_x = x;
-            }
-        }
-    }
     
-    for(x = this.width - 1; x > 0; x -= 1) {
-        for(y = 0; y < this.height; y += 1) {
-            if(this.cells[x][y] !== null && last_x === undefined) {
-                last_x = x + 1;
-            }
-        }
-    }
-    
-    for(y = 0; y < this.height; y += 1) {
-        for(x = 0; x < this.width; x += 1) {
-            if(this.cells[x][y] !== null && first_y === undefined) {
-                first_y = y;
-            }
-        }
-    }
-    
-    for(y = this.height - 1; y > 0; y -= 1) {
-        for(x = this.width - 1; x > 0; x -= 1) {
-            if(this.cells[x][y] !== null && last_y === undefined) {
-                last_y = y + 1;
-            }
-        }
-    }
-    
-    // These are indeces, i.e. they start at 0
-    this.tmp = this.cells.slice(first_x, last_x);
-    for(x = 0; x < this.tmp.length; x += 1) {
-        this.tmp[x] = this.tmp[x].slice(first_y, last_y);
-    }
-    
-    var offset_x = Math.floor((59 - (this.tmp.length - 1)) / 2);
-    var offset_y = Math.floor((35 - (this.tmp[0].length - 1)) / 2);
-    
-    // Place the tmp array into the center of the cells array
-    for(x = 0; x < this.width; x += 1) {
-        for(y = 0; y < this.height; y += 1) {
-            this.cells[x][y] = null;
-            
-            // 
-            if(x >= offset_x && y >= offset_y && x < this.tmp.length + offset_x && y < this.tmp[0].length + offset_y) {
-                this.cells[x][y] = this.tmp[x - offset_x][y - offset_y];
-            }
-        }
-    }
     
     // Loop over everything placing lights
     for(x = 0; x < this.width; x += 1) {
@@ -150,6 +98,7 @@ Dungeon.prototype.at = function(x, y) {
     return null;
 };
 
+// returns all possible locations to place the player
 Dungeon.prototype.generate = function() {
     // Level 5 should work differently, we should generate a large room on level 5 for the boss
     if(this.level < 5) {
@@ -159,8 +108,6 @@ Dungeon.prototype.generate = function() {
         } else {
             generator = new ROT.Map.Digger(this.width, this.height);
         }
-            
-        var floors = [];
         
         var x, y;
         for(x = 0; x < this.width; x += 1) {
@@ -175,7 +122,6 @@ Dungeon.prototype.generate = function() {
         var generatorCallback = function(x, y, value) {
             if(value === 0) {
                 this.cells[x][y] = Tile.FLOOR;
-                floors.push({ x: x, y: y });
             }
         };
         
@@ -345,4 +291,69 @@ Dungeon.prototype.generate = function() {
             }
         }
     }
+    // Find the first used cell (x, y)
+    var first_x, last_x, first_y, last_y;
+    for(x = 0; x < this.width; x += 1) {
+        for(y = 0; y < this.height; y += 1) {
+            if(this.cells[x][y] !== null && first_x === undefined) {
+                first_x = x;
+            }
+        }
+    }
+    
+    for(x = this.width - 1; x > 0; x -= 1) {
+        for(y = 0; y < this.height; y += 1) {
+            if(this.cells[x][y] !== null && last_x === undefined) {
+                last_x = x + 1;
+            }
+        }
+    }
+    
+    for(y = 0; y < this.height; y += 1) {
+        for(x = 0; x < this.width; x += 1) {
+            if(this.cells[x][y] !== null && first_y === undefined) {
+                first_y = y;
+            }
+        }
+    }
+    
+    for(y = this.height - 1; y > 0; y -= 1) {
+        for(x = this.width - 1; x > 0; x -= 1) {
+            if(this.cells[x][y] !== null && last_y === undefined) {
+                last_y = y + 1;
+            }
+        }
+    }
+    
+    // These are indeces, i.e. they start at 0
+    this.tmp = this.cells.slice(first_x, last_x);
+    for(x = 0; x < this.tmp.length; x += 1) {
+        this.tmp[x] = this.tmp[x].slice(first_y, last_y);
+    }
+    
+    var offset_x = Math.floor((59 - (this.tmp.length - 1)) / 2);
+    var offset_y = Math.floor((35 - (this.tmp[0].length - 1)) / 2);
+    
+    // Place the tmp array into the center of the cells array
+    for(x = 0; x < this.width; x += 1) {
+        for(y = 0; y < this.height; y += 1) {
+            this.cells[x][y] = null;
+            
+            // 
+            if(x >= offset_x && y >= offset_y && x < this.tmp.length + offset_x && y < this.tmp[0].length + offset_y) {
+                this.cells[x][y] = this.tmp[x - offset_x][y - offset_y];
+            }
+        }
+    }
+    
+    var floors = [];
+    for(x = 0; x < this.width; x += 1) {
+        for(y = 0; y < this.height; y += 1) {
+            if(this.cells[x][y] !== null && Tile[this.cells[x][y]].entityPasses === true) {
+                floors.push({ x: x, y: y });
+            }
+        }
+    }
+    
+    this.startPosition = floors.random();
 };
