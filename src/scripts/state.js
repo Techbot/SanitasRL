@@ -74,21 +74,6 @@ var State = {
                 case '.':
                     game.turn();
                     break;
-                // > - Descend a downward staircase
-                case '>':
-                    if(game.dungeon.cells[game.player.x][game.player.y].id === Tile.DOWNWARD_STAIRCASE.id) {
-                        // Generate a new level
-                        game.dungeon.level += 1;
-                        game.dungeon.generate();
-
-                        // Move the player to the center
-                        newPosition.x = Math.floor(game.dungeon.width / 2);
-                        newPosition.y = Math.floor(game.dungeon.height / 2);
-
-                        // UPDATE THE TURN COUNTER
-                        game.turn();
-                    }
-                    break;
             }
         }
     },

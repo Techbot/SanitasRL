@@ -82,7 +82,20 @@ var Tile = {
         look: 'A staircase leading up',
         image: { x: 5, y: 0 },
         color: '#a2a2a2',
-        interact: undefined
+        interact: function(x, y, game) {
+            'use strict';
+            // Generate a new level
+            //game.dungeon.level += 1;
+            //game.dungeon.generate();
+
+            // Move the player to the center
+            //game.player.x = Math.floor(game.dungeon.width / 2);
+            //game.player.y = Math.floor(game.dungeon.height / 2);
+
+            // UPDATE THE TURN COUNTER
+            //game.turn();
+            return true;
+        }
     },
     DOWNWARD_STAIRCASE: {
         id: 9,
@@ -91,7 +104,20 @@ var Tile = {
         look: 'A staircase leading down',
         image: { x: 6, y: 0 },
         color: '#a2a2a2',
-        interact: undefined
+        interact: function(x, y, game) {
+            'use strict';
+            // Generate a new level
+            game.dungeon.level += 1;
+            game.dungeon.generate();
+
+            // Move the player to the center
+            game.player.x = Math.floor(game.dungeon.width / 2);
+            game.player.y = Math.floor(game.dungeon.height / 2);
+
+            // UPDATE THE TURN COUNTER
+            game.turn();
+            return true;
+        }
     },
     COCA_PLANT: {
         id: 10,
