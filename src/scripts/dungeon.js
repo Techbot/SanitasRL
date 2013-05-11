@@ -31,7 +31,7 @@ var Dungeon = function() {
     // Loop over everything placing lights
     for(x = 0; x < this.width; x += 1) {
         for(y = 0; y < this.height; y += 1) {
-            if(this.cells[x][y] === Tile.SHRINE) {
+            if(this.cells[x][y] !== null && this.cells[x][y].id === Tile.SHRINE.id) {
                 this.lightSources[x][y] = true;
                 this.lighting.setLight(x, y, [138, 30, 81]);
             }
@@ -43,14 +43,14 @@ var Dungeon = function() {
 
 Dungeon.prototype.lightPasses = function(x, y) {
     if(x > 0 && x < this.width && y > 0 && y < this.height && this.cells[x][y] !== null) {
-        return Tile[this.cells[x][y]].lightPasses;
+        return this.cells[x][y].lightPasses;
     }
     
     return false;
 };
 
 Dungeon.prototype.reflectivity = function(x, y) {
-    if(x > 0 && x < this.width && y > 0 && y < this.height && this.cells[x][y] !== Tile.WALL) {
+    if(x > 0 && x < this.width && y > 0 && y < this.height && this.cells[x][y].id !== Tile.WALL.id) {
         return 0.3;
     }
     
@@ -84,14 +84,11 @@ Dungeon.prototype.generateLighting = function(x, y, color) {
 
 // Returns the tile at position x, y
 Dungeon.prototype.at = function(x, y) {
-    var tile = this.cells[x][y];
-
-    if(tile !== null) {
-        tile = Tile[tile];
+    if(this.cells[x][y] !== null) {
         return {
-            x: tile.image.x,
-            y: tile.image.y,
-            color: tile.color
+            x: this.cells[x][y].image.x,
+            y: this.cells[x][y].image.y,
+            color: this.cells[x][y].color
         };
     }
     
@@ -238,7 +235,7 @@ Dungeon.prototype.generate = function() {
     var x, y;
     for(x = 1; x < this.width - 1; x += 1) {
         for(y = 1; y < this.height - 1; y += 1) {            
-            if(this.cells[x][y] !== null && (this.cells[x][y] === Tile.FLOOR || this.cells[x][y] === Tile.GRASS)) {
+            if(this.cells[x][y] !== null && (this.cells[x][y].id === Tile.FLOOR.id || this.cells[x][y].id === Tile.GRASS.id)) {
                 // North
                 if(this.cells[x][y - 1] === null) {
                     this.cells[x][y - 1] = Tile.WALL;
@@ -349,7 +346,7 @@ Dungeon.prototype.generate = function() {
     var floors = [];
     for(x = 0; x < this.width; x += 1) {
         for(y = 0; y < this.height; y += 1) {
-            if(this.cells[x][y] !== null && Tile[this.cells[x][y]].entityPasses === true) {
+            if(this.cells[x][y] !== null && this.cells[x][y].entityPasses === true) {
                 floors.push({ x: x, y: y });
             }
         }

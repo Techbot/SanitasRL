@@ -79,12 +79,12 @@ Game.prototype.render = function() {
     this.canvas.clearRect(0, 0, 960, 576);
     
     if(this.pulseDir === true) {
-        this.pulse += 0.2;
+        this.pulse += 0.3;
     } else {
-        this.pulse -= 0.2;
+        this.pulse -= 0.3;
     }
     
-    if(this.pulse >= 0 || this.pulse <= -30) {
+    if(this.pulse >= 20 || this.pulse <= 0) {
         this.pulseDir = !this.pulseDir;
     }
 
@@ -165,8 +165,8 @@ Game.prototype.updateInterface = function() {
         };
     
     if(this.dungeon.fov[position.x][position.y] > 0) {
-        if(this.dungeon.cells[position.x][position.y] !== null && Tile[this.dungeon.cells[position.x][position.y]].look !== undefined) {
-            look += Tile[this.dungeon.cells[position.x][position.y]].look + '<br>';
+        if(this.dungeon.cells[position.x][position.y] !== null && this.dungeon.cells[position.x][position.y].look !== undefined) {
+            look += this.dungeon.cells[position.x][position.y].look + '<br>';
         }
     } else {
         look = 'You can\'t see that far';
@@ -227,7 +227,7 @@ Game.prototype.keydown = function(code, key) {
         } else if(key === 'numpad5' || key === '.') {
             this.turn();
         } else if(key === '>') {
-            if(this.dungeon.cells[this.player.x][this.player.y] === Tile.STAIRS) {
+            if(this.dungeon.cells[this.player.x][this.player.y].id === Tile.STAIRS.id) {
                 // Generate a new level
                 this.dungeon.level += 1;
                 this.dungeon.generate();
@@ -267,16 +267,16 @@ Game.prototype.keydown = function(code, key) {
                 // Pray
                 //case Keys.VK_Q:
                 case 'q':
-                    if(this.dungeon.cells[this.player.x][this.player.y - 1] === Tile.SHRINE) {
+                    if(this.dungeon.cells[this.player.x][this.player.y - 1].id === Tile.SHRINE.id) {
                         this.dungeon.cells[this.player.x][this.player.y - 1] = Tile.SHRINE_USED;
                         this.turn();
-                    } else if(this.dungeon.cells[this.player.x + 1][this.player.y] === Tile.SHRINE) {
+                    } else if(this.dungeon.cells[this.player.x + 1][this.player.y].id === Tile.SHRINE.id) {
                         this.dungeon.cells[this.player.x + 1][this.player.y] = Tile.SHRINE_USED;
                         this.turn();
-                    } else if(this.dungeon.cells[this.player.x][this.player.y + 1] === Tile.SHRINE) {
+                    } else if(this.dungeon.cells[this.player.x][this.player.y + 1].id === Tile.SHRINE.id) {
                         this.dungeon.cells[this.player.x][this.player.y + 1] = Tile.SHRINE_USED;
                         this.turn();
-                    } else if(this.dungeon.cells[this.player.x - 1][this.player.y] === Tile.SHRINE) {
+                    } else if(this.dungeon.cells[this.player.x - 1][this.player.y].id === Tile.SHRINE.id) {
                         this.dungeon.cells[this.player.x - 1][this.player.y] = Tile.SHRINE_USED;
                         this.turn();
                     }
@@ -295,7 +295,7 @@ Game.prototype.keydown = function(code, key) {
             this.cursor.y = newPosition.y;
         // If there has been a change to the newPosition
         } else if(this.player.x !== newPosition.x || this.player.y !== newPosition.y) {
-            if(Tile[this.dungeon.cells[newPosition.x][newPosition.y]].entityPasses === true) {
+            if(this.dungeon.cells[newPosition.x][newPosition.y].entityPasses === true) {
                 this.player.x = newPosition.x;
                 this.player.y = newPosition.y;
                     
@@ -305,8 +305,8 @@ Game.prototype.keydown = function(code, key) {
             }
             
             // Check for special behaviour on tiles
-            switch(this.dungeon.cells[this.player.x][this.player.y]) {
-                case Tile.DOOR:
+            switch(this.dungeon.cells[this.player.x][this.player.y].id) {
+                case Tile.DOOR.id:
                     this.dungeon.cells[this.player.x][this.player.y] = Tile.DOOR_OPEN;
                     break;
             }
