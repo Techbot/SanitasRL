@@ -12,7 +12,7 @@ var Dungeon = function() {
     for(this.light = []; this.light.length < this.width; this.light.push([])); // generate a 2d array for lighting
 
     this.shadowcasting = new ROT.FOV.PreciseShadowcasting(this.lightPasses.bind(this));
-    this.lighting = new ROT.Lighting(this.reflectivity.bind(this), { range: 3, passes: 2 });
+    this.lighting = new ROT.Lighting(undefined, { range: 3 });
     this.lighting.setFOV(this.shadowcasting);
 
     this.lightSources = []; // generate a 2d array for lightsources, these cells should not be lighted
@@ -25,20 +25,6 @@ var Dungeon = function() {
     }
 
     this.generate();
-
-
-
-    // Loop over everything placing lights
-    for(x = 0; x < this.width; x += 1) {
-        for(y = 0; y < this.height; y += 1) {
-            if(this.cells[x][y] !== null && this.cells[x][y].id === Tile.WELL.id) {
-                this.lightSources[x][y] = true;
-                this.lighting.setLight(x, y, [138, 30, 81]);
-            }
-        }
-    }
-
-    this.computeLighting();
 };
 
 Dungeon.prototype.computeLighting = function() {
@@ -52,14 +38,6 @@ Dungeon.prototype.lightPasses = function(x, y) {
     }
 
     return false;
-};
-
-Dungeon.prototype.reflectivity = function(x, y) {
-    if(x > 0 && x < this.width && y > 0 && y < this.height && this.cells[x][y].id !== Tile.WALL.id) {
-        return 0.3;
-    }
-
-    return 0;
 };
 
 Dungeon.prototype.generateFOV = function(x, y) {
@@ -362,4 +340,18 @@ Dungeon.prototype.generate = function() {
     }
 
     this.startPosition = floors.random();
+    
+    
+    // Loop over everything placing lights
+    for(x = 0; x < this.width; x += 1) {
+        for(y = 0; y < this.height; y += 1) {
+            this.lightSources[x][y] = false;
+            if(this.cells[x][y] !== null && this.cells[x][y].id === Tile.WELL.id) {
+                this.lightSources[x][y] = true;
+                this.lighting.setLight(x, y, [138, 30, 81]);
+            }
+        }
+    }
+
+    this.computeLighting();
 };
