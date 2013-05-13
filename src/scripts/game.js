@@ -47,10 +47,10 @@ var Game = function() {
     
     // Create the dungeon instance and generate a dungeon
     this.dungeon = new Dungeon();
-    var position = this.dungeon.generate(this);
+    this.dungeon.generate(this);
 
     // Create the player instance
-    this.player = new Player(position.x, position.y);
+    this.player = new Player(this.dungeon.levels[this.level].startingPosition.x, this.dungeon.levels[this.level].startingPosition.y);
     this.cursor = undefined;
 
     /*** TEMPORARY fov AND light 2d-arrays ***/
@@ -99,7 +99,7 @@ Game.prototype.computeFOV = function(sx, sy) {
     // Compute the new FOV
     this.shadowcasting.compute(sx, sy, 10, function(x, y, r, visibility) {
         this.fov[x][y] = (r === 0 ? 1 : (1 / r) * 3);
-        this.dungeon.levels[this.level].explored[x][y] = true; // change to this.dungeon.levels[this.level].levels[this.level].explored[x][y]
+        this.dungeon.levels[this.level].explored[x][y] = true;
     }.bind(this));
 };
 

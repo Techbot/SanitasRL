@@ -9,6 +9,8 @@ var Dungeon = function() {
 var Level = function(length) {
     this.cells = [];
     this.explored = [];
+    this.startingPosition = { x: undefined, y: undefined };
+    this.endingPosition = { x: undefined, y: undefined };
     
     var i;
     for(i = 0; i < length; i += 1) {
@@ -33,8 +35,8 @@ Dungeon.prototype.generate = function(game) {
         // Create a new level
         this.levels[game.level] = new Level(this.width);
         // Shortcut to this.levels[game.level]
-        var level = this.levels[game.level];
-        var generator = new ROT.Map.Digger(this.width, this.height);
+        var level = this.levels[game.level],
+            generator = new ROT.Map.Digger(this.width, this.height);
 
         // Generate the level, but only store the floors
         generator.create(function(x, y, value) {
@@ -42,16 +44,18 @@ Dungeon.prototype.generate = function(game) {
         }.bind(this));
 
         // Loop over the rooms
-        var rooms = generator.getRooms().randomize(), i;
+        var rooms = generator.getRooms().randomize(),
+            width, height, center,
+            generated, i;
+            
         for(i = 0; i < rooms.length; i += 1) {
             // Get width, height and center of the room
-            var width = rooms[i]._x2 - rooms[i]._x1,
-                height = rooms[i]._y2 - rooms[i]._y1,
-                center = { x: rooms[i]._x1 + Math.ceil(width / 2), y: rooms[i]._y1 + Math.ceil(height / 2) };
-                
-            var done = false;
+            width = rooms[i]._x2 - rooms[i]._x1;
+            height = rooms[i]._y2 - rooms[i]._y1;
+            center = { x: rooms[i]._x1 + Math.ceil(width / 2), y: rooms[i]._y1 + Math.ceil(height / 2) };
+            generated = false;
 
-            while(done === false) {
+            while(generated === false) {
                 switch(ROT.RNG.getInt(0, 4)) {
                     case 0: // Water treasure
                         if(width >= 4 && height >= 4) {
@@ -64,7 +68,7 @@ Dungeon.prototype.generate = function(game) {
                             level.cells[center.x - 1][center.y] = Tile.WATER;
                             level.cells[center.x - 1][center.y - 1] = Tile.WATER;
 
-                            done = true;
+                            generated = true;
                         }
                         break;
                     case 1: // Trapped treasure
@@ -78,13 +82,12 @@ Dungeon.prototype.generate = function(game) {
                             level.cells[center.x - 1][center.y] = Tile.WALL;
                             level.cells[center.x - 1][center.y - 1] = Tile.WALL;
 
-                            done = true;
+                            generated = true;
                         }
-                            done = true;
                         break;
                     case 2: // Shrine
                         level.cells[center.x][center.y] = Tile.WELL;
-                        done = true;
+                        generated = true;
                         break;
                     case 3: // Pillar
                         if(width >= 4 && height >= 4) {
@@ -92,7 +95,7 @@ Dungeon.prototype.generate = function(game) {
                             level.cells[center.x + 1][center.y + 1] = Tile.PILLAR;
                             level.cells[center.x - 1][center.y + 1] = Tile.PILLAR;
                             level.cells[center.x - 1][center.y - 1] = Tile.PILLAR;
-                            done = true;
+                            generated = true;
                         }
                         break;
                     case 4: // grass
@@ -105,7 +108,7 @@ Dungeon.prototype.generate = function(game) {
                                 }
                             }
                         }
-                        done = true;
+                        generated = true;
                         break;
                 }
             }
@@ -213,9 +216,7 @@ Dungeon.prototype.generate = function(game) {
             }
         }
         
-        // Add a stairwell
-        
-        // Pick a random wall
+        // Add a downward stairwell
         var done = false, wall;
         while(done === false) {
             wall = walls.random();
@@ -296,6 +297,91 @@ Dungeon.prototype.generate = function(game) {
             }
         }
         
+        // Add a upward stairwell
+        done = false, wall = undefined;
+        while(done === false) {
+            wall = walls.random();
+            
+            // See if the wall is eligble to host a stairwell
+            if(wall.x > 1 && wall.y > 1 && wall.x < this.width - 1 && wall.y < this.height - 1) {
+                // North
+                if(
+                        (level.cells[wall.x - 1][wall.y - 1].id === Tile.EMPTY.id   || level.cells[wall.x - 1][wall.y - 1].id === Tile.WALL.id)
+                    &&  (level.cells[wall.x][wall.y - 1].id === Tile.EMPTY.id       || level.cells[wall.x][wall.y - 1].id === Tile.WALL.id)
+                    &&  (level.cells[wall.x + 1][wall.y - 1].id === Tile.EMPTY.id   || level.cells[wall.x + 1][wall.y - 1].id === Tile.WALL.id)
+                    &&  (level.cells[wall.x - 1][wall.y].id === Tile.EMPTY.id       || level.cells[wall.x - 1][wall.y].id === Tile.WALL.id)
+                    &&  (level.cells[wall.x + 1][wall.y].id === Tile.EMPTY.id       || level.cells[wall.x + 1][wall.y].id === Tile.WALL.id)
+                    &&  (level.cells[wall.x][wall.y + 1].entityPasses === true) // The tile below is walkable
+                ) {
+                    level.cells[wall.x - 1][wall.y - 1] = Tile.WALL;
+                    level.cells[wall.x][wall.y - 1] = Tile.WALL;
+                    level.cells[wall.x + 1][wall.y - 1] = Tile.WALL;
+                    level.cells[wall.x - 1][wall.y] = Tile.WALL;
+                    level.cells[wall.x][wall.y] = Tile.ENTRANCE;
+                    level.cells[wall.x + 1][wall.y] = Tile.WALL;
+                    
+                    done = true;
+                }
+                
+                // East
+                if(
+                        (level.cells[wall.x + 1][wall.y - 1].id === Tile.EMPTY.id   || level.cells[wall.x + 1][wall.y - 1].id === Tile.WALL.id)
+                    &&  (level.cells[wall.x + 1][wall.y].id === Tile.EMPTY.id       || level.cells[wall.x + 1][wall.y].id === Tile.WALL.id)
+                    &&  (level.cells[wall.x + 1][wall.y + 1].id === Tile.EMPTY.id   || level.cells[wall.x + 1][wall.y - 1].id === Tile.WALL.id)
+                    &&  (level.cells[wall.x][wall.y - 1].id === Tile.EMPTY.id       || level.cells[wall.x][wall.y - 1].id === Tile.WALL.id)
+                    &&  (level.cells[wall.x][wall.y + 1].id === Tile.EMPTY.id        || level.cells[wall.x][wall.y + 1].id === Tile.WALL.id)
+                    &&  (level.cells[wall.x - 1][wall.y].entityPasses === true) // The tile to the left is walkable
+                ) {
+                    level.cells[wall.x + 1][wall.y - 1] = Tile.WALL;
+                    level.cells[wall.x + 1][wall.y] = Tile.WALL;
+                    level.cells[wall.x + 1][wall.y + 1] = Tile.WALL;
+                    level.cells[wall.x][wall.y - 1] = Tile.WALL;
+                    level.cells[wall.x][wall.y] = Tile.ENTRANCE;
+                    level.cells[wall.x][wall.y + 1] = Tile.WALL;
+                    
+                    done = true;
+                }
+                
+                // South
+                if(
+                        (level.cells[wall.x - 1][wall.y + 1].id === Tile.EMPTY.id   || level.cells[wall.x - 1][wall.y + 1].id === Tile.WALL.id)
+                    &&  (level.cells[wall.x][wall.y + 1].id === Tile.EMPTY.id       || level.cells[wall.x][wall.y + 1].id === Tile.WALL.id)
+                    &&  (level.cells[wall.x + 1][wall.y + 1].id === Tile.EMPTY.id   || level.cells[wall.x + 1][wall.y + 1].id === Tile.WALL.id)
+                    &&  (level.cells[wall.x - 1][wall.y].id === Tile.EMPTY.id       || level.cells[wall.x - 1][wall.y].id === Tile.WALL.id)
+                    &&  (level.cells[wall.x + 1][wall.y].id === Tile.EMPTY.id       || level.cells[wall.x + 1][wall.y].id === Tile.WALL.id)
+                    &&  (level.cells[wall.x][wall.y - 1].entityPasses === true) // The tile below is walkable
+                ) {
+                    level.cells[wall.x - 1][wall.y + 1] = Tile.WALL;
+                    level.cells[wall.x][wall.y + 1] = Tile.WALL;
+                    level.cells[wall.x + 1][wall.y + 1] = Tile.WALL;
+                    level.cells[wall.x - 1][wall.y] = Tile.WALL;
+                    level.cells[wall.x][wall.y] = Tile.ENTRANCE;
+                    level.cells[wall.x + 1][wall.y] = Tile.WALL;
+                    
+                    done = true;
+                }
+                
+                // West
+                if(
+                        (level.cells[wall.x - 1][wall.y - 1].id === Tile.EMPTY.id   || level.cells[wall.x - 1][wall.y - 1].id === Tile.WALL.id)
+                    &&  (level.cells[wall.x - 1][wall.y].id === Tile.EMPTY.id       || level.cells[wall.x - 1][wall.y].id === Tile.WALL.id)
+                    &&  (level.cells[wall.x - 1][wall.y + 1].id === Tile.EMPTY.id   || level.cells[wall.x - 1][wall.y - 1].id === Tile.WALL.id)
+                    &&  (level.cells[wall.x][wall.y - 1].id === Tile.EMPTY.id       || level.cells[wall.x][wall.y - 1].id === Tile.WALL.id)
+                    &&  (level.cells[wall.x][wall.y + 1].id === Tile.EMPTY.id        || level.cells[wall.x][wall.y + 1].id === Tile.WALL.id)
+                    &&  (level.cells[wall.x + 1][wall.y].entityPasses === true) // The tile to the left is walkable
+                ) {
+                    level.cells[wall.x - 1][wall.y - 1] = Tile.WALL;
+                    level.cells[wall.x - 1][wall.y] = Tile.WALL;
+                    level.cells[wall.x - 1][wall.y + 1] = Tile.WALL;
+                    level.cells[wall.x][wall.y - 1] = Tile.WALL;
+                    level.cells[wall.x][wall.y] = Tile.ENTRANCE;
+                    level.cells[wall.x][wall.y + 1] = Tile.WALL;
+                    
+                    done = true;
+                }
+            }
+        }
+        
         
         // Find the first used cell (x, y)
         var first_x, last_x, first_y, last_y;
@@ -348,6 +434,12 @@ Dungeon.prototype.generate = function(game) {
                 //
                 if(x >= offset_x && y >= offset_y && x < this.tmp.length + offset_x && y < this.tmp[0].length + offset_y) {
                     level.cells[x][y] = this.tmp[x - offset_x][y - offset_y];
+                    
+                    if(level.cells[x][y].id === Tile.UPWARD_STAIRCASE.id || level.cells[x][y].id === Tile.ENTRANCE.id) {
+                        level.startingPosition = { x: x, y: y };
+                    } else if(level.cells[x][y].id === Tile.DOWNWARD_STAIRCASE.id) {
+                        level.endingPosition = { x: x, y: y };
+                    }
                 }
             }
         }
@@ -369,7 +461,4 @@ Dungeon.prototype.generate = function(game) {
                 }
             }
         }
-
-        // Return a random floor tile for the player to start at
-        return floors.random();
 };
