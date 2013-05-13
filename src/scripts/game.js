@@ -33,8 +33,8 @@ var Game = function() {
     // Shadowcaster for field of view
     this.shadowcasting = new ROT.FOV.PreciseShadowcasting(function(x, y) {
         'use strict'; // needed?
-        if(x > 0 && x < this.dungeon.width && y > 0 && y < this.dungeon.height && this.dungeon.levels[this.level].cells[x][y] !== null) { // change to this.dungeon.levels[this.level].levels[this.level].cells[x][y]
-            return this.dungeon.levels[this.level].cells[x][y].lightPasses; // change to this.dungeon.levels[this.level].levels[this.level].cells[x][y].lightPasses
+        if(x > 0 && x < this.dungeon.width && y > 0 && y < this.dungeon.height && this.dungeon.levels[this.level].cells[x][y].id !== Tile.EMPTY.id) {
+            return this.dungeon.levels[this.level].cells[x][y].lightPasses;
         }
         
         return false;
@@ -217,7 +217,7 @@ Game.prototype.updateInterface = function() {
         }
 
         if(this.dungeon.levels[this.level].seenCells[position.x][position.y] === true) {
-            if(this.dungeon.levels[this.level].cells[position.x][position.y] !== null && this.dungeon.levels[this.level].cells[position.x][position.y].look !== undefined) {
+            if(this.dungeon.levels[this.level].cells[position.x][position.y].look !== undefined) {
                 look += this.dungeon.levels[this.level].cells[position.x][position.y].look + '<br>';
             }
         } else {

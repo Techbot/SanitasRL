@@ -1,4 +1,15 @@
 var Tile = {
+    EMPTY: {
+        id: -1,
+        entityPasses: false,
+        lightPasses: false,
+        reflects: false,
+        look: undefined,
+        image: undefined,
+        light: undefined,
+        color: undefined,
+        interact: undefined
+    },
     FLOOR: {
         id: 0,
         entityPasses: true,

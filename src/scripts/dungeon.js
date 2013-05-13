@@ -13,7 +13,7 @@ var Level = function() {
 
 // Returns the tile at position x, y
 Dungeon.prototype.at = function(x, y, level) {
-    if(this.levels[level].cells[x][y] !== null) {
+    if(this.levels[level].cells[x][y].id !== Tile.EMPTY.id) {
         return {
             x: this.levels[level].cells[x][y].image.x,
             y: this.levels[level].cells[x][y].image.y,
@@ -24,11 +24,11 @@ Dungeon.prototype.at = function(x, y, level) {
     return null;
 };
 
-// returns all possible locations to place the player
 Dungeon.prototype.generate = function(game) {
-        // Level 5 should work differently, we should generate a large room on level 5 for the boss
+        // Create a new level
         this.levels[game.level] = new Level();
         
+        // Decide to greate a uniform or digger dungeon
         var generator;
         if(ROT.RNG.getInt(0, 1) === 1) {
             generator = new ROT.Map.Uniform(this.width, this.height);
@@ -36,24 +36,25 @@ Dungeon.prototype.generate = function(game) {
             generator = new ROT.Map.Digger(this.width, this.height);
         }
 
+        // Initialize the arrays to keep cells and seen cells in
         var x, y;
         for(x = 0; x < this.width; x += 1) {
             this.levels[game.level].cells[x] = [];
             this.levels[game.level].seenCells[x] = [];
             for(y = 0; y < this.height; y += 1) {
-                this.levels[game.level].cells[x][y] = null;
+                this.levels[game.level].cells[x][y] = Tile.EMPTY;
                 this.levels[game.level].seenCells[x][y] = false;
             }
         }
 
-        var generatorCallback = function(x, y, value) {
+        // Generate the level, but only store the floors
+        generator.create(function(x, y, value) {
             if(value === 0) {
                 this.levels[game.level].cells[x][y] = Tile.FLOOR;
             }
-        };
+        }.bind(this));
 
-        generator.create(generatorCallback.bind(this));
-
+        // Loop over the rooms
         var rooms = generator.getRooms().randomize(), i;
         for(i = 0; i < rooms.length; i += 1) {
             // Add DOWNWARD_STAIRCASE to the first room
@@ -133,59 +134,95 @@ Dungeon.prototype.generate = function(game) {
 
         }
 
+        // Add walls to all border tiles
         var x, y;
         for(x = 1; x < this.width - 1; x += 1) {
             for(y = 1; y < this.height - 1; y += 1) {
-                if(this.levels[game.level].cells[x][y] !== null && this.levels[game.level].cells[x][y].id !== Tile.WALL.id) {
+                if(this.levels[game.level].cells[x][y].id !== Tile.EMPTY.id && this.levels[game.level].cells[x][y].id !== Tile.WALL.id) {
                     // North
-                    if(this.levels[game.level].cells[x][y - 1] === null) {
+                    if(this.levels[game.level].cells[x][y - 1].id === Tile.EMPTY.id) {
                         this.levels[game.level].cells[x][y - 1] = Tile.WALL;
                     }
 
                     // North East
-                    if(this.levels[game.level].cells[x + 1][y - 1] === null) {
+                    if(this.levels[game.level].cells[x + 1][y - 1].id === Tile.EMPTY.id) {
                         this.levels[game.level].cells[x + 1][y - 1] = Tile.WALL;
                     }
 
                     // East
-                    if(this.levels[game.level].cells[x + 1][y] === null) {
+                    if(this.levels[game.level].cells[x + 1][y].id === Tile.EMPTY.id) {
                         this.levels[game.level].cells[x + 1][y] = Tile.WALL;
                     }
 
                     // South East
-                    if(this.levels[game.level].cells[x + 1][y + 1] === null) {
+                    if(this.levels[game.level].cells[x + 1][y + 1].id === Tile.EMPTY.id) {
                         this.levels[game.level].cells[x + 1][y + 1] = Tile.WALL;
                     }
 
                     // South
-                    if(this.levels[game.level].cells[x][y + 1] === null) {
+                    if(this.levels[game.level].cells[x][y + 1].id === Tile.EMPTY.id) {
                         this.levels[game.level].cells[x][y + 1] = Tile.WALL;
                     }
 
                     // South West
-                    if(this.levels[game.level].cells[x - 1][y + 1] === null) {
+                    if(this.levels[game.level].cells[x - 1][y + 1].id === Tile.EMPTY.id) {
                         this.levels[game.level].cells[x - 1][y + 1] = Tile.WALL;
                     }
 
                     // West
-                    if(this.levels[game.level].cells[x - 1][y] === null) {
+                    if(this.levels[game.level].cells[x - 1][y].id === Tile.EMPTY.id) {
                         this.levels[game.level].cells[x - 1][y] = Tile.WALL;
                     }
 
                     // North West
-                    if(this.levels[game.level].cells[x - 1][y - 1] === null) {
+                    if(this.levels[game.level].cells[x - 1][y - 1].id === Tile.EMPTY.id) {
                         this.levels[game.level].cells[x - 1][y - 1] = Tile.WALL;
                     }
                 }
             }
         }
 
+        // Loop over all rooms, adding doors
         for(i = 0; i < rooms.length; i += 1) {
             var door;
             for(var door in rooms[i]._doors) {
-                if(rooms[i]._doors.hasOwnProperty(door)) {
-                    var d = door.split(',');
-                    this.levels[game.level].cells[parseInt(d[0], 10)][parseInt(d[1], 10)] = Tile.DOOR;
+                if(rooms[i]._doors.hasOwnProperty(door)) {                    
+                    var door_x = parseInt(door.split(',')[0], 10),
+                        door_y = parseInt(door.split(',')[1], 10);
+                    
+                    // There seems to be a bug where doors can be added in illogical places.
+                    // Therefore, we need to check if the door is places between two walls:
+                    //
+                    //         #
+                    //  #+# or +
+                    //         #
+                    if(
+                        // #+#
+                        (this.levels[game.level].cells[door_x - 1][door_y].id === Tile.WALL.id && this.levels[game.level].cells[door_x + 1][door_y].id === Tile.WALL.id)
+                        
+                        ||
+                        
+                        // #
+                        // +
+                        // #
+                        (this.levels[game.level].cells[door_x][door_y - 1].id === Tile.WALL.id && this.levels[game.level].cells[door_x][door_y + 1].id === Tile.WALL.id)
+                    ) {
+                        // There also seems to be a bug where two doors can be placed subsequent
+                        // to each other, or very close to eachother. We therefore need to check
+                        // if there is a door adjacent to the one we're placing
+                        if(
+                            this.levels[game.level].cells[door_x][door_y - 1].id !== Tile.DOOR.id
+                            && this.levels[game.level].cells[door_x + 1][door_y - 1].id !== Tile.DOOR.id
+                            && this.levels[game.level].cells[door_x + 1][door_y].id !== Tile.DOOR.id
+                            && this.levels[game.level].cells[door_x + 1][door_y + 1].id !== Tile.DOOR.id
+                            && this.levels[game.level].cells[door_x][door_y + 1].id !== Tile.DOOR.id
+                            && this.levels[game.level].cells[door_x - 1][door_y + 1].id !== Tile.DOOR.id
+                            && this.levels[game.level].cells[door_x - 1][door_y].id !== Tile.DOOR.id
+                            && this.levels[game.level].cells[door_x - 1][door_y - 1].id !== Tile.DOOR.id
+                        ) {
+                            this.levels[game.level].cells[door_x][door_y] = Tile.DOOR;
+                        }
+                    }
                 }
             }
         }
@@ -193,7 +230,7 @@ Dungeon.prototype.generate = function(game) {
         var first_x, last_x, first_y, last_y;
         for(x = 0; x < this.width; x += 1) {
             for(y = 0; y < this.height; y += 1) {
-                if(this.levels[game.level].cells[x][y] !== null && first_x === undefined) {
+                if(this.levels[game.level].cells[x][y].id !== Tile.EMPTY.id && first_x === undefined) {
                     first_x = x;
                 }
             }
@@ -201,7 +238,7 @@ Dungeon.prototype.generate = function(game) {
 
         for(x = this.width - 1; x > 0; x -= 1) {
             for(y = 0; y < this.height; y += 1) {
-                if(this.levels[game.level].cells[x][y] !== null && last_x === undefined) {
+                if(this.levels[game.level].cells[x][y].id !== Tile.EMPTY.id && last_x === undefined) {
                     last_x = x + 1;
                 }
             }
@@ -209,7 +246,7 @@ Dungeon.prototype.generate = function(game) {
 
         for(y = 0; y < this.height; y += 1) {
             for(x = 0; x < this.width; x += 1) {
-                if(this.levels[game.level].cells[x][y] !== null && first_y === undefined) {
+                if(this.levels[game.level].cells[x][y].id !== Tile.EMPTY.id && first_y === undefined) {
                     first_y = y;
                 }
             }
@@ -217,7 +254,7 @@ Dungeon.prototype.generate = function(game) {
 
         for(y = this.height - 1; y > 0; y -= 1) {
             for(x = this.width - 1; x > 0; x -= 1) {
-                if(this.levels[game.level].cells[x][y] !== null && last_y === undefined) {
+                if(this.levels[game.level].cells[x][y].id !== Tile.EMPTY.id && last_y === undefined) {
                     last_y = y + 1;
                 }
             }
@@ -235,7 +272,7 @@ Dungeon.prototype.generate = function(game) {
         // Place the tmp array into the center of the cells array
         for(x = 0; x < this.width; x += 1) {
             for(y = 0; y < this.height; y += 1) {
-                this.levels[game.level].cells[x][y] = null;
+                this.levels[game.level].cells[x][y] = Tile.EMPTY;
 
                 //
                 if(x >= offset_x && y >= offset_y && x < this.tmp.length + offset_x && y < this.tmp[0].length + offset_y) {
@@ -247,7 +284,7 @@ Dungeon.prototype.generate = function(game) {
         var floors = [];
         for(x = 0; x < this.width; x += 1) {
             for(y = 0; y < this.height; y += 1) {
-                if(this.levels[game.level].cells[x][y] !== null && this.levels[game.level].cells[x][y].entityPasses === true) {
+                if(this.levels[game.level].cells[x][y].entityPasses === true) {
                     floors.push({ x: x, y: y });
                 }
             }
@@ -256,7 +293,7 @@ Dungeon.prototype.generate = function(game) {
         // Loop over everything placing lights
         for(x = 0; x < this.width; x += 1) {
             for(y = 0; y < this.height; y += 1) {
-                if(this.levels[game.level].cells[x][y] !== null && this.levels[game.level].cells[x][y].light !== undefined) {
+                if(this.levels[game.level].cells[x][y].light !== undefined) {
                     game.lighting.setLight(x, y, this.levels[game.level].cells[x][y].light);
                 }
             }
