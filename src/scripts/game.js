@@ -41,7 +41,7 @@ var Game = function() {
     }.bind(this));
     
     // Lighting
-    this.lighting = new ROT.Lighting(undefined, { range: 3 });
+    this.lighting = new ROT.Lighting(undefined, { range: 4 });
     this.lighting.setFOV(this.shadowcasting);
     
     
