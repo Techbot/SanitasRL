@@ -69,7 +69,7 @@ var Game = function() {
     this.pulse = 0;
     
     // Set the debug mode
-    this.debug = true;
+    this.debug = false;
     if(this.debug === true) {
         $('.window').hide();
         this.state = State.PLAYER;
