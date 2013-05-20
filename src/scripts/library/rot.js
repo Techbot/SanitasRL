@@ -568,7 +568,6 @@ ROT.Text = {
  * @returns {number} The largest number
  */
 Array.prototype.max = function(comparer) {
-
     if (this.length === 0) return null;
     if (this.length === 1) return this[0];
 

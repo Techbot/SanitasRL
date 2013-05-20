@@ -138,8 +138,10 @@ var Tile = {
             game.level += 1;
             
             // Remove all lights
-            game.lighting._lights = {};
-            game.dungeon.generate(game);
+            if(game.dungeon.levels[game.level] === undefined) {
+                game.lighting._lights = {};
+                game.dungeon.generate(game);
+            }
 
             // Move the player to the center
             game.player.x = game.dungeon.levels[game.level].startingPosition.x;
@@ -229,6 +231,28 @@ var Tile = {
         image: { x: 8, y: 0 },
         light: undefined,
         color: 'rgb(104, 36, 68)',
+        interact: undefined
+    },
+    ROOM_HIGHLIGHT: {
+        id: 16,
+        entityPasses: true,
+        lightPasses: true,
+        reflects: true,
+        look: 'The dungeon floor',
+        image: { x: 0, y: 0 },
+        light: undefined,
+        color: 'rgb(255, 255, 0)',
+        interact: undefined
+    },
+    CELLULAR_HIGHLIGHT: {
+        id: 17,
+        entityPasses: true,
+        lightPasses: true,
+        reflects: true,
+        look: 'The dungeon floor',
+        image: { x: 0, y: 0 },
+        light: undefined,
+        color: 'rgb(255, 0, 255)',
         interact: undefined
     }
 };
