@@ -23,28 +23,31 @@ var Game = function() {
     // Get the canvas context from the DOM
     this.canvas = document.getElementById('canvas').getContext('2d');
 
+    this.initializeGamepad();
+    this.gamepadTimer = new Date();
+
     // The game state
     this.state = State.WELCOME;
     // The game turn
     this.turn = 0;
     // The dungeon level we're currently at
     this.level = 1;
-    
+
     // Shadowcaster for field of view
     this.shadowcasting = new ROT.FOV.PreciseShadowcasting(function(x, y) {
         'use strict'; // needed?
         if(x > 0 && x < this.dungeon.width && y > 0 && y < this.dungeon.height && this.dungeon.levels[this.level].cells[x][y].id !== Tile.EMPTY.id) {
             return this.dungeon.levels[this.level].cells[x][y].lightPasses;
         }
-        
+
         return false;
     }.bind(this));
-    
+
     // Lighting
     this.lighting = new ROT.Lighting(undefined, { range: 4 });
     this.lighting.setFOV(this.shadowcasting);
-    
-    
+
+
     // Create the dungeon instance and generate a dungeon
     this.dungeon = new Dungeon();
     this.dungeon.generate(this);
@@ -57,45 +60,45 @@ var Game = function() {
     for(this.fov = []; this.fov.length < this.dungeon.width; this.fov.push([])); // generate a 2d array for field of view
     for(this.light = []; this.light.length < this.dungeon.width; this.light.push([])); // generate a 2d array for lighting
     /***                                   ***/
-    
+
     // Update the field of view
     this.computeFOV(this.player.x, this.player.y);
-    
+
     // Update the lighting
     this.computeLighting();
 
     // Pulsation for lighting
     this.pulseDir = true; // true = addition, false = subtraction
     this.pulse = 0;
-    
+
     // Set the debug mode
     this.debug = true;
     if(this.debug === true) {
         $('.window').hide();
         this.state = State.PLAYER;
     }
-    
+
     // Load the tileset and begin to render when done
     this.tileset = new Image();
     this.tileset.onload = function() {
         this.render();
     }.bind(this);
     this.tileset.src = 'images/tileset.png';
-    
+
     // Update the interface
     this.updateInterface();
 };
 
 Game.prototype.computeFOV = function(sx, sy) {
     var x, y;
-    
+
     // Clear the FOV
     for(x = 0; x < this.dungeon.width; x += 1) {
         for(y = 0; y < this.dungeon.height; y += 1) {
             this.fov[x][y] = undefined;
         }
     }
-    
+
     // Compute the new FOV
     this.shadowcasting.compute(sx, sy, 10, function(x, y, r, visibility) {
         this.fov[x][y] = (r === 0 ? 1 : (1 / r) * 3);
@@ -105,14 +108,14 @@ Game.prototype.computeFOV = function(sx, sy) {
 
 Game.prototype.computeLighting = function() {
     var x, y;
-    
+
     // CLear the light
     for(x = 0; x < this.dungeon.width; x += 1) {
         for(y = 0; y < this.dungeon.height; y += 1) {
             this.light[x][y] = undefined;
         }
     }
-    
+
     // Compute the new light
     this.lighting.compute(function(x, y, color) {
         this.light[x][y] = color;
@@ -248,4 +251,71 @@ Game.prototype.input = function(key) {
     }
 
     this.updateInterface();
+};
+
+Game.prototype.initializeGamepad = function() {
+    this.gamepad = new Gamepad();
+
+    this.gamepad.bind(Gamepad.Event.CONNECTED, function(device) {
+        console.log('Gamepad connected');
+    });
+
+    this.gamepad.bind(Gamepad.Event.DISCONNECTED, function(device) {
+        console.log('Gamepad disconnected');
+    });
+
+    this.gamepad.bind(Gamepad.Event.BUTTON_DOWN, function(e) {
+        switch(e.control) {
+            case 'X':
+                this.input('x');
+                break;
+            case 'B':
+                this.input('escape');
+                break;
+            case 'A':
+                this.input('enter');
+                break;
+
+            case 'DPAD_UP':
+                this.input('numpad8');
+                break;
+            case 'DPAD_RIGHT':
+                this.input('numpad6');
+                break;
+            case 'DPAD_DOWN':
+                this.input('numpad2');
+                break;
+            case 'DPAD_LEFT':
+                this.input('numpad4');
+                break;
+        }
+    }.bind(this));
+
+    this.gamepad.bind(Gamepad.Event.TICK, function(gamepads) {
+        var now = new Date();
+
+        if(now - this.gamepadTimer >= 100) {
+            this.gamepadTimer = new Date();
+
+            if(gamepads[0].axes[0] <= -0.5 && gamepads[0].axes[1] <= -0.5) {
+                this.input('numpad7');
+            } else if(gamepads[0].axes[0] >= 0.5 && gamepads[0].axes[1] >= 0.5) {
+                this.input('numpad3');
+            } else if(gamepads[0].axes[0] >= 0.5 && gamepads[0].axes[1] <= -0.5) {
+                this.input('numpad9');
+            } else if(gamepads[0].axes[0] <= -0.5 && gamepads[0].axes[1] >= 0.5) {
+                this.input('numpad1');
+            } else if(gamepads[0].axes[0] <= -0.7) {
+                this.input('numpad4');
+            } else if(gamepads[0].axes[0] >= 0.7) {
+                this.input('numpad6');
+            } else if(gamepads[0].axes[1] <= -0.7) {
+                this.input('numpad8');
+            } else if(gamepads[0].axes[1] >= 0.7) {
+                this.input('numpad2');
+            }
+        }
+    }.bind(this));
+
+    this.gamepad.init();
 };
