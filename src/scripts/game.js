@@ -271,20 +271,9 @@ Game.prototype.initializeGamepad = function() {
             case 'X':
                 this.input('x');
                 break;
-            case 'START':
-                // This button serves as a multi-purpose key
-                // While any windows are vibile, is serves as
-                // the enter key otherwise as the escape key
-                if($('.window:visible').length > 0) {
-                    this.input('enter');
-                } else {
-                    this.input('escape');
-                }
-                break;
             case 'Y':
                 this.input('numpad5');
                 break;
-
             case 'BACK':
                 if($('.window.welcome:visible').length > 0) {
                     if(this.controlScheme === 'gamepad') {
@@ -298,6 +287,16 @@ Game.prototype.initializeGamepad = function() {
                         $('pre.keyboard').hide();
                         $('pre.gamepad').show();
                     }
+                }
+                break;
+            case 'START':
+                // This button serves as a multi-purpose key;
+                // while any windows are visible, it serves as
+                // the enter key otherwise as the escape key
+                if($('.window:visible').length > 0) {
+                    this.input('enter');
+                } else {
+                    this.input('escape');
                 }
                 break;
         }
