@@ -25,6 +25,7 @@ var Game = function() {
 
     this.initializeGamepad();
     this.gamepadTimer = new Date();
+    this.controlScheme = 'keyboard'; // keyboard, gamepad, touch
 
     // The game state
     this.state = State.WELCOME;
@@ -72,7 +73,7 @@ var Game = function() {
     this.pulse = 0;
 
     // Set the debug mode
-    this.debug = true;
+    this.debug = false;
     if(this.debug === true) {
         $('.window').hide();
         this.state = State.PLAYER;
@@ -257,11 +258,12 @@ Game.prototype.initializeGamepad = function() {
     this.gamepad = new Gamepad();
 
     this.gamepad.bind(Gamepad.Event.CONNECTED, function(device) {
-        console.log('Gamepad connected');
+        $('span.gamepad').html('Gamepad connected, press <span class="cyan">' + (device.type === 'playstation' ? 'SELECT' : 'BACK') + '</span> to switch controller scheme.');
+        $('span.back').text(device.type === 'playstation' ? 'SELECT' : 'BACK');
     });
 
     this.gamepad.bind(Gamepad.Event.DISCONNECTED, function(device) {
-        console.log('Gamepad disconnected');
+        $('span.gamepad').html('Gamepad disconnected.');
     });
 
     this.gamepad.bind(Gamepad.Event.BUTTON_DOWN, function(e) {
@@ -269,24 +271,34 @@ Game.prototype.initializeGamepad = function() {
             case 'X':
                 this.input('x');
                 break;
-            case 'B':
-                this.input('escape');
+            case 'START':
+                // This button serves as a multi-purpose key
+                // While any windows are vibile, is serves as
+                // the enter key otherwise as the escape key
+                if($('.window:visible').length > 0) {
+                    this.input('enter');
+                } else {
+                    this.input('escape');
+                }
                 break;
-            case 'A':
-                this.input('enter');
+            case 'Y':
+                this.input('numpad5');
                 break;
 
-            case 'DPAD_UP':
-                this.input('numpad8');
-                break;
-            case 'DPAD_RIGHT':
-                this.input('numpad6');
-                break;
-            case 'DPAD_DOWN':
-                this.input('numpad2');
-                break;
-            case 'DPAD_LEFT':
-                this.input('numpad4');
+            case 'BACK':
+                if($('.window.welcome:visible').length > 0) {
+                    if(this.controlScheme === 'gamepad') {
+                        this.controlScheme = 'keyboard';
+                        $('.enter').text('ENTER');
+                        $('pre.gamepad').hide();
+                        $('pre.keyboard').show();
+                    } else {
+                        this.controlScheme = 'gamepad';
+                        $('.enter').text('START');
+                        $('pre.keyboard').hide();
+                        $('pre.gamepad').show();
+                    }
+                }
                 break;
         }
     }.bind(this));
@@ -297,22 +309,22 @@ Game.prototype.initializeGamepad = function() {
         if(now - this.gamepadTimer >= 100) {
             this.gamepadTimer = new Date();
 
-            if(gamepads[0].axes[0] <= -0.5 && gamepads[0].axes[1] <= -0.5) {
-                this.input('numpad7');
-            } else if(gamepads[0].axes[0] >= 0.5 && gamepads[0].axes[1] >= 0.5) {
-                this.input('numpad3');
+            if(gamepads[0].axes[1] <= -0.7 || gamepads[0].buttons[12] === 1) {
+                this.input('numpad8');
             } else if(gamepads[0].axes[0] >= 0.5 && gamepads[0].axes[1] <= -0.5) {
                 this.input('numpad9');
+            } else if(gamepads[0].axes[0] >= 0.7 || gamepads[0].buttons[15] === 1) {
+                this.input('numpad6');
+            } else if(gamepads[0].axes[0] >= 0.5 && gamepads[0].axes[1] >= 0.5) {
+                this.input('numpad3');
+            } else if(gamepads[0].axes[1] >= 0.7 || gamepads[0].buttons[13] === 1) {
+                this.input('numpad2');
             } else if(gamepads[0].axes[0] <= -0.5 && gamepads[0].axes[1] >= 0.5) {
                 this.input('numpad1');
-            } else if(gamepads[0].axes[0] <= -0.7) {
+            } else if(gamepads[0].axes[0] <= -0.7 || gamepads[0].buttons[14] === 1) {
                 this.input('numpad4');
-            } else if(gamepads[0].axes[0] >= 0.7) {
-                this.input('numpad6');
-            } else if(gamepads[0].axes[1] <= -0.7) {
-                this.input('numpad8');
-            } else if(gamepads[0].axes[1] >= 0.7) {
-                this.input('numpad2');
+            } else if(gamepads[0].axes[0] <= -0.5 && gamepads[0].axes[1] <= -0.5) {
+                this.input('numpad7');
             }
         }
     }.bind(this));
