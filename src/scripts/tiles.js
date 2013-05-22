@@ -120,7 +120,7 @@ var Tile = {
             game.player.x = game.dungeon.levels[game.level].endingPosition.x;
             game.player.y = game.dungeon.levels[game.level].endingPosition.y;
             
-            return true;
+            return false;
         }
     },
     DOWNWARD_STAIRCASE: {
@@ -147,7 +147,7 @@ var Tile = {
             game.player.x = game.dungeon.levels[game.level].startingPosition.x;
             game.player.y = game.dungeon.levels[game.level].startingPosition.y;
 
-            return true;
+            return false;
         }
     },
     ENTRANCE: {

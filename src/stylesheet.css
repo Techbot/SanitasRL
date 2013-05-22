@@ -48,8 +48,15 @@ canvas {
 }
 .window .logo {
     line-height: 1.2em;
+    text-align: center;
 }
-.window .center {
+.window .controls {
+    margin-top: 40px;
+}
+.window .bottom {
+    width: 100%;
+    position: absolute;
+    bottom: 0;
     text-align: center;
 }
 

@@ -19,6 +19,9 @@ Player.prototype.move = function(direction, game) {
     if(canMoveAfterInteraction === true && game.dungeon.levels[game.level].cells[x][y].entityPasses === true) {
         game.player.x = x;
         game.player.y = y;
+        
+        $('.character-position').text('{ x: ' + x + ', y: ' + y + ' }');
+        
         game.next();
     } else if(interacted === true) {
         game.next();

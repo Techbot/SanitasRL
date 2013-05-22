@@ -76,6 +76,7 @@ var Game = function() {
     this.debug = false;
     if(this.debug === true) {
         $('.window').hide();
+        $('.character-position').show();
         this.state = State.PLAYER;
     }
 
@@ -245,6 +246,7 @@ Game.prototype.input = function(key) {
     switch(key) {
         case 'ctrl+d':
             this.debug = !this.debug;
+            $('.character-position').toggle();
             break;
         default:
             this.state.input(key, this);
