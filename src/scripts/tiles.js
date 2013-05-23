@@ -190,24 +190,9 @@ var Tile = {
             // Replace this with foilage and place 1 opium poppy in the players inventory
             return true;
         }
-    },
-    PSILOCYBIN_MUSHROOM: {
-        id: 13,
-        entityPasses: true,
-        lightPasses: true,
-        reflects: true,
-        look: 'A small brown mushroom',
-        image: { x: 7, y: 0 },
-        light: undefined,
-        color: 'rgb(100, 74, 17)',
-        interact: function(x, y, game) {
-            'use strict';
-            // Replace this with foilage(?) and place x psilocybin mushrooms in the players inventory
-            return true;
-        }
-    },
+    }
     WELL: {
-        id: 14,
+        id: 13,
         entityPasses: false,
         lightPasses: true,
         reflects: false,
@@ -223,7 +208,7 @@ var Tile = {
         }
     },
     WELL_EMPTY: {
-        id: 15,
+        id: 14,
         entityPasses: false,
         lightPasses: true,
         reflects: false,
@@ -234,7 +219,7 @@ var Tile = {
         interact: undefined
     },
     ROOM_HIGHLIGHT: {
-        id: 16,
+        id: 100,
         entityPasses: true,
         lightPasses: true,
         reflects: true,
@@ -245,7 +230,7 @@ var Tile = {
         interact: undefined
     },
     CELLULAR_HIGHLIGHT: {
-        id: 17,
+        id: 101,
         entityPasses: true,
         lightPasses: true,
         reflects: true,
