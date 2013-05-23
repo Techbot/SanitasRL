@@ -310,22 +310,22 @@ Game.prototype.initializeGamepad = function() {
         if(now - this.gamepadTimer >= 100) {
             this.gamepadTimer = new Date();
 
-            if(gamepads[0].axes[1] <= -0.7 || gamepads[0].buttons[12] === 1) {
-                this.input('numpad8');
-            } else if(gamepads[0].axes[0] >= 0.5 && gamepads[0].axes[1] <= -0.5) {
+            if(gamepads[0].axes[0] >= 0.5 && gamepads[0].axes[1] <= -0.5) {
                 this.input('numpad9');
-            } else if(gamepads[0].axes[0] >= 0.7 || gamepads[0].buttons[15] === 1) {
-                this.input('numpad6');
             } else if(gamepads[0].axes[0] >= 0.5 && gamepads[0].axes[1] >= 0.5) {
                 this.input('numpad3');
-            } else if(gamepads[0].axes[1] >= 0.7 || gamepads[0].buttons[13] === 1) {
-                this.input('numpad2');
             } else if(gamepads[0].axes[0] <= -0.5 && gamepads[0].axes[1] >= 0.5) {
                 this.input('numpad1');
-            } else if(gamepads[0].axes[0] <= -0.7 || gamepads[0].buttons[14] === 1) {
-                this.input('numpad4');
             } else if(gamepads[0].axes[0] <= -0.5 && gamepads[0].axes[1] <= -0.5) {
                 this.input('numpad7');
+            } else if(gamepads[0].axes[1] <= -0.7 || gamepads[0].buttons[12] === 1) {
+                this.input('numpad8');
+            } else if(gamepads[0].axes[0] >= 0.7 || gamepads[0].buttons[15] === 1) {
+                this.input('numpad6');
+            } else if(gamepads[0].axes[1] >= 0.7 || gamepads[0].buttons[13] === 1) {
+                this.input('numpad2');
+            } else if(gamepads[0].axes[0] <= -0.7 || gamepads[0].buttons[14] === 1) {
+                this.input('numpad4');
             }
         }
     }.bind(this));
