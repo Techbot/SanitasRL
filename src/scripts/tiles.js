@@ -190,7 +190,7 @@ var Tile = {
             // Replace this with foilage and place 1 opium poppy in the players inventory
             return true;
         }
-    }
+    },
     WELL: {
         id: 13,
         entityPasses: false,
