@@ -48,7 +48,7 @@ var Tile = {
         entityPasses: false,
         lightPasses: true,
         reflects: true,
-        look: 'A hole with dirty water',
+        look: 'A small pond of water',
         image: { x: 9, y: 0 },
         light: undefined,
         color: 'rgb(84, 84, 255)',

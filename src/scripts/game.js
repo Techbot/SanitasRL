@@ -73,7 +73,7 @@ var Game = function() {
     this.pulse = 0;
 
     // Set the debug mode
-    this.debug = false;
+    this.debug = true;
     if(this.debug === true) {
         $('.window').hide();
         $('.character-position').show();

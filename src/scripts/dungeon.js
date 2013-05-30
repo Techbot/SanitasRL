@@ -42,86 +42,9 @@ Dungeon.prototype.generate = function(game) {
         level.cells[x][y] = (value === 0) ? Tile.FLOOR : Tile.EMPTY;
     }.bind(this));
     var rooms = generator.getRooms().randomize();
-
-        // Loop over the rooms
-    var width, height, center,
-        generated;
-        
-    for(i = 0; i < rooms.length; i += 1) {
-        // Get width, height and center of the room
-        width = rooms[i]._x2 - rooms[i]._x1;
-        height = rooms[i]._y2 - rooms[i]._y1;
-        center = { x: rooms[i]._x1 + Math.ceil(width / 2), y: rooms[i]._y1 + Math.ceil(height / 2) };
-        
-        for(x = rooms[i]._x1; x <= rooms[i]._x2; x += 1) {
-            for(y = rooms[i]._y1; y <= rooms[i]._y2; y += 1) {
-                level.cells[x][y] = Tile.ROOM_HIGHLIGHT;
-            }
-        }
-        
-        /*generated = false;
-
-        while(generated === false) {
-            switch(ROT.RNG.getInt(0, 4)) {
-                case 0: // Water treasure
-                    if(width >= 4 && height >= 4) {
-                        level.cells[center.x][center.y - 1] = Tile.WATER;
-                        level.cells[center.x + 1][center.y - 1] = Tile.WATER;
-                        level.cells[center.x + 1][center.y] = Tile.WATER;
-                        level.cells[center.x + 1][center.y + 1] = Tile.WATER;
-                        level.cells[center.x][center.y + 1] = Tile.WATER;
-                        level.cells[center.x - 1][center.y + 1] = Tile.WATER;
-                        level.cells[center.x - 1][center.y] = Tile.WATER;
-                        level.cells[center.x - 1][center.y - 1] = Tile.WATER;
-
-                        generated = true;
-                    }
-                    break;
-                case 1: // Trapped treasure
-                    if(width >= 4 && height >= 4) {
-                        level.cells[center.x][center.y - 1] = Tile.WALL;
-                        level.cells[center.x + 1][center.y - 1] = Tile.WALL;
-                        level.cells[center.x + 1][center.y] = Tile.WALL;
-                        level.cells[center.x + 1][center.y + 1] = Tile.WALL;
-                        level.cells[center.x][center.y + 1] = Tile.DOOR;
-                        level.cells[center.x - 1][center.y + 1] = Tile.WALL;
-                        level.cells[center.x - 1][center.y] = Tile.WALL;
-                        level.cells[center.x - 1][center.y - 1] = Tile.WALL;
-
-                        generated = true;
-                    }
-                    break;
-                case 2: // Shrine
-                    level.cells[center.x][center.y] = Tile.WELL;
-                    generated = true;
-                    break;
-                case 3: // Pillar
-                    if(width >= 4 && height >= 4) {
-                        level.cells[center.x + 1][center.y - 1] = Tile.PILLAR;
-                        level.cells[center.x + 1][center.y + 1] = Tile.PILLAR;
-                        level.cells[center.x - 1][center.y + 1] = Tile.PILLAR;
-                        level.cells[center.x - 1][center.y - 1] = Tile.PILLAR;
-                        generated = true;
-                    }
-                    break;
-                case 4: // grass
-                    for(x = rooms[i]._x1; x <= rooms[i]._x2; x += 1) {
-                        for(y = rooms[i]._y1; y <= rooms[i]._y2; y += 1) {
-                            if(ROT.RNG.getInt(0, 1) === 0) {
-                                level.cells[x][y] = Tile.FLOOR; // GRASS
-                            } else {
-                                level.cells[x][y] = Tile.FLOOR; // FOILAGE
-                            }
-                        }
-                    }
-                    generated = true;
-                    break;
-            }
-        }*/
-    }
     
     // Generate the cellular porition of the level
-    var offset = { x: undefined, y: undefined };
+    var offset = { x: undefined, y: undefined }, cellular = [];
     for(i = 0; i < 3; i += 1) {
         generator = new ROT.Map.Cellular(ROT.RNG.getInt(10, 20), ROT.RNG.getInt(10, 20));
         generator.randomize(0.5);
@@ -135,9 +58,61 @@ Dungeon.prototype.generate = function(game) {
         
         generator.create(function(x, y, value) {
             if(value === 1) {
-                level.cells[x + offset.x][y + offset.y] = Tile.CELLULAR_HIGHLIGHT;
+                level.cells[x + offset.x][y + offset.y] = Tile.FLOOR;//Tile.CELLULAR_HIGHLIGHT;
+                cellular.push({ x: x + offset.x, y: y + offset.y });
             }
         });
+    }
+    
+    // Add oasis-like growth in the cellular porition of the level
+    var growth = {
+        origin: cellular.random(),
+        size: ROT.RNG.getInt(5, 15),
+        start: { x: undefined, y: undefined },
+        type: (ROT.RNG.getInt(0, 1) === 1 ? Tile.OPIUM_PLANT : Tile.COCA_PLANT)
+    }, grass = [];
+    growth.start.x = growth.origin.x - Math.floor(growth.size / 2);
+    growth.start.y = growth.origin.y - Math.floor(growth.size / 2);
+    
+    for(x = growth.start.x; x < growth.start.x + growth.size; x += 1) {
+        for(y = growth.start.y; y < growth.start.y + growth.size; y += 1) {
+            var distance = Math.sqrt(Math.pow(growth.origin.x - x, 2) + Math.pow(growth.origin.y - y, 2));
+
+            if(x === growth.origin.x && y === growth.origin.y) {
+                level.cells[x][y] = Tile.WATER;
+            } else if((level.cells[x][y] === Tile.CELLULAR_HIGHLIGHT || level.cells[x][y] === Tile.ROOM_HIGHLIGHT || level.cells[x][y] === Tile.FLOOR) && distance <= Math.floor(growth.size / 2)) {
+                level.cells[x][y] = Tile.GRASS;
+                grass.push({ x: x, y: y });
+            }
+        }
+    }
+    
+    for(i = 0; i < 5; i += 1) {
+        var tile = grass.random();
+        level.cells[tile.x][tile.y] = growth.type;
+    }
+    
+    // Loop over the rooms
+    var width, height, center,
+        generated;
+        
+    for(i = 0; i < rooms.length; i += 1) {
+        // Get width, height and center of the room
+        width = (rooms[i]._x2 - rooms[i]._x1) + 1;
+        height = (rooms[i]._y2 - rooms[i]._y1) + 1;
+        center = { x: rooms[i]._x1 + Math.floor(width / 2), y: rooms[i]._y1 + Math.floor(height / 2) };
+
+        // Pillar tomb
+        if(width % 2 !== 0 && height % 2 !== 0 && width >= 5 && height >= 5) {
+            level.cells[center.x][center.y] = Tile.WELL;
+            level.cells[center.x - 1][center.y - 1] = Tile.PILLAR;
+            level.cells[center.x + 1][center.y - 1] = Tile.PILLAR;
+            level.cells[center.x + 1][center.y + 1] = Tile.PILLAR;
+            level.cells[center.x - 1][center.y + 1] = Tile.PILLAR;
+        // Well room
+        } else if(ROT.RNG.getInt(0, 5) === 0 && width % 2 !== 0 && height % 2 !== 0) {
+            level.cells[center.x][center.y] = Tile.WELL;
+        }
     }
     
     // Add walls to all border tiles
@@ -503,6 +478,5 @@ Dungeon.prototype.generate = function(game) {
     
     if(possible === false) {
         this.generate(game);
-        console.log('regen');
     }
 };
