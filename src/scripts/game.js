@@ -225,17 +225,18 @@ Game.prototype.updateInterface = function() {
             if(this.dungeon.levels[this.level].cells[position.x][position.y].look !== undefined) {
                 look += this.dungeon.levels[this.level].cells[position.x][position.y].look + '<br>';
             }
-        } else {
-            look = 'You can\'t see that far';
-        }
+            
+            if(this.fov[position.x][position.y] > 0) {
+                $('.character-sight-header').text('You see:');
+            } else {
+                $('.character-sight-header').text('You remember seeing:');
+            }
 
-        if(this.fov[position.x][position.y] > 0) {
-            $('.character-sight-header').text('You see:');
+            $('.character-sight').html(look === '' ? 'Nothing' : look);
         } else {
-            $('.character-sight-header').text('You remember seeing:');
+            $('.character-sight-header').text('You can\'t see that far');
+            $('.character-sight').html('');
         }
-
-        $('.character-sight').html(look === '' ? 'Nothing' : look);
     }
 };
 
