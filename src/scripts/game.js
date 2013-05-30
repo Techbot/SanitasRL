@@ -73,7 +73,7 @@ var Game = function() {
     this.pulse = 0;
 
     // Set the debug mode
-    this.debug = true;
+    this.debug = false;
     if(this.debug === true) {
         $('.window').hide();
         $('.character-position').show();
@@ -331,5 +331,7 @@ Game.prototype.initializeGamepad = function() {
         }
     }.bind(this));
 
-    this.gamepad.init();
+    if(this.gamepad.init() === true && $('span.gamepad').text() === '') {
+        $('span.gamepad').text('Your browser support gamepads, you can connect one to play with it.');
+    }
 };
