@@ -55,10 +55,6 @@ var Game = function() {
     // Get the canvas context from the DOM
     this.canvas = document.getElementById('canvas').getContext('2d');
 
-    this.initializeGamepad();
-    this.gamepadTimer = new Date();
-    this.controlScheme = 'keyboard'; // keyboard, gamepad, touch
-
     // The game state
     this.state = State.WELCOME;
     // The game turn
@@ -79,7 +75,6 @@ var Game = function() {
     // Lighting
     this.lighting = new ROT.Lighting(undefined, { range: 4 });
     this.lighting.setFOV(this.shadowcasting);
-
 
     // Create the dungeon instance and generate a dungeon
     this.dungeon = new Dungeon();
@@ -288,83 +283,4 @@ Game.prototype.input = function(key) {
     }
 
     this.updateInterface();
-};
-
-Game.prototype.initializeGamepad = function() {
-    this.gamepad = new Gamepad();
-
-    this.gamepad.bind(Gamepad.Event.CONNECTED, function(device) {
-        $('span.gamepad').html('Gamepad connected, press <span class="cyan">' + (device.type === 'playstation' ? 'SELECT' : 'BACK') + '</span> to switch controller scheme.');
-        $('span.back').text(device.type === 'playstation' ? 'SELECT' : 'BACK');
-    });
-
-    this.gamepad.bind(Gamepad.Event.DISCONNECTED, function(device) {
-        $('span.gamepad').html('Gamepad disconnected.');
-    });
-
-    this.gamepad.bind(Gamepad.Event.BUTTON_DOWN, function(e) {
-        switch(e.control) {
-            case 'X':
-                this.input('x');
-                break;
-            case 'Y':
-                this.input('numpad5');
-                break;
-            case 'BACK':
-                if($('.window.welcome:visible').length > 0) {
-                    if(this.controlScheme === 'gamepad') {
-                        this.controlScheme = 'keyboard';
-                        $('.enter').text('ENTER');
-                        $('pre.gamepad').hide();
-                        $('pre.keyboard').show();
-                    } else {
-                        this.controlScheme = 'gamepad';
-                        $('.enter').text('START');
-                        $('pre.keyboard').hide();
-                        $('pre.gamepad').show();
-                    }
-                }
-                break;
-            case 'START':
-                // This button serves as a multi-purpose key;
-                // while any windows are visible, it serves as
-                // the enter key otherwise as the escape key
-                if($('.window:visible').length > 0) {
-                    this.input('enter');
-                } else {
-                    this.input('escape');
-                }
-                break;
-        }
-    }.bind(this));
-
-    this.gamepad.bind(Gamepad.Event.TICK, function(gamepads) {
-        var now = new Date();
-
-        if(now - this.gamepadTimer >= 100) {
-            this.gamepadTimer = new Date();
-
-            if(gamepads[0].axes[0] >= 0.5 && gamepads[0].axes[1] <= -0.5) {
-                this.input('numpad9');
-            } else if(gamepads[0].axes[0] >= 0.5 && gamepads[0].axes[1] >= 0.5) {
-                this.input('numpad3');
-            } else if(gamepads[0].axes[0] <= -0.5 && gamepads[0].axes[1] >= 0.5) {
-                this.input('numpad1');
-            } else if(gamepads[0].axes[0] <= -0.5 && gamepads[0].axes[1] <= -0.5) {
-                this.input('numpad7');
-            } else if(gamepads[0].axes[1] <= -0.7 || gamepads[0].buttons[12] === 1) {
-                this.input('numpad8');
-            } else if(gamepads[0].axes[0] >= 0.7 || gamepads[0].buttons[15] === 1) {
-                this.input('numpad6');
-            } else if(gamepads[0].axes[1] >= 0.7 || gamepads[0].buttons[13] === 1) {
-                this.input('numpad2');
-            } else if(gamepads[0].axes[0] <= -0.7 || gamepads[0].buttons[14] === 1) {
-                this.input('numpad4');
-            }
-        }
-    }.bind(this));
-
-    if(this.gamepad.init() === true && $('span.gamepad').text() === '') {
-        $('span.gamepad').text('Your browser support gamepads, you can connect one to play with it.');
-    }
 };
