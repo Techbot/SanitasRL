@@ -24,18 +24,18 @@ a:hover, a:active {
 .cyan { color: rgb(0, 211, 211); }
 
 canvas {
-    width: 960px;
+    width: 800px;
     height: 576px;
-    margin: -288px 0 0 -590px;
+    margin: -288px 0 0 -512px;
     position: fixed;
     top: 50%;
     left: 50%;
 }
 
 .window {
-    width: 1180px;
+    width: 1024px;
     height: 576px;
-    margin: -288px 0 0 -590px;
+    margin: -288px 0 0 -512px;
     position: fixed;
     top: 50%;
     left: 50%;
@@ -63,7 +63,7 @@ canvas {
 .sidebar {
     width: 200px;
     height: 576px;
-    margin: -288px 0 0 390px;
+    margin: -288px 0 0 312px;
     position: fixed;
     top: 50%;
     left: 50%;

@@ -127,7 +127,7 @@ Game.prototype.computeLighting = function() {
 Game.prototype.render = function() {
     'use strict';
     if(this.state.render === true) {
-        this.canvas.clearRect(0, 0, 960, 576);
+        this.canvas.clearRect(0, 0, 800, 576);
 
         if(this.pulseDir === true) {
             this.pulse += 0.3;

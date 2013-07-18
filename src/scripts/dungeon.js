@@ -1,6 +1,6 @@
 var Dungeon = function() {
     'use strict';
-    this.width = 60;
+    this.width = 50;
     this.height = 36;
 
     this.levels = [];
@@ -53,8 +53,8 @@ Dungeon.prototype.generate = function(game) {
             generator.create();
         }
         
-        offset.x = ROT.RNG.getInt(2, 38);
-        offset.y = ROT.RNG.getInt(2, 14);
+        offset.x = ROT.RNG.getInt(2, this.width - 20 - 2); // Width - maximum cullular size - 2 for walls
+        offset.y = ROT.RNG.getInt(2, this.height - 20 - 2); // Height - maximum cellular size - 2 for walls
         
         generator.create(function(x, y, value) {
             if(value === 1) {
@@ -423,8 +423,8 @@ Dungeon.prototype.generate = function(game) {
         this.tmp[x] = this.tmp[x].slice(first_y, last_y);
     }
 
-    var offset_x = Math.floor((59 - (this.tmp.length - 1)) / 2);
-    var offset_y = Math.floor((35 - (this.tmp[0].length - 1)) / 2);
+    var offset_x = Math.floor((this.width - 1 - (this.tmp.length - 1)) / 2);
+    var offset_y = Math.floor((this.height - 1 - (this.tmp[0].length - 1)) / 2);
 
     // Place the tmp array into the center of the cells array
     for(x = 0; x < this.width; x += 1) {
