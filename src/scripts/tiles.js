@@ -121,6 +121,7 @@ var Tile = {
             game.player.y = game.dungeon.levels[game.level].endingPosition.y;
 
             // Reset the player path
+            game.autopilot = false;
             game.player.path = [];
 
             return false;
@@ -151,6 +152,7 @@ var Tile = {
             game.player.y = game.dungeon.levels[game.level].startingPosition.y;
 
             // Reset the player path
+            game.autopilot = false;
             game.player.path = [];
 
             return false;
