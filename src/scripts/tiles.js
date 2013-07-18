@@ -180,7 +180,7 @@ var Tile = {
         color: 'rgb(34, 122, 48)',
         interact: function(x, y, game) {
             'use strict';
-            // Replace this with foilage and place x coca thingies in the players inventory
+            // Replace this with foilage and place x coca leafs in the players inventory
             return true;
         }
     },
@@ -226,6 +226,7 @@ var Tile = {
         color: 'rgb(104, 36, 68)',
         interact: undefined
     },
+    // The following ones are only for debugging pruposes
     ROOM_HIGHLIGHT: {
         id: 100,
         entityPasses: true,

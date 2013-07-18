@@ -7,11 +7,12 @@ var Dungeon = function() {
 };
 
 var Level = function(length) {
+    'use strict';
     this.cells = [];
     this.explored = [];
     this.startingPosition = { x: undefined, y: undefined };
     this.endingPosition = { x: undefined, y: undefined };
-    
+
     var i;
     for(i = 0; i < length; i += 1) {
         this.cells[i] = [];
@@ -20,6 +21,7 @@ var Level = function(length) {
 };
 
 Dungeon.prototype.at = function(x, y, level) {
+    'use strict';
     if(this.levels[level].cells[x][y].id !== Tile.EMPTY.id) {
         return {
             x: this.levels[level].cells[x][y].image.x,
@@ -32,9 +34,10 @@ Dungeon.prototype.at = function(x, y, level) {
 };
 
 Dungeon.prototype.generate = function(game) {
+    'use strict';
     this.levels[game.level] = new Level(this.width);
-    var level = this.levels[game.level];
-    var i, j, x, y;
+    var level = this.levels[game.level],
+        i, j, x, y;
 
     // Generate the digger porition of the level
     generator = new ROT.Map.Digger(this.width, this.height);
@@ -42,20 +45,20 @@ Dungeon.prototype.generate = function(game) {
         level.cells[x][y] = (value === 0) ? Tile.FLOOR : Tile.EMPTY;
     }.bind(this));
     var rooms = generator.getRooms().randomize();
-    
+
     // Generate the cellular porition of the level
     var offset = { x: undefined, y: undefined }, cellular = [];
     for(i = 0; i < 3; i += 1) {
         generator = new ROT.Map.Cellular(ROT.RNG.getInt(10, 20), ROT.RNG.getInt(10, 20));
         generator.randomize(0.5);
-        
+
         for(j = 0; j < 4; j += 1) {
             generator.create();
         }
-        
+
         offset.x = ROT.RNG.getInt(2, this.width - 20 - 2); // Width - maximum cullular size - 2 for walls
         offset.y = ROT.RNG.getInt(2, this.height - 20 - 2); // Height - maximum cellular size - 2 for walls
-        
+
         generator.create(function(x, y, value) {
             if(value === 1) {
                 level.cells[x + offset.x][y + offset.y] = Tile.FLOOR;//Tile.CELLULAR_HIGHLIGHT;
@@ -63,7 +66,7 @@ Dungeon.prototype.generate = function(game) {
             }
         });
     }
-    
+
     // Add oasis-like growth in the cellular porition of the level
     var growth = {
         origin: cellular.random(),
@@ -73,7 +76,7 @@ Dungeon.prototype.generate = function(game) {
     }, grass = [];
     growth.start.x = growth.origin.x - Math.floor(growth.size / 2);
     growth.start.y = growth.origin.y - Math.floor(growth.size / 2);
-    
+
     for(x = growth.start.x; x < growth.start.x + growth.size; x += 1) {
         for(y = growth.start.y; y < growth.start.y + growth.size; y += 1) {
             var distance = Math.sqrt(Math.pow(growth.origin.x - x, 2) + Math.pow(growth.origin.y - y, 2));
@@ -86,16 +89,16 @@ Dungeon.prototype.generate = function(game) {
             }
         }
     }
-    
+
     for(i = 0; i < 5; i += 1) {
         var tile = grass.random();
         level.cells[tile.x][tile.y] = growth.type;
     }
-    
+
     // Loop over the rooms
     var width, height, center,
         generated;
-        
+
     for(i = 0; i < rooms.length; i += 1) {
         // Get width, height and center of the room
         width = (rooms[i]._x2 - rooms[i]._x1) + 1;
@@ -114,7 +117,7 @@ Dungeon.prototype.generate = function(game) {
             level.cells[center.x][center.y] = Tile.WELL;
         }
     }
-    
+
     // Add walls to all border tiles
     for(x = 1; x < this.width - 1; x += 1) {
         for(y = 1; y < this.height - 1; y += 1) {
@@ -169,7 +172,7 @@ Dungeon.prototype.generate = function(game) {
             if(rooms[i]._doors.hasOwnProperty(door)) {
                 var door_x = parseInt(door.split(',')[0], 10),
                     door_y = parseInt(door.split(',')[1], 10);
-                
+
                 // There seems to be a bug where doors can be added in illogical places.
                 // Therefore, we need to check if the door is places between two walls:
                 //
@@ -179,9 +182,9 @@ Dungeon.prototype.generate = function(game) {
                 if(
                     // #+#
                     (level.cells[door_x - 1][door_y].id === Tile.WALL.id && level.cells[door_x + 1][door_y].id === Tile.WALL.id)
-                    
+
                     ||
-                    
+
                     // #
                     // +
                     // #
@@ -206,7 +209,7 @@ Dungeon.prototype.generate = function(game) {
             }
         }
     }
-    
+
     var walls = [];
     for(x = 0; x < this.width; x += 1) {
         for(y = 0; y < this.height; y += 1) {
@@ -215,12 +218,12 @@ Dungeon.prototype.generate = function(game) {
             }
         }
     }
-    
+
     // Add a downward stairwell
     var done = false, wall;
     while(done === false) {
         wall = walls.random();
-        
+
         // See if the wall is eligble to host a stairwell
         if(wall.x > 1 && wall.y > 1 && wall.x < this.width - 1 && wall.y < this.height - 1) {
             // North
@@ -240,7 +243,7 @@ Dungeon.prototype.generate = function(game) {
                 level.cells[wall.x + 1][wall.y] = Tile.WALL;
                 done = true;
             }
-            
+
             // East
             if(
                     (level.cells[wall.x + 1][wall.y - 1].id === Tile.EMPTY.id   || level.cells[wall.x + 1][wall.y - 1].id === Tile.WALL.id)
@@ -258,7 +261,7 @@ Dungeon.prototype.generate = function(game) {
                 level.cells[wall.x][wall.y + 1] = Tile.WALL;
                 done = true;
             }
-            
+
             // South
             if(
                     (level.cells[wall.x - 1][wall.y + 1].id === Tile.EMPTY.id   || level.cells[wall.x - 1][wall.y + 1].id === Tile.WALL.id)
@@ -276,7 +279,7 @@ Dungeon.prototype.generate = function(game) {
                 level.cells[wall.x + 1][wall.y] = Tile.WALL;
                 done = true;
             }
-            
+
             // West
             if(
                     (level.cells[wall.x - 1][wall.y - 1].id === Tile.EMPTY.id   || level.cells[wall.x - 1][wall.y - 1].id === Tile.WALL.id)
@@ -296,12 +299,12 @@ Dungeon.prototype.generate = function(game) {
             }
         }
     }
-    
+
     // Add a upward stairwell
     done = false, wall = undefined;
     while(done === false) {
         wall = walls.random();
-        
+
         // See if the wall is eligble to host a stairwell
         if(wall.x > 1 && wall.y > 1 && wall.x < this.width - 1 && wall.y < this.height - 1) {
             // North
@@ -319,10 +322,10 @@ Dungeon.prototype.generate = function(game) {
                 level.cells[wall.x - 1][wall.y] = Tile.WALL;
                 level.cells[wall.x][wall.y] = (game.level === 1) ? Tile.ENTRANCE : Tile.UPWARD_STAIRCASE;
                 level.cells[wall.x + 1][wall.y] = Tile.WALL;
-                
+
                 done = true;
             }
-            
+
             // East
             if(
                     (level.cells[wall.x + 1][wall.y - 1].id === Tile.EMPTY.id   || level.cells[wall.x + 1][wall.y - 1].id === Tile.WALL.id)
@@ -338,10 +341,10 @@ Dungeon.prototype.generate = function(game) {
                 level.cells[wall.x][wall.y - 1] = Tile.WALL;
                 level.cells[wall.x][wall.y] = (game.level === 1) ? Tile.ENTRANCE : Tile.UPWARD_STAIRCASE;
                 level.cells[wall.x][wall.y + 1] = Tile.WALL;
-                
+
                 done = true;
             }
-            
+
             // South
             if(
                     (level.cells[wall.x - 1][wall.y + 1].id === Tile.EMPTY.id   || level.cells[wall.x - 1][wall.y + 1].id === Tile.WALL.id)
@@ -357,10 +360,10 @@ Dungeon.prototype.generate = function(game) {
                 level.cells[wall.x - 1][wall.y] = Tile.WALL;
                 level.cells[wall.x][wall.y] = (game.level === 1) ? Tile.ENTRANCE : Tile.UPWARD_STAIRCASE;
                 level.cells[wall.x + 1][wall.y] = Tile.WALL;
-                
+
                 done = true;
             }
-            
+
             // West
             if(
                     (level.cells[wall.x - 1][wall.y - 1].id === Tile.EMPTY.id   || level.cells[wall.x - 1][wall.y - 1].id === Tile.WALL.id)
@@ -376,13 +379,13 @@ Dungeon.prototype.generate = function(game) {
                 level.cells[wall.x][wall.y - 1] = Tile.WALL;
                 level.cells[wall.x][wall.y] = (game.level === 1) ? Tile.ENTRANCE : Tile.UPWARD_STAIRCASE;
                 level.cells[wall.x][wall.y + 1] = Tile.WALL;
-                
+
                 done = true;
             }
         }
     }
-    
-    
+
+
     // Find the first used cell (x, y)
     var first_x, last_x, first_y, last_y;
     for(x = 0; x < this.width; x += 1) {
@@ -434,7 +437,7 @@ Dungeon.prototype.generate = function(game) {
             //
             if(x >= offset_x && y >= offset_y && x < this.tmp.length + offset_x && y < this.tmp[0].length + offset_y) {
                 level.cells[x][y] = this.tmp[x - offset_x][y - offset_y];
-                
+
                 if(level.cells[x][y].id === Tile.UPWARD_STAIRCASE.id || level.cells[x][y].id === Tile.ENTRANCE.id) {
                     level.startingPosition = { x: x, y: y };
                 } else if(level.cells[x][y].id === Tile.DOWNWARD_STAIRCASE.id) {
@@ -461,21 +464,21 @@ Dungeon.prototype.generate = function(game) {
             }
         }
     }
-    
+
     var dijkstra = new ROT.Path.Dijkstra(level.endingPosition.x, level.endingPosition.y, function(x, y) {
         if(level.cells[x][y].id === Tile.DOOR.id || level.cells[x][y].entityPasses === true) {
             return true;
         }
-        
+
         return false;
     });
-    
+
     var possible = false;
     dijkstra.compute(level.startingPosition.x, level.startingPosition.y, function() {
         // If this function is called, we've reached our destination and do not need to redo the level
         possible = true;
     });
-    
+
     if(possible === false) {
         this.generate(game);
     }

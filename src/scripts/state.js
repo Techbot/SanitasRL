@@ -71,7 +71,7 @@ var State = {
                     break;
                 // Numpad 7 / y - Move player north west
                 case 'numpad7':
-                case 'k':
+                case 'y':
                     game.player.move(ROT.NORTH_WEST, game);
                     break;
                 // Numpad 5 / . - Wait one turn
@@ -134,7 +134,7 @@ var State = {
                     break;
                 // Numpad 7 / y - Move cursor north west
                 case 'numpad7':
-                case 'k':
+                case 'y':
                     game.cursor.x -= 1;
                     game.cursor.y -= 1;
                     break;
