@@ -21,8 +21,13 @@ var State = {
             switch(key) {
                 // Escape - Go to WELCOME state
                 case 'escape':
-                    $('.window').fadeIn();
-                    game.state = State.WELCOME;
+                    if(game.player.autopilot === true) {
+                        game.player.autopilot = false;
+                        game.player.path = [];
+                    } else {
+                        $('.window').fadeIn();
+                        game.state = State.WELCOME;
+                    }
                     break;
                 // x - Go to EXAMINE state
                 case 'x':

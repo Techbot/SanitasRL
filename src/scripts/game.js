@@ -20,6 +20,38 @@ var Game = function() {
         }
     }.bind(this));
 
+    // Bind to the mousemove event
+    $('#canvas').on('mousemove', function(e) {
+        var old = $.extend({}, this.mouse);
+        this.mouse.x = Math.floor(e.offsetX / 16);
+        this.mouse.y = Math.floor(e.offsetY / 16);
+
+        // Only calculate a path if the autopilot is off (we're not traversing a path right now)
+        // and the mouse has actually moved a tile and not just a couple of pixels
+        if(this.player.autopilot === false && (old.x !== this.mouse.x || old.y !== this.mouse.y)) {
+            this.player.path = [];
+
+            // Only calculate a path if we've seen this cell
+            if(this.dungeon.levels[this.level].explored[this.mouse.x][this.mouse.y]) {
+                var astar = new ROT.Path.AStar(this.mouse.x, this.mouse.y, function(x, y) {
+                    if(x > 0 && y > 0 && x < this.dungeon.width && y < this.dungeon.height) {
+                        var p = this.dungeon.levels[this.level].cells[x][y].entityPasses;
+                        return p === undefined ? false : p;
+                    }
+
+                    return false;
+                }.bind(this));
+                astar.compute(this.player.x, this.player.y, function(x, y) {
+                    this.player.path.push(x.toString() + ',' + y.toString());
+                }.bind(this));
+            }
+        }
+    }.bind(this)).on('click', function(e) {
+        // Start the player's autopilot following the computed path
+        this.player.autopilot = true;
+        this.player.automove();
+    }.bind(this));
+
     // Get the canvas context from the DOM
     this.canvas = document.getElementById('canvas').getContext('2d');
 
@@ -56,6 +88,10 @@ var Game = function() {
     // Create the player instance
     this.player = new Player(this.dungeon.levels[this.level].startingPosition.x, this.dungeon.levels[this.level].startingPosition.y);
     this.cursor = undefined;
+
+    // Mouse tracking and pathfinding from player to mouse
+    this.mouse = { x: undefined, y: undefined };
+    this.player.path = [];
 
     /*** TEMPORARY fov AND light 2d-arrays ***/
     for(this.fov = []; this.fov.length < this.dungeon.width; this.fov.push([])); // generate a 2d array for field of view
@@ -148,19 +184,17 @@ Game.prototype.render = function() {
                 } else {
                     tile = this.dungeon.at(x, y, this.level);
                 }
-                                     // DEBUGGING
+                                     // DEBUGGING                                                  END DEBUGGING //
                 if(tile !== null && (this.debug === true || this.dungeon.levels[this.level].explored[x][y] === true)) {
-                    if(this.fov[x][y] === undefined) {
+                    if(this.debug === true) {
+                        // If we're in debug mode, we draw all tiles
+                        this.canvas.globalAlpha = 1;
+                    } else if(this.fov[x][y] === undefined) {
                         // This is a seen cell, but it's not in the fov
                         this.canvas.globalAlpha = 0.3;
                     } else {
                         // The cell is in the fov
                         this.canvas.globalAlpha = this.fov[x][y];
-                    }
-
-                    // THIS IS ONLY FOR DEBUGGING
-                    if(this.debug === true) {
-                        this.canvas.globalAlpha = 1;
                     }
 
                     this.canvas.drawImage(this.tileset, tile.x * 16, tile.y * 16, 16, 16, x * 16, y * 16, 16, 16);
@@ -169,7 +203,9 @@ Game.prototype.render = function() {
                     if(tile.color !== undefined) {
                         this.canvas.globalCompositeOperation = 'source-atop';
 
-                        if(this.dungeon.levels[this.level].cells[x][y].reflects === true && this.light[x][y] !== undefined && this.fov[x][y] > 0.1) {
+                        if(this.player.path.indexOf(x.toString() + ',' + y.toString()) !== -1) {
+                            this.canvas.fillStyle = '#ff0';
+                        } else if(this.dungeon.levels[this.level].cells[x][y].reflects === true && this.light[x][y] !== undefined && this.fov[x][y] > 0.1) {
                             var light = ROT.Color.add(this.light[x][y], [Math.round(this.pulse), Math.round(this.pulse), Math.round(this.pulse)]);
                             var finalLight = ROT.Color.add(ROT.Color.fromString(tile.color), light);
 
@@ -200,7 +236,6 @@ Game.prototype.render = function() {
  */
 Game.prototype.next = function() {
     this.turn += 1;
-    //this.dungeon.generateFOV(this.player.x, this.player.y);
     this.computeFOV(this.player.x, this.player.y);
     this.computeLighting();
 };
@@ -210,8 +245,6 @@ Game.prototype.updateInterface = function() {
 
     if(this.state.id !== State.WELCOME.id) {
         $('.dungeon-level').text(this.level);
-
-        // DEBUG
         $('.dungeon-turn').text(this.turn);
 
         var look = '', position;
@@ -225,7 +258,7 @@ Game.prototype.updateInterface = function() {
             if(this.dungeon.levels[this.level].cells[position.x][position.y].look !== undefined) {
                 look += this.dungeon.levels[this.level].cells[position.x][position.y].look + '<br>';
             }
-            
+
             if(this.fov[position.x][position.y] > 0) {
                 $('.character-sight-header').text('You see:');
             } else {

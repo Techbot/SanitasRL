@@ -119,7 +119,10 @@ var Tile = {
             // Move the player to the center
             game.player.x = game.dungeon.levels[game.level].endingPosition.x;
             game.player.y = game.dungeon.levels[game.level].endingPosition.y;
-            
+
+            // Reset the player path
+            game.player.path = [];
+
             return false;
         }
     },
@@ -136,7 +139,7 @@ var Tile = {
             'use strict';
             // Generate a new level
             game.level += 1;
-            
+
             // Remove all lights
             if(game.dungeon.levels[game.level] === undefined) {
                 game.lighting._lights = {};
@@ -146,6 +149,9 @@ var Tile = {
             // Move the player to the center
             game.player.x = game.dungeon.levels[game.level].startingPosition.x;
             game.player.y = game.dungeon.levels[game.level].startingPosition.y;
+
+            // Reset the player path
+            game.player.path = [];
 
             return false;
         }
