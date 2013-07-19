@@ -4722,7 +4722,7 @@ ROT.Path.AStar.prototype._add = function(x, y, prev) {
 		x: x,
 		y: y,
 		prev: prev,
-		g: (prev ? prev.g+1 : 0),
+		g: (prev ? prev.g + Math.sqrt(Math.abs(prev.x - x) + Math.abs(prev.y - y)) : 0),
 		h: this._distance(x, y)
 	}
 	this._done[x+","+y] = obj;
