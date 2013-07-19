@@ -100,8 +100,10 @@ var State = {
                     break;
                 case 'mouseclick':
                     // Start the player's autopilot following the computed path
-                    game.player.automove(game);
-                    game.state = State.AUTOPILOT;
+                    if(game.player.path.length > 0) {
+                        game.player.automove(game);
+                        game.state = State.AUTOPILOT;
+                    }
                     break;
             }
         }
