@@ -47,6 +47,9 @@ var Game = function() {
             }
         }
     }.bind(this)).on('click', function(e) {
+        // Remove the top position since this is the players current position
+        this.player.path.shift();
+        
         // Start the player's autopilot following the computed path
         this.player.autopilot = true;
         this.player.automove(this);
@@ -234,6 +237,7 @@ Game.prototype.next = function() {
     this.turn += 1;
     this.computeFOV(this.player.x, this.player.y);
     this.computeLighting();
+    this.updateInterface();
 };
 
 Game.prototype.updateInterface = function() {
