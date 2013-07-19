@@ -64,7 +64,7 @@ var Game = function() {
 
     // Shadowcaster for field of view
     this.shadowcasting = new ROT.FOV.PreciseShadowcasting(function(x, y) {
-        if(x > 0 && x < this.dungeon.width && y > 0 && y < this.dungeon.height && this.dungeon.levels[this.level].cells[x][y].id !== Tile.EMPTY.id) {
+        if(x > 0 && x < this.dungeon.width && y > 0 && y < this.dungeon.height && this.dungeon.levels[this.level].cells[x][y].id !== Tiles.EMPTY.id) {
             return this.dungeon.levels[this.level].cells[x][y].lightPasses;
         }
 
