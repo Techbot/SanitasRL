@@ -49,7 +49,7 @@ var Game = function() {
     }.bind(this)).on('click', function(e) {
         // Start the player's autopilot following the computed path
         this.player.autopilot = true;
-        this.player.automove(game);
+        this.player.automove(this);
     }.bind(this));
 
     // Get the canvas context from the DOM
