@@ -101,8 +101,8 @@ var State = {
                 case 'mouseclick':
                     // Start the player's autopilot following the computed path
                     if(game.player.path.length > 0) {
-                        game.player.automove(game);
                         game.state = State.AUTOPILOT;
+                        game.player.automove(game);
                     }
                     break;
             }
@@ -124,8 +124,8 @@ var State = {
                 // Enter - Autopilot
                 case 'enter':
                     // Start the player's autopilot following the computed path
-                    game.player.automove(game);
                     game.state = State.AUTOPILOT;
+                    game.player.automove(game);
                     game.cursor = { x: undefined, y: undefined };
                     break;
                 // Numpad 8 / k - Move cursor north
