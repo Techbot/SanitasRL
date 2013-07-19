@@ -194,7 +194,9 @@ var Tile = {
         interact: function(x, y, game) {
             'use strict';
             // Replace this with foilage and place x coca leafs in the players inventory
-            return true;
+            game.dungeon.levels[game.level].cells[x][y] = Tile.FOILAGE;
+            game.player.inventory.add(Item.COCA_LEAF, 3);
+            return false;
         }
     },
     OPIUM_PLANT: {
@@ -210,7 +212,9 @@ var Tile = {
         interact: function(x, y, game) {
             'use strict';
             // Replace this with foilage and place 1 opium poppy in the players inventory
-            return true;
+            game.dungeon.levels[game.level].cells[x][y] = Tile.FOILAGE;
+            game.player.inventory.add(Item.OPIUM_POPPY, 1);
+            return false;
         }
     },
     WELL: {

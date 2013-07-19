@@ -6,6 +6,8 @@ var Player = function(x, y) {
 
     this.autopilot = false;
     this.path = [];
+    
+    this.inventory = new Inventory();
 };
 
 Player.prototype.move = function(direction, game) {

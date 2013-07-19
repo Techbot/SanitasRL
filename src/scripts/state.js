@@ -7,10 +7,13 @@ var State = {
             switch(key) {
                 // Enter - Go to PLAYER state
                 case 'enter':
-                    $('.window').fadeOut();
+                    $('.window.welcome').fadeOut();
                     game.state = State.PLAYER;
                     break;
             }
+        },
+        construct: function(game) {
+            $('.window.welcome').fadeIn();
         }
     },
     PLAYER: {
@@ -21,7 +24,7 @@ var State = {
             switch(key) {
                 // Escape - Go to WELCOME state
                 case 'escape':
-                    $('.window').fadeIn();
+                    State.WELCOME.construct();
                     game.state = State.WELCOME;
                     break;
                 // x / Enter - Go to CURSOR state
@@ -75,6 +78,12 @@ var State = {
                 case '.':
                     game.next();
                     break;
+                // i - Open inventory
+                case 'i':
+                    State.INVENTORY.construct(game);
+                    game.state = State.INVENTORY;
+                    break;
+                // mousemove - Update the autopilot path
                 case 'mousemove':
                     var previous = $.extend({}, game.cursor);
                     game.cursor.x = Math.floor(e.offsetX / 16);
@@ -83,7 +92,7 @@ var State = {
                     // Only do stuff if the mouse has actually moved a tile and not just a couple of pixels
                     if(previous.x !== game.cursor.x || previous.y !== game.cursor.y) {
                         game.updateInterface();
-                    
+
                         // Only calculate a path if the autopilot is off (we're not traversing a path right now)
                         if(game.player.autopilot === false) {
                             game.player.path = [];
@@ -97,6 +106,7 @@ var State = {
                         }
                     }
                     break;
+                // mouseclick - Follow the autopilot path
                 case 'mouseclick':
                     // Start the player's autopilot following the computed path
                     if(game.player.path.length > 0) {
@@ -104,6 +114,7 @@ var State = {
                         game.player.automove(game);
                     }
                     break;
+                // mouseleave - Remove the cursor
                 case 'mouseleave':
                     game.cursor = { x: undefined, y: undefined };
                     break;
@@ -189,6 +200,34 @@ var State = {
                     game.player.path = [];
                     break;
             }
+        }
+    },
+    INVENTORY: {
+        id: 4,
+        render: false,
+        input: function(key, e, game) {
+            'use strict';
+            switch(key) {
+                case 'i':
+                case 'escape':
+                    $('.window.inventory').hide();
+                    game.state = State.PLAYER; // This should really revert to whatever state it was before
+                    break;
+            }
+        },
+        construct: function(game) {
+            'use strict';
+
+            var inventory = game.player.inventory.items;
+            var window = $('.window.inventory');
+
+            window.html('');
+
+            for(var i = 0; i < inventory.length; i++) {
+                window.append(inventory[i].name + ' (' + inventory[i].quantity + 'x)<br>');
+            }
+
+            window.show();
         }
     }
 };
