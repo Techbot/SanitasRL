@@ -82,7 +82,6 @@ var State = {
 
                     // Only do stuff if the mouse has actually moved a tile and not just a couple of pixels
                     if(previous.x !== game.cursor.x || previous.y !== game.cursor.y) {
-                        game.mouselook = true; // Allow the player to examine with the mouse
                         game.updateInterface();
                     
                         // Only calculate a path if the autopilot is off (we're not traversing a path right now)
@@ -104,6 +103,9 @@ var State = {
                         game.state = State.AUTOPILOT;
                         game.player.automove(game);
                     }
+                    break;
+                case 'mouseleave':
+                    game.cursor = { x: undefined, y: undefined };
                     break;
             }
         }

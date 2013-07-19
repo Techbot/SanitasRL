@@ -25,6 +25,8 @@ var Game = function() {
         this.input('mousemove', e);
     }.bind(this)).on('click', function(e) {
         this.input('mouseclick', e);
+    }.bind(this)).on('mouseleave', function(e) {
+        this.input('mouseleave', e);
     }.bind(this));
 
     // Get the canvas context from the DOM
@@ -57,9 +59,6 @@ var Game = function() {
     // Create the player instance
     this.player = new Player(this.dungeon.levels[this.level].startingPosition.x, this.dungeon.levels[this.level].startingPosition.y);
     this.cursor = { x: undefined, y: undefined };
-
-    // Mouse tracking and pathfinding from player to mouse
-    this.mouselook = false;
 
     /*** TEMPORARY fov AND light 2d-arrays ***/ // Why / how are they temporary? What was the thought behind this?
     this.fov = [];
@@ -242,7 +241,7 @@ Game.prototype.updateInterface = function() {
         var look = '', position;
         if(this.state.id === State.PLAYER.id) {
             // If we recently moved the mouse, show what's there instead of below the player
-            if(this.mouselook === true) {
+            if(this.cursor.x !== undefined && this.cursor.y !== undefined) {
                 position = this.cursor;
             } else {
                 position = { x: this.player.x, y: this.player.y };
