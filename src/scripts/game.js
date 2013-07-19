@@ -239,7 +239,7 @@ Game.prototype.render = function() {
             }
         }
 
-        if(this.state.id === State.EXAMINE.id) {
+        if(this.state.id === State.CURSOR.id) {
             this.canvas.strokeStyle = 'rgb(0, 255, 0)';
             this.canvas.lineWidth = 1;
             this.canvas.strokeRect(this.cursor.x * 16 + 0.5, this.cursor.y * 16 + 0.5, 16 - 1, 16 - 1); // .5 to create a 1px line instead of blurry 2px
@@ -274,7 +274,7 @@ Game.prototype.updateInterface = function() {
             } else {
                 position = { x: this.player.x, y: this.player.y };
             }
-        } else if(this.state.id === State.EXAMINE.id) {
+        } else if(this.state.id === State.CURSOR.id) {
             position = { x: this.cursor.x, y: this.cursor.y };
         }
 
@@ -296,7 +296,7 @@ Game.prototype.updateInterface = function() {
         }
         
         //
-        if(this.state.id === State.EXAMINE.id) {
+        if(this.state.id === State.CURSOR.id) {
             this.player.path = [];
 
             // Only calculate a path if we've seen this cell

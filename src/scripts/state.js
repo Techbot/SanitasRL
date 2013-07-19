@@ -29,9 +29,9 @@ var State = {
                         game.state = State.WELCOME;
                     }
                     break;
-                // x - Go to EXAMINE state
+                // x - Go to CURSOR state
                 case 'x':
-                    game.state = State.EXAMINE;
+                    game.state = State.CURSOR;
                     game.cursor = { x: game.player.x, y: game.player.y };
                     break;
                 // Numpad 8 / k - Move player north
@@ -82,7 +82,7 @@ var State = {
             }
         }
     },
-    EXAMINE: {
+    CURSOR: {
         id: 2,
         render: true,
         input: function(key, game) {
