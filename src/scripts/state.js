@@ -228,9 +228,10 @@ var State = {
 
             window.html('<p class="heading">============================================= INVENTORY ============================================</p>');
 
+            var az = [ 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z' ];
             if(inventory.length > 0) {
                 for(var i = 0; i < inventory.length; i++) {
-                    window.append('<span class="cyan">a</span>) ' + inventory[i].name + ' (' + inventory[i].quantity + 'x)<br>');
+                    window.append('<span class="cyan">' + az[i] +'</span>) ' + inventory[i].name + ' (' + inventory[i].quantity + 'x)<br>');
                 }
             } else {
                 window.append('You have no items.');
