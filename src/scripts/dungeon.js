@@ -12,6 +12,7 @@ var Level = function(length) {
     this.explored = [];
     this.startingPosition = { x: undefined, y: undefined };
     this.endingPosition = { x: undefined, y: undefined };
+    this.creatures = [];
 
     var i;
     for(i = 0; i < length; i += 1) {
@@ -22,6 +23,16 @@ var Level = function(length) {
 
 Dungeon.prototype.at = function(x, y, level) {
     'use strict';
+    for(var i = 0; i < this.levels[level].creatures.length; i++) {
+        if(this.levels[level].creatures[i].x === x && this.levels[level].creatures[i].y === y) {
+            return {
+                x: this.levels[level].creatures[i].image.x,
+                y: this.levels[level].creatures[i].image.y,
+                color: undefined
+            };
+        }
+    }
+    
     if(this.levels[level].cells[x][y].id !== Tile.EMPTY.id) {
         return {
             x: this.levels[level].cells[x][y].image.x,
@@ -457,11 +468,15 @@ Dungeon.prototype.generate = function(game) {
         }
     }
 
-    // Loop over everything placing lights
+    // Loop over everything placing lights and creatures
     for(x = 0; x < this.width; x += 1) {
         for(y = 0; y < this.height; y += 1) {
             if(level.cells[x][y].light !== undefined) {
                 game.lighting.setLight(x, y, level.cells[x][y].light);
+            }
+            
+            if(level.cells[x][y].spawnable === true && ROT.RNG.getPercentage() < 5) {
+                level.creatures.push(new Creature(x, y));
             }
         }
     }
