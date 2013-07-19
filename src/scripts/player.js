@@ -36,6 +36,8 @@ Player.prototype.automove = function(game) {
     'use strict';
 
     if(this.path.length > 0) {
+        this.autopilot = true;
+    
         var next = this.path.shift().split(','),
             x = parseInt(next[0], 10),
             y = parseInt(next[1], 10),

@@ -22,31 +22,9 @@ var Game = function() {
 
     // Bind to the mousemove event
     $('#canvas').on('mousemove', function(e) {
-        var previous = $.extend({}, this.mouse);
-        this.mouse.x = Math.floor(e.offsetX / 16);
-        this.mouse.y = Math.floor(e.offsetY / 16);
-
-        // Only do stuff if the mouse has actually moved a tile and not just a couple of pixels
-        if(previous.x !== this.mouse.x || previous.y !== this.mouse.y) {
-            this.mouselook = true; // Allow the player to examine with the mouse
-            this.updateInterface();
-        
-            // Only calculate a path if the autopilot is off (we're not traversing a path right now)
-            if(this.player.autopilot === false) {
-                this.player.path = [];
-
-                // Only calculate a path if we've seen this cell
-                if(this.dungeon.levels[this.level].explored[this.mouse.x][this.mouse.y]) {
-                    this.player.path = this.calculatePath(this.player.x, this.player.y, this.mouse.x, this.mouse.y);
-                    // Remove the top position since this is the players current position
-                    this.player.path.shift();
-                }
-            }
-        }
+        this.input('mousemove', e);
     }.bind(this)).on('click', function(e) {
-        // Start the player's autopilot following the computed path
-        this.player.autopilot = true;
-        this.player.automove(this);
+        this.input('mouseclick', e);
     }.bind(this));
 
     // Get the canvas context from the DOM
@@ -82,7 +60,6 @@ var Game = function() {
 
     // Mouse tracking and pathfinding from player to mouse
     this.mouse = { x: undefined, y: undefined };
-    this.player.path = [];
     this.mouselook = false;
 
     /*** TEMPORARY fov AND light 2d-arrays ***/ // Why / how are they temporary? What was the thought behind this?
@@ -221,6 +198,7 @@ Game.prototype.render = function() {
                     if(tile.color !== undefined) {
                         this.canvas.globalCompositeOperation = 'source-atop';
 
+                        // Draw the tile with yellow if it's in the current path
                         if(this.player.path.indexOf(x.toString() + ',' + y.toString()) !== -1) {
                             this.canvas.fillStyle = '#ff0';
                         } else if(this.dungeon.levels[this.level].cells[x][y].reflects === true && this.light[x][y] !== undefined && this.fov[x][y] > 0.1) {
@@ -249,9 +227,6 @@ Game.prototype.render = function() {
     window.requestAnimationFrame(this.render.bind(this));
 };
 
-/*
- * Goes to the next turn
- */
 Game.prototype.next = function() {
     this.turn += 1;
     this.computeFOV(this.player.x, this.player.y);
@@ -295,7 +270,7 @@ Game.prototype.updateInterface = function() {
             $('.character-sight').html('');
         }
         
-        //
+        /** This code should really not be here... **/
         if(this.state.id === State.CURSOR.id) {
             this.player.path = [];
 
@@ -311,12 +286,39 @@ Game.prototype.updateInterface = function() {
 
 // Take input from keydown and keypress and forward it to the state
 // We can also hijack keys to process keys globally
-Game.prototype.input = function(key) {
+Game.prototype.input = function(key, e) {
     'use strict';
     switch(key) {
         case 'ctrl+d':
             this.debug = !this.debug;
             $('.character-position').toggle();
+            break;
+        case 'mousemove':
+            var previous = $.extend({}, this.mouse);
+            this.mouse.x = Math.floor(e.offsetX / 16);
+            this.mouse.y = Math.floor(e.offsetY / 16);
+
+            // Only do stuff if the mouse has actually moved a tile and not just a couple of pixels
+            if(previous.x !== this.mouse.x || previous.y !== this.mouse.y) {
+                this.mouselook = true; // Allow the player to examine with the mouse
+                this.updateInterface();
+            
+                // Only calculate a path if the autopilot is off (we're not traversing a path right now)
+                if(this.player.autopilot === false) {
+                    this.player.path = [];
+
+                    // Only calculate a path if we've seen this cell
+                    if(this.dungeon.levels[this.level].explored[this.mouse.x][this.mouse.y]) {
+                        this.player.path = this.calculatePath(this.player.x, this.player.y, this.mouse.x, this.mouse.y);
+                        // Remove the top position since this is the players current position
+                        this.player.path.shift();
+                    }
+                }
+            }
+            break;
+        case 'mouseclick':
+            // Start the player's autopilot following the computed path
+            this.player.automove(this);
             break;
         default:
             this.state.input(key, this);
