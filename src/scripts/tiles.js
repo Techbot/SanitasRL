@@ -2,6 +2,7 @@ var Tile = {
     EMPTY: {
         id: -1,
         entityPasses: false,
+        autopilotPasses: false,
         lightPasses: false,
         reflects: false,
         look: undefined,
@@ -13,6 +14,7 @@ var Tile = {
     FLOOR: {
         id: 0,
         entityPasses: true,
+        autopilotPasses: true,
         lightPasses: true,
         reflects: true,
         look: 'The dungeon floor',
@@ -24,6 +26,7 @@ var Tile = {
     GRASS: {
         id: 1,
         entityPasses: true,
+        autopilotPasses: true,
         lightPasses: true,
         reflects: true,
         look: 'Some grass',
@@ -35,6 +38,7 @@ var Tile = {
     FOILAGE: {
         id: 2,
         entityPasses: true,
+        autopilotPasses: true,
         lightPasses: true,
         reflects: true,
         look: 'Some foilage',
@@ -46,6 +50,7 @@ var Tile = {
     WATER: {
         id: 3,
         entityPasses: false,
+        autopilotPasses: false,
         lightPasses: true,
         reflects: true,
         look: 'A small pond of water',
@@ -57,6 +62,7 @@ var Tile = {
     WALL: {
         id: 4,
         entityPasses: false,
+        autopilotPasses: false,
         lightPasses: false,
         reflects: false,
         look: 'The dungeon wall',
@@ -68,6 +74,7 @@ var Tile = {
     PILLAR: {
         id: 5,
         entityPasses: false,
+        autopilotPasses: false,
         lightPasses: false,
         reflects: true,
         look: 'A large pillar',
@@ -79,6 +86,7 @@ var Tile = {
     DOOR: {
         id: 6,
         entityPasses: false,
+        autopilotPasses: true,
         lightPasses: false,
         reflects: false,
         look: 'A closed door',
@@ -94,6 +102,7 @@ var Tile = {
     DOOR_OPEN: {
         id: 7,
         entityPasses: true,
+        autopilotPasses: true,
         lightPasses: true,
         reflects: true,
         look: 'An open door',
@@ -105,6 +114,7 @@ var Tile = {
     UPWARD_STAIRCASE: {
         id: 8,
         entityPasses: true,
+        autopilotPasses: true,
         lightPasses: true,
         reflects: true,
         look: 'A staircase leading up',
@@ -130,6 +140,7 @@ var Tile = {
     DOWNWARD_STAIRCASE: {
         id: 9,
         entityPasses: true,
+        autopilotPasses: true,
         lightPasses: true,
         reflects: true,
         look: 'A staircase leading down',
@@ -161,6 +172,7 @@ var Tile = {
     ENTRANCE: {
         id: 10,
         entityPasses: true,
+        autopilotPasses: true,
         lightPasses: true,
         reflects: true,
         look: 'A staircase leading out of the dungeon',
@@ -172,6 +184,7 @@ var Tile = {
     COCA_PLANT: {
         id: 11,
         entityPasses: false,
+        autopilotPasses: false,
         lightPasses: true,
         reflects: true,
         look: 'A plant with large lightgreen leaves',
@@ -187,6 +200,7 @@ var Tile = {
     OPIUM_PLANT: {
         id: 12,
         entityPasses: false,
+        autopilotPasses: false,
         lightPasses: true,
         reflects: true,
         look: 'A plant carrying a large poppy',
@@ -202,6 +216,7 @@ var Tile = {
     WELL: {
         id: 13,
         entityPasses: false,
+        autopilotPasses: false,
         lightPasses: true,
         reflects: false,
         look: 'An untapped well',
@@ -218,6 +233,7 @@ var Tile = {
     WELL_EMPTY: {
         id: 14,
         entityPasses: false,
+        autopilotPasses: false,
         lightPasses: true,
         reflects: false,
         look: 'An empty well',
@@ -230,6 +246,7 @@ var Tile = {
     ROOM_HIGHLIGHT: {
         id: 100,
         entityPasses: true,
+        autopilotPasses: true,
         lightPasses: true,
         reflects: true,
         look: 'The dungeon floor',
@@ -241,6 +258,7 @@ var Tile = {
     CELLULAR_HIGHLIGHT: {
         id: 101,
         entityPasses: true,
+        autopilotPasses: true,
         lightPasses: true,
         reflects: true,
         look: 'The dungeon floor',

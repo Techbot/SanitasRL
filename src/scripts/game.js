@@ -34,8 +34,14 @@ var Game = function() {
             // Only calculate a path if we've seen this cell
             if(this.dungeon.levels[this.level].explored[this.mouse.x][this.mouse.y]) {
                 var astar = new ROT.Path.AStar(this.mouse.x, this.mouse.y, function(x, y) {
+                    /** This piece of code can defenitly be cleaned up **/
                     if(x > 0 && y > 0 && x < this.dungeon.width && y < this.dungeon.height) {
+                        var a = this.dungeon.levels[this.level].cells[x][y].autopilotPasses;
                         var p = this.dungeon.levels[this.level].cells[x][y].entityPasses;
+                        
+                        if(a === true) {
+                            return true;
+                        }
                         return p === undefined ? false : p;
                     }
 
