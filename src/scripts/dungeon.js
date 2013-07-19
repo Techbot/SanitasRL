@@ -98,8 +98,7 @@ Dungeon.prototype.generate = function(game) {
     }
 
     // Loop over the rooms
-    var width, height, center,
-        generated;
+    var width, height, center;
 
     for(i = 0; i < rooms.length; i += 1) {
         // Get width, height and center of the room

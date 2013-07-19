@@ -172,7 +172,7 @@ Game.prototype.render = function() {
             this.pulseDir = !this.pulseDir;
         }
 
-        var x, y, tile, color;
+        var x, y, tile;
         for(x = 0; x < this.dungeon.width; x += 1) {
             for(y = 0; y < this.dungeon.height; y += 1) {
                 if(x === this.player.x && y === this.player.y) {
