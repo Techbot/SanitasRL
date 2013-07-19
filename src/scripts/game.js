@@ -22,13 +22,13 @@ var Game = function() {
 
     // Bind to the mousemove event
     $('#canvas').on('mousemove', function(e) {
-        var old = $.extend({}, this.mouse);
+        var previous = $.extend({}, this.mouse);
         this.mouse.x = Math.floor(e.offsetX / 16);
         this.mouse.y = Math.floor(e.offsetY / 16);
 
         // Only calculate a path if the autopilot is off (we're not traversing a path right now)
         // and the mouse has actually moved a tile and not just a couple of pixels
-        if(this.player.autopilot === false && (old.x !== this.mouse.x || old.y !== this.mouse.y)) {
+        if(this.player.autopilot === false && (previous.x !== this.mouse.x || previous.y !== this.mouse.y)) {
             this.player.path = [];
 
             // Only calculate a path if we've seen this cell
@@ -64,7 +64,6 @@ var Game = function() {
 
     // Shadowcaster for field of view
     this.shadowcasting = new ROT.FOV.PreciseShadowcasting(function(x, y) {
-        'use strict'; // needed?
         if(x > 0 && x < this.dungeon.width && y > 0 && y < this.dungeon.height && this.dungeon.levels[this.level].cells[x][y].id !== Tile.EMPTY.id) {
             return this.dungeon.levels[this.level].cells[x][y].lightPasses;
         }

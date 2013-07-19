@@ -40,7 +40,7 @@ Dungeon.prototype.generate = function(game) {
         i, j, x, y;
 
     // Generate the digger porition of the level
-    generator = new ROT.Map.Digger(this.width, this.height);
+    var generator = new ROT.Map.Digger(this.width, this.height);
     generator.create(function(x, y, value) {
         level.cells[x][y] = (value === 0) ? Tile.FLOOR : Tile.EMPTY;
     }.bind(this));
