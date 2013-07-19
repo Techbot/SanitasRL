@@ -6,7 +6,7 @@ var State = {
             'use strict';
             switch(key) {
                 // Enter - Go to PLAYER state
-                case 'enter':
+                default:
                     $('.window.welcome').fadeOut();
                     game.state = State.PLAYER;
                     break;
@@ -22,13 +22,12 @@ var State = {
         input: function(key, e, game) {
             'use strict';
             switch(key) {
-                // Escape - Go to WELCOME state
-                case 'escape':
+                // ? - Open help screen
+                case '?':
                     State.WELCOME.construct();
                     game.state = State.WELCOME;
                     break;
-                // x / Enter - Go to CURSOR state
-                case 'x':
+                // Enter - Go to cursor mode
                 case 'enter':
                     game.state = State.CURSOR;
                     game.cursor = { x: game.player.x, y: game.player.y };
@@ -80,6 +79,7 @@ var State = {
                     break;
                 // i - Open inventory
                 case 'i':
+                    State.INVENTORY.previousState = game.state;
                     State.INVENTORY.construct(game);
                     game.state = State.INVENTORY;
                     break;
@@ -127,9 +127,8 @@ var State = {
         input: function(key, e, game) {
             'use strict';
             switch(key) {
-                // Escape / x - Go to PLAYER state
+                // Escape - Go to PLAYER state
                 case 'escape':
-                case 'x':
                     game.player.path = [];
                     game.state = State.PLAYER;
                     game.cursor = { x: undefined, y: undefined };
@@ -185,6 +184,12 @@ var State = {
                     game.cursor.x -= 1;
                     game.cursor.y -= 1;
                     break;
+                // i - Open inventory
+                case 'i':
+                    State.INVENTORY.previousState = game.state;
+                    State.INVENTORY.construct(game);
+                    game.state = State.INVENTORY;
+                    break;
             }
         }
     },
@@ -211,7 +216,7 @@ var State = {
                 case 'i':
                 case 'escape':
                     $('.window.inventory').hide();
-                    game.state = State.PLAYER; // This should really revert to whatever state it was before
+                    game.state = this.previousState; // This should really revert to whatever state it was before
                     break;
             }
         },
@@ -221,13 +226,18 @@ var State = {
             var inventory = game.player.inventory.items;
             var window = $('.window.inventory');
 
-            window.html('');
+            window.html('<p class="heading">============================================= INVENTORY ============================================</p>');
 
-            for(var i = 0; i < inventory.length; i++) {
-                window.append(inventory[i].name + ' (' + inventory[i].quantity + 'x)<br>');
+            if(inventory.length > 0) {
+                for(var i = 0; i < inventory.length; i++) {
+                    window.append('<span class="cyan">a</span>) ' + inventory[i].name + ' (' + inventory[i].quantity + 'x)<br>');
+                }
+            } else {
+                window.append('You have no items.');
             }
 
             window.show();
-        }
+        },
+        previousState: null
     }
 };

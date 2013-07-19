@@ -44,27 +44,54 @@ canvas {
     display: none;
     background: rgb(17, 17, 17);
 }
-.window p, pre {
-    width: 960px;
-    margin: 10px auto;
+.window p, .window pre {
+    margin: 10px 0;
     font: inherit;
 }
+.window p {
+    width: 960px;
+    margin: 10px auto;
+}
 .window .logo {
+    width: 440px;
+    margin: 0 auto;
     line-height: 1.2em;
-    text-align: center;
+    text-align: left;
 }
 .window .controls {
-    margin-top: 40px;
+    width: 960px;
+    margin: 30px auto;
+    overflow: hidden;
+}
+.window .controls pre {
+    margin: 0 20px;
 }
 .window .bottom {
     width: 100%;
     position: absolute;
     bottom: 0;
+    text-align: right;
+}
+.window .center {
     text-align: center;
 }
 .window.welcome {
     width: 1024px;
     display: block;
+    background: rgb(17, 17, 17);
+}
+pre b, .green {
+    color: #46b034;
+    font-weight: normal;
+}
+pre i, .gold {
+    color: #ffd700;
+    font-style: normal;
+}
+
+.window .heading {
+    width: auto;
+    margin-top: 3px;
 }
 
 .sidebar {
