@@ -56,10 +56,9 @@ var Game = function() {
 
     // Create the player instance
     this.player = new Player(this.dungeon.levels[this.level].startingPosition.x, this.dungeon.levels[this.level].startingPosition.y);
-    this.cursor = undefined;
+    this.cursor = { x: undefined, y: undefined };
 
     // Mouse tracking and pathfinding from player to mouse
-    this.mouse = { x: undefined, y: undefined };
     this.mouselook = false;
 
     /*** TEMPORARY fov AND light 2d-arrays ***/ // Why / how are they temporary? What was the thought behind this?
@@ -241,13 +240,15 @@ Game.prototype.updateInterface = function() {
         $('.dungeon-turn').text(this.turn);
 
         var look = '', position;
-        if(this.state.id === State.PLAYER.id || this.state.id === State.AUTOPILOT.id) {
-            // If we recently moved the mouse, show whats there instead of below the player
+        if(this.state.id === State.PLAYER.id) {
+            // If we recently moved the mouse, show what's there instead of below the player
             if(this.mouselook === true) {
-                position = this.mouse;
+                position = this.cursor;
             } else {
                 position = { x: this.player.x, y: this.player.y };
             }
+        } else if(this.state.id === State.AUTOPILOT.id) {
+            position = { x: this.player.x, y: this.player.y };
         } else if(this.state.id === State.CURSOR.id) {
             position = { x: this.cursor.x, y: this.cursor.y };
         }

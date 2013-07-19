@@ -76,12 +76,12 @@ var State = {
                     game.next();
                     break;
                 case 'mousemove':
-                    var previous = $.extend({}, game.mouse);
-                    game.mouse.x = Math.floor(e.offsetX / 16);
-                    game.mouse.y = Math.floor(e.offsetY / 16);
+                    var previous = $.extend({}, game.cursor);
+                    game.cursor.x = Math.floor(e.offsetX / 16);
+                    game.cursor.y = Math.floor(e.offsetY / 16);
 
                     // Only do stuff if the mouse has actually moved a tile and not just a couple of pixels
-                    if(previous.x !== game.mouse.x || previous.y !== game.mouse.y) {
+                    if(previous.x !== game.cursor.x || previous.y !== game.cursor.y) {
                         game.mouselook = true; // Allow the player to examine with the mouse
                         game.updateInterface();
                     
@@ -90,8 +90,8 @@ var State = {
                             game.player.path = [];
 
                             // Only calculate a path if we've seen this cell
-                            if(game.dungeon.levels[game.level].explored[game.mouse.x][game.mouse.y]) {
-                                game.player.path = game.calculatePath(game.player.x, game.player.y, game.mouse.x, game.mouse.y);
+                            if(game.dungeon.levels[game.level].explored[game.cursor.x][game.cursor.y]) {
+                                game.player.path = game.calculatePath(game.player.x, game.player.y, game.cursor.x, game.cursor.y);
                                 // Remove the top position since this is the players current position
                                 game.player.path.shift();
                             }
@@ -117,14 +117,14 @@ var State = {
                 case 'x':
                     game.player.path = [];
                     game.state = State.PLAYER;
-                    game.cursor = undefined;
+                    game.cursor = { x: undefined, y: undefined };
                     break;
                 // Enter - Autopilot
                 case 'enter':
                     // Start the player's autopilot following the computed path
                     game.player.automove(game);
                     game.state = State.AUTOPILOT;
-                    game.cursor = undefined;
+                    game.cursor = { x: undefined, y: undefined };
                     break;
                 // Numpad 8 / k - Move cursor north
                 case 'numpad8':
@@ -169,34 +169,6 @@ var State = {
                 case 'y':
                     game.cursor.x -= 1;
                     game.cursor.y -= 1;
-                    break;
-                case 'mousemove':
-                    var previous = $.extend({}, game.mouse);
-                    game.mouse.x = Math.floor(e.offsetX / 16);
-                    game.mouse.y = Math.floor(e.offsetY / 16);
-
-                    // Only do stuff if the mouse has actually moved a tile and not just a couple of pixels
-                    if(previous.x !== game.mouse.x || previous.y !== game.mouse.y) {
-                        game.mouselook = true; // Allow the player to examine with the mouse
-                        game.updateInterface();
-                    
-                        // Only calculate a path if the autopilot is off (we're not traversing a path right now)
-                        if(game.player.autopilot === false) {
-                            game.player.path = [];
-
-                            // Only calculate a path if we've seen this cell
-                            if(game.dungeon.levels[game.level].explored[game.mouse.x][game.mouse.y]) {
-                                game.player.path = game.calculatePath(game.player.x, game.player.y, game.mouse.x, game.mouse.y);
-                                // Remove the top position since this is the players current position
-                                game.player.path.shift();
-                            }
-                        }
-                    }
-                    break;
-                case 'mouseclick':
-                    // Start the player's autopilot following the computed path
-                    game.player.automove(game);
-                    game.state = State.AUTOPILOT;
                     break;
             }
         }

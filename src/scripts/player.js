@@ -26,7 +26,7 @@ Player.prototype.move = function(direction, game) {
         
         // we need to update the path, if there is any
         if(this.path.length > 0) {
-            this.path = game.calculatePath(this.x, this.y, game.mouse.x, game.mouse.y);
+            this.path = game.calculatePath(this.x, this.y, game.cursor.x, game.cursor.y);
         }
 
         $('.character-position').text('{ x: ' + x + ', y: ' + y + ' }');
