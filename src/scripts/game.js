@@ -246,10 +246,10 @@ Game.prototype.updateInterface = function() {
             } else {
                 position = { x: this.player.x, y: this.player.y };
             }
-        } else if(this.state.id === State.AUTOPILOT.id) {
-            position = { x: this.player.x, y: this.player.y };
         } else if(this.state.id === State.CURSOR.id) {
             position = { x: this.cursor.x, y: this.cursor.y };
+        } else {
+            position = { x: this.player.x, y: this.player.y };
         }
 
         if(this.dungeon.levels[this.level].explored[position.x][position.y] === true) {
