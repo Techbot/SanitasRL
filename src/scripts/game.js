@@ -218,9 +218,8 @@ Game.prototype.render = function() {
         }
 
         if(this.state.id === State.CURSOR.id) {
-            this.canvas.strokeStyle = 'rgb(0, 255, 0)';
-            this.canvas.lineWidth = 1;
-            this.canvas.strokeRect(this.cursor.x * 16 + 0.5, this.cursor.y * 16 + 0.5, 16 - 1, 16 - 1); // .5 to create a 1px line instead of blurry 2px
+            this.canvas.fillStyle = 'rgba(255, 255, 255, 0.2)';
+            this.canvas.fillRect(this.cursor.x * 16, this.cursor.y * 16, 16, 16);
         }
     }
 
@@ -242,7 +241,7 @@ Game.prototype.updateInterface = function() {
         $('.dungeon-turn').text(this.turn);
 
         var look = '', position;
-        if(this.state.id === State.PLAYER.id) {
+        if(this.state.id === State.PLAYER.id || this.state.id === State.AUTOPILOT.id) {
             // If we recently moved the mouse, show whats there instead of below the player
             if(this.mouselook === true) {
                 position = this.mouse;
@@ -293,35 +292,8 @@ Game.prototype.input = function(key, e) {
             this.debug = !this.debug;
             $('.character-position').toggle();
             break;
-        case 'mousemove':
-            var previous = $.extend({}, this.mouse);
-            this.mouse.x = Math.floor(e.offsetX / 16);
-            this.mouse.y = Math.floor(e.offsetY / 16);
-
-            // Only do stuff if the mouse has actually moved a tile and not just a couple of pixels
-            if(previous.x !== this.mouse.x || previous.y !== this.mouse.y) {
-                this.mouselook = true; // Allow the player to examine with the mouse
-                this.updateInterface();
-            
-                // Only calculate a path if the autopilot is off (we're not traversing a path right now)
-                if(this.player.autopilot === false) {
-                    this.player.path = [];
-
-                    // Only calculate a path if we've seen this cell
-                    if(this.dungeon.levels[this.level].explored[this.mouse.x][this.mouse.y]) {
-                        this.player.path = this.calculatePath(this.player.x, this.player.y, this.mouse.x, this.mouse.y);
-                        // Remove the top position since this is the players current position
-                        this.player.path.shift();
-                    }
-                }
-            }
-            break;
-        case 'mouseclick':
-            // Start the player's autopilot following the computed path
-            this.player.automove(this);
-            break;
         default:
-            this.state.input(key, this);
+            this.state.input(key, e, this);
             break;
     }
 

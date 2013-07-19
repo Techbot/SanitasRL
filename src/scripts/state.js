@@ -2,7 +2,7 @@ var State = {
     WELCOME: {
         id: 0,
         render: false,
-        input: function(key, game) {
+        input: function(key, e, game) {
             'use strict';
             switch(key) {
                 // Enter - Go to PLAYER state
@@ -16,21 +16,17 @@ var State = {
     PLAYER: {
         id: 1,
         render: true,
-        input: function(key, game) {
+        input: function(key, e, game) {
             'use strict';
             switch(key) {
                 // Escape - Go to WELCOME state
                 case 'escape':
-                    if(game.player.autopilot === true) {
-                        game.player.autopilot = false;
-                        game.player.path = [];
-                    } else {
-                        $('.window').fadeIn();
-                        game.state = State.WELCOME;
-                    }
+                    $('.window').fadeIn();
+                    game.state = State.WELCOME;
                     break;
-                // x - Go to CURSOR state
+                // x / Enter - Go to CURSOR state
                 case 'x':
+                case 'enter':
                     game.state = State.CURSOR;
                     game.cursor = { x: game.player.x, y: game.player.y };
                     break;
@@ -79,16 +75,44 @@ var State = {
                 case '.':
                     game.next();
                     break;
+                case 'mousemove':
+                    var previous = $.extend({}, game.mouse);
+                    game.mouse.x = Math.floor(e.offsetX / 16);
+                    game.mouse.y = Math.floor(e.offsetY / 16);
+
+                    // Only do stuff if the mouse has actually moved a tile and not just a couple of pixels
+                    if(previous.x !== game.mouse.x || previous.y !== game.mouse.y) {
+                        game.mouselook = true; // Allow the player to examine with the mouse
+                        game.updateInterface();
+                    
+                        // Only calculate a path if the autopilot is off (we're not traversing a path right now)
+                        if(game.player.autopilot === false) {
+                            game.player.path = [];
+
+                            // Only calculate a path if we've seen this cell
+                            if(game.dungeon.levels[game.level].explored[game.mouse.x][game.mouse.y]) {
+                                game.player.path = game.calculatePath(game.player.x, game.player.y, game.mouse.x, game.mouse.y);
+                                // Remove the top position since this is the players current position
+                                game.player.path.shift();
+                            }
+                        }
+                    }
+                    break;
+                case 'mouseclick':
+                    // Start the player's autopilot following the computed path
+                    game.player.automove(game);
+                    game.state = State.AUTOPILOT;
+                    break;
             }
         }
     },
     CURSOR: {
         id: 2,
         render: true,
-        input: function(key, game) {
+        input: function(key, e, game) {
             'use strict';
             switch(key) {
-                // Escape or x - Go to PLAYER state
+                // Escape / x - Go to PLAYER state
                 case 'escape':
                 case 'x':
                     game.player.path = [];
@@ -99,7 +123,7 @@ var State = {
                 case 'enter':
                     // Start the player's autopilot following the computed path
                     game.player.automove(game);
-                    game.state = State.PLAYER;
+                    game.state = State.AUTOPILOT;
                     game.cursor = undefined;
                     break;
                 // Numpad 8 / k - Move cursor north
@@ -145,6 +169,48 @@ var State = {
                 case 'y':
                     game.cursor.x -= 1;
                     game.cursor.y -= 1;
+                    break;
+                case 'mousemove':
+                    var previous = $.extend({}, game.mouse);
+                    game.mouse.x = Math.floor(e.offsetX / 16);
+                    game.mouse.y = Math.floor(e.offsetY / 16);
+
+                    // Only do stuff if the mouse has actually moved a tile and not just a couple of pixels
+                    if(previous.x !== game.mouse.x || previous.y !== game.mouse.y) {
+                        game.mouselook = true; // Allow the player to examine with the mouse
+                        game.updateInterface();
+                    
+                        // Only calculate a path if the autopilot is off (we're not traversing a path right now)
+                        if(game.player.autopilot === false) {
+                            game.player.path = [];
+
+                            // Only calculate a path if we've seen this cell
+                            if(game.dungeon.levels[game.level].explored[game.mouse.x][game.mouse.y]) {
+                                game.player.path = game.calculatePath(game.player.x, game.player.y, game.mouse.x, game.mouse.y);
+                                // Remove the top position since this is the players current position
+                                game.player.path.shift();
+                            }
+                        }
+                    }
+                    break;
+                case 'mouseclick':
+                    // Start the player's autopilot following the computed path
+                    game.player.automove(game);
+                    game.state = State.AUTOPILOT;
+                    break;
+            }
+        }
+    },
+    AUTOPILOT: {
+        id: 3,
+        render: true,
+        input: function(key, e, game) {
+            'use strict';
+            switch(key) {
+                case 'escape':
+                    game.state = State.PLAYER;
+                    game.player.autopilot = false;
+                    game.player.path = [];
                     break;
             }
         }

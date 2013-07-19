@@ -23,6 +23,11 @@ Player.prototype.move = function(direction, game) {
     if(canMoveAfterInteraction === true && game.dungeon.levels[game.level].cells[x][y].entityPasses === true) {
         game.player.x = x;
         game.player.y = y;
+        
+        // we need to update the path, if there is any
+        if(this.path.length > 0) {
+            this.path = game.calculatePath(this.x, this.y, game.mouse.x, game.mouse.y);
+        }
 
         $('.character-position').text('{ x: ' + x + ', y: ' + y + ' }');
 
@@ -63,16 +68,19 @@ Player.prototype.automove = function(game) {
             window.setTimeout(this.automove.bind(this, game), 50);
         // If we interacted but cannot move
         } else if(interacted === true) {
+            game.state = State.PLAYER;
             this.autopilot = false;
             this.path = [];
             
             game.next();
         // We cannot go any further
         } else {
+            game.state = State.PLAYER;
             this.autopilot = false;
             this.path = [];
         }
     } else {
+        game.state = State.PLAYER;
         this.autopilot = false;
     }
 };
