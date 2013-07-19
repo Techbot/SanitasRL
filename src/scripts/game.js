@@ -26,36 +26,24 @@ var Game = function() {
         this.mouse.x = Math.floor(e.offsetX / 16);
         this.mouse.y = Math.floor(e.offsetY / 16);
 
-        // Only calculate a path if the autopilot is off (we're not traversing a path right now)
-        // and the mouse has actually moved a tile and not just a couple of pixels
-        if(this.player.autopilot === false && (previous.x !== this.mouse.x || previous.y !== this.mouse.y)) {
-            this.player.path = [];
+        // Only do stuff if the mouse has actually moved a tile and not just a couple of pixels
+        if(previous.x !== this.mouse.x || previous.y !== this.mouse.y) {
+            this.mouselook = true; // Allow the player to examine with the mouse
+            this.updateInterface();
+        
+            // Only calculate a path if the autopilot is off (we're not traversing a path right now)
+            if(this.player.autopilot === false) {
+                this.player.path = [];
 
-            // Only calculate a path if we've seen this cell
-            if(this.dungeon.levels[this.level].explored[this.mouse.x][this.mouse.y]) {
-                var astar = new ROT.Path.AStar(this.mouse.x, this.mouse.y, function(x, y) {
-                    /** This piece of code can defenitly be cleaned up **/
-                    if(x > 0 && y > 0 && x < this.dungeon.width && y < this.dungeon.height) {
-                        var a = this.dungeon.levels[this.level].cells[x][y].autopilotPasses;
-                        var p = this.dungeon.levels[this.level].cells[x][y].entityPasses;
-                        
-                        if(a === true) {
-                            return true;
-                        }
-                        return p === undefined ? false : p;
-                    }
-
-                    return false;
-                }.bind(this));
-                astar.compute(this.player.x, this.player.y, function(x, y) {
-                    this.player.path.push(x.toString() + ',' + y.toString());
-                }.bind(this));
+                // Only calculate a path if we've seen this cell
+                if(this.dungeon.levels[this.level].explored[this.mouse.x][this.mouse.y]) {
+                    this.player.path = this.calculatePath(this.player.x, this.player.y, this.mouse.x, this.mouse.y);
+                    // Remove the top position since this is the players current position
+                    this.player.path.shift();
+                }
             }
         }
     }.bind(this)).on('click', function(e) {
-        // Remove the top position since this is the players current position
-        this.player.path.shift();
-        
         // Start the player's autopilot following the computed path
         this.player.autopilot = true;
         this.player.automove(this);
@@ -95,6 +83,7 @@ var Game = function() {
     // Mouse tracking and pathfinding from player to mouse
     this.mouse = { x: undefined, y: undefined };
     this.player.path = [];
+    this.mouselook = false;
 
     /*** TEMPORARY fov AND light 2d-arrays ***/ // Why / how are they temporary? What was the thought behind this?
     this.fov = [];
@@ -131,6 +120,30 @@ var Game = function() {
 
     // Update the interface
     this.updateInterface();
+};
+
+Game.prototype.calculatePath = function(sx, sy, dx, dy) {
+    var path = [];
+    
+    var astar = new ROT.Path.AStar(dx, dy, function(x, y) {
+        /** This piece of code can defenitly be cleaned up **/
+        if(x > 0 && y > 0 && x < this.dungeon.width && y < this.dungeon.height) {
+            var a = this.dungeon.levels[this.level].cells[x][y].autopilotPasses;
+            var p = this.dungeon.levels[this.level].cells[x][y].entityPasses;
+            
+            if(a === true) {
+                return true;
+            }
+            return p === undefined ? false : p;
+        }
+
+        return false;
+    }.bind(this));
+    astar.compute(sx, sy, function(x, y) {
+        path.push(x.toString() + ',' + y.toString());
+    }.bind(this));
+    
+    return path;
 };
 
 Game.prototype.computeFOV = function(sx, sy) {
@@ -255,7 +268,12 @@ Game.prototype.updateInterface = function() {
 
         var look = '', position;
         if(this.state.id === State.PLAYER.id) {
-            position = { x: this.player.x, y: this.player.y };
+            // If we recently moved the mouse, show whats there instead of below the player
+            if(this.mouselook === true) {
+                position = this.mouse;
+            } else {
+                position = { x: this.player.x, y: this.player.y };
+            }
         } else if(this.state.id === State.EXAMINE.id) {
             position = { x: this.cursor.x, y: this.cursor.y };
         }
@@ -275,6 +293,18 @@ Game.prototype.updateInterface = function() {
         } else {
             $('.character-sight-header').text('You can\'t see that far');
             $('.character-sight').html('');
+        }
+        
+        //
+        if(this.state.id === State.EXAMINE.id) {
+            this.player.path = [];
+
+            // Only calculate a path if we've seen this cell
+            if(this.dungeon.levels[this.level].explored[this.cursor.x][this.cursor.y]) {
+                this.player.path = this.calculatePath(this.player.x, this.player.y, this.cursor.x, this.cursor.y);
+                // Remove the top position since this is the players current position
+                this.player.path.shift();
+            }
         }
     }
 };

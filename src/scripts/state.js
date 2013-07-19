@@ -91,6 +91,15 @@ var State = {
                 // Escape or x - Go to PLAYER state
                 case 'escape':
                 case 'x':
+                    game.player.path = [];
+                    game.state = State.PLAYER;
+                    game.cursor = undefined;
+                    break;
+                // Enter - Autopilot
+                case 'enter':
+                    // Start the player's autopilot following the computed path
+                    game.player.autopilot = true;
+                    game.player.automove(game);
                     game.state = State.PLAYER;
                     game.cursor = undefined;
                     break;
