@@ -32,7 +32,7 @@ Player.prototype.move = function(direction, game) {
     }
 };
 
-Player.prototype.automove = function() {
+Player.prototype.automove = function(game) {
     'use strict';
 
     if(this.path.length > 0) {
@@ -47,7 +47,7 @@ Player.prototype.automove = function() {
             game.next();
             // When monsters are implemented, this is the time to check if we should abort the autopilot
             // if any new interesting stuff came into view
-            window.setTimeout(this.automove.bind(this), 50);
+            window.setTimeout(this.automove.bind(this, game), 50);
         } else {
             this.autopilot = false;
             this.path = [];

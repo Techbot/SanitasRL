@@ -47,7 +47,14 @@ Dungeon.prototype.generate = function(game) {
     var rooms = generator.getRooms().randomize();
 
     // Generate the cellular porition of the level
-    var offset = { x: undefined, y: undefined }, cellular = [];
+    var offset = { x: undefined, y: undefined }, cellular = [],
+        create = function(x, y, value) {
+            if(value === 1) {
+                level.cells[x + offset.x][y + offset.y] = Tile.FLOOR;//Tile.CELLULAR_HIGHLIGHT;
+                cellular.push({ x: x + offset.x, y: y + offset.y });
+            }
+        };
+
     for(i = 0; i < 3; i += 1) {
         generator = new ROT.Map.Cellular(ROT.RNG.getInt(10, 20), ROT.RNG.getInt(10, 20));
         generator.randomize(0.5);
@@ -59,12 +66,7 @@ Dungeon.prototype.generate = function(game) {
         offset.x = ROT.RNG.getInt(2, this.width - 20 - 2); // Width - maximum cullular size - 2 for walls
         offset.y = ROT.RNG.getInt(2, this.height - 20 - 2); // Height - maximum cellular size - 2 for walls
 
-        generator.create(function(x, y, value) {
-            if(value === 1) {
-                level.cells[x + offset.x][y + offset.y] = Tile.FLOOR;//Tile.CELLULAR_HIGHLIGHT;
-                cellular.push({ x: x + offset.x, y: y + offset.y });
-            }
-        });
+        generator.create(create);
     }
 
     // Add oasis-like growth in the cellular porition of the level
@@ -168,7 +170,7 @@ Dungeon.prototype.generate = function(game) {
     // Loop over all rooms, adding doors
     for(i = 0; i < rooms.length; i += 1) {
         var door;
-        for(var door in rooms[i]._doors) {
+        for(door in rooms[i]._doors) {
             if(rooms[i]._doors.hasOwnProperty(door)) {
                 var door_x = parseInt(door.split(',')[0], 10),
                     door_y = parseInt(door.split(',')[1], 10);

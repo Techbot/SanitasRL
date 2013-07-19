@@ -49,7 +49,7 @@ var Game = function() {
     }.bind(this)).on('click', function(e) {
         // Start the player's autopilot following the computed path
         this.player.autopilot = true;
-        this.player.automove();
+        this.player.automove(game);
     }.bind(this));
 
     // Get the canvas context from the DOM
@@ -64,7 +64,7 @@ var Game = function() {
 
     // Shadowcaster for field of view
     this.shadowcasting = new ROT.FOV.PreciseShadowcasting(function(x, y) {
-        if(x > 0 && x < this.dungeon.width && y > 0 && y < this.dungeon.height && this.dungeon.levels[this.level].cells[x][y].id !== Tiles.EMPTY.id) {
+        if(x > 0 && x < this.dungeon.width && y > 0 && y < this.dungeon.height && this.dungeon.levels[this.level].cells[x][y].id !== Tile.EMPTY.id) {
             return this.dungeon.levels[this.level].cells[x][y].lightPasses;
         }
 
@@ -87,10 +87,13 @@ var Game = function() {
     this.mouse = { x: undefined, y: undefined };
     this.player.path = [];
 
-    /*** TEMPORARY fov AND light 2d-arrays ***/
-    for(this.fov = []; this.fov.length < this.dungeon.width; this.fov.push([])); // generate a 2d array for field of view
-    for(this.light = []; this.light.length < this.dungeon.width; this.light.push([])); // generate a 2d array for lighting
-    /***                                   ***/
+    /*** TEMPORARY fov AND light 2d-arrays ***/ // Why / how are they temporary? What was the thought behind this?
+    this.fov = [];
+    this.light = [];
+    for(var i = 0; i < this.dungeon.width; i++) {
+        this.fov.push([]);
+        this.light.push([]);
+    }
 
     // Update the field of view
     this.computeFOV(this.player.x, this.player.y);
@@ -172,7 +175,6 @@ Game.prototype.render = function() {
         var x, y, tile, color;
         for(x = 0; x < this.dungeon.width; x += 1) {
             for(y = 0; y < this.dungeon.height; y += 1) {
-                var tile;
                 if(x === this.player.x && y === this.player.y) {
                     tile = { x: 0, y: 2, color: undefined };
                 } else {
