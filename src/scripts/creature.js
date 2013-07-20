@@ -3,7 +3,7 @@ var Creature = function(x, y) {
 
     this.x = x;
     this.y = y;
-    
+
     this.image = {
         x: 1,
         y: 2,

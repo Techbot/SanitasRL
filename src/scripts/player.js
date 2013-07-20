@@ -6,7 +6,7 @@ var Player = function(x, y) {
 
     this.autopilot = false;
     this.path = [];
-    
+
     this.inventory = new Inventory();
 };
 
@@ -25,7 +25,7 @@ Player.prototype.move = function(direction, game) {
     if(canMoveAfterInteraction === true && game.dungeon.levels[game.level].cells[x][y].entityPasses === true) {
         game.player.x = x;
         game.player.y = y;
-        
+
         // we need to update the path, if there is any
         if(this.path.length > 0) {
             this.path = game.calculatePath(this.x, this.y, game.cursor.x, game.cursor.y);
@@ -44,7 +44,7 @@ Player.prototype.automove = function(game) {
 
     if(this.path.length > 0) {
         this.autopilot = true;
-    
+
         var next = this.path.shift().split(','),
             x = parseInt(next[0], 10),
             y = parseInt(next[1], 10),
@@ -56,14 +56,14 @@ Player.prototype.automove = function(game) {
             canMoveAfterInteraction = game.dungeon.levels[game.level].cells[x][y].interact(x, y, game);
             interacted = true;
         }
-        
+
         // If we can move after the interaction, do so
         if(canMoveAfterInteraction === true && game.dungeon.levels[game.level].cells[x][y].entityPasses === true) {
             game.player.x = x;
             game.player.y = y;
-            
+
             $('.character-position').text('{ x: ' + x + ', y: ' + y + ' }');
-            
+
             game.next();
             // When monsters are implemented, this is the time to check if we should abort the autopilot
             // if any new interesting stuff came into view
@@ -73,7 +73,7 @@ Player.prototype.automove = function(game) {
             game.state = State.PLAYER;
             this.autopilot = false;
             this.path = [];
-            
+
             game.next();
         // We cannot go any further
         } else {

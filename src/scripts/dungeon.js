@@ -28,7 +28,7 @@ Dungeon.prototype.at = function(x, y, level) {
             return this.levels[level].creatures[i].image;
         }
     }
-    
+
     if(this.levels[level].cells[x][y].id !== Tile.EMPTY.id) {
         return {
             x: this.levels[level].cells[x][y].image.x,
@@ -470,7 +470,7 @@ Dungeon.prototype.generate = function(game) {
             if(level.cells[x][y].light !== undefined) {
                 game.lighting.setLight(x, y, level.cells[x][y].light);
             }
-            
+
             if(level.cells[x][y].spawnable === true && ROT.RNG.getPercentage() < 5) {
                 level.creatures.push(new Creature(x, y));
             }
