@@ -119,3 +119,27 @@ pre i, .gold {
 .sidebar .indent:last-of-type {
     margin-bottom: 0;
 }
+
+.sidebar .touch-controls {
+    width: 156px;
+    position: absolute;
+    bottom: 0;
+    left: 22px;
+    
+    display: none;
+}
+
+.sidebar .touch-controls div {
+    width: 40px;
+    height: 40px;
+    margin: 5px;
+    float: left;
+    border: 1px solid #fff;
+    text-align: center;
+    font-size: 40px;
+    line-height: 44px;
+    cursor: pointer;
+}
+.sidebar .touch-controls div:hover, .sidebar .touch-controls div:active {
+    background: rgba(255, 255, 255, 0.1);
+}

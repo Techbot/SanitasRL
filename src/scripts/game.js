@@ -28,6 +28,11 @@ var Game = function() {
     }.bind(this)).on('mouseleave', function(e) {
         this.input('mouseleave', e);
     }.bind(this));
+    
+    // Bind to the virtual controls
+    $('.touch-controls div').on('click', function(e) {
+        this.input($(e.target).data('key'));
+    }.bind(this));
 
     // Get the canvas context from the DOM
     this.canvas = document.getElementById('canvas').getContext('2d');
@@ -83,6 +88,7 @@ var Game = function() {
     if(this.debug === true) {
         $('.window').hide();
         $('.character-position').show();
+        $('.touch-controls').show();
         this.state = State.PLAYER;
     }
 
@@ -313,6 +319,7 @@ Game.prototype.input = function(key, e) {
         case 'ctrl+d':
             this.debug = !this.debug;
             $('.character-position').toggle();
+            $('.touch-controls').toggle();
             break;
         default:
             this.state.input(key, e, this);
