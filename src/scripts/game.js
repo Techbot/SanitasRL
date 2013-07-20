@@ -28,7 +28,7 @@ var Game = function() {
     }.bind(this)).on('mouseleave', function(e) {
         this.input('mouseleave', e);
     }.bind(this));
-    
+
     // Bind to the virtual controls
     $('.touch-controls div').on('click', function(e) {
         this.input($(e.target).data('key'));
@@ -201,7 +201,7 @@ Game.prototype.render = function() {
         for(x = 0; x < this.dungeon.width; x += 1) {
             for(y = 0; y < this.dungeon.height; y += 1) {
                 if(x === this.player.x && y === this.player.y) {
-                    tile = { x: 0, y: 2, color: 'rgb(68, 68, 68)' };
+                    tile = { x: 0, y: 2, color: 'rgb(162, 162, 162)' };
                 } else {
                     tile = this.dungeon.at(x, y, this.level);
                 }
