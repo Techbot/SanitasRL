@@ -98,7 +98,7 @@ var State = {
                             game.player.path = [];
 
                             // Only calculate a path if we've seen this cell
-                            if(game.dungeon.levels[game.level].explored[game.cursor.x][game.cursor.y]) {
+                            if(game.dungeon.levels[game.level].explored[game.cursor.x][game.cursor.y] || game.debug === true) {
                                 game.player.path = game.calculatePath(game.player.x, game.player.y, game.cursor.x, game.cursor.y);
                                 // Remove the top position since this is the players current position
                                 game.player.path.shift();
