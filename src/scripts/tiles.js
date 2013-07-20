@@ -20,9 +20,8 @@ var Tile = {
         reflects: true,
         spawnable: true,
         look: 'The dungeon floor',
-        image: { x: 0, y: 0 },
+        image: { x: 0, y: 0, color: 'rgb(68, 68, 68)' },
         light: undefined,
-        color: 'rgb(68, 68, 68)',
         interact: undefined
     },
     GRASS: {
@@ -33,9 +32,8 @@ var Tile = {
         reflects: true,
         spawnable: true,
         look: 'Some grass',
-        image: { x: 0, y: 0 },
+        image: { x: 0, y: 0, color: 'rgb(32, 122, 48)' },
         light: undefined,
-        color: 'rgb(34, 122, 48)',
         interact: undefined
     },
     FOILAGE: {
@@ -46,9 +44,8 @@ var Tile = {
         reflects: true,
         spawnable: true,
         look: 'Some foilage',
-        image: { x: 1, y: 0 },
+        image: { x: 1, y: 0, color: 'rgb(34, 122, 48)' },
         light: undefined,
-        color: 'rgb(34, 122, 48)',
         interact: undefined
     },
     WATER: {
@@ -59,9 +56,8 @@ var Tile = {
         reflects: true,
         spawnable: false,
         look: 'A small pond of water',
-        image: { x: 9, y: 0 },
+        image: { x: 9, y: 0, color: 'rgb(84, 84, 255)' },
         light: undefined,
-        color: 'rgb(84, 84, 255)',
         interact: undefined
     },
     WALL: {
@@ -72,9 +68,8 @@ var Tile = {
         reflects: false,
         spawnable: false,
         look: 'The dungeon wall',
-        image: { x: 2, y: 0 },
+        image: { x: 2, y: 0, color: 'rgb(162, 162, 162)' },
         light: undefined,
-        color: 'rgb(162, 162, 162)',
         interact: undefined
     },
     PILLAR: {
@@ -85,9 +80,8 @@ var Tile = {
         reflects: true,
         spawnable: false,
         look: 'A large pillar',
-        image: { x: 2, y: 0 },
+        image: { x: 2, y: 0, color: 'rgb(162, 162, 162)' },
         light: undefined,
-        color: 'rgb(68, 68, 68)',
         interact: undefined
     },
     DOOR: {
@@ -98,9 +92,8 @@ var Tile = {
         reflects: false,
         spawnable: false,
         look: 'A closed door',
-        image: { x: 3, y: 0 },
+        image: { x: 3, y: 0, color: 'rgb(162, 162, 162)' },
         light: undefined,
-        color: 'rgb(162, 162, 162)',
         interact: function(x, y, game) {
             'use strict';
             game.dungeon.levels[game.level].cells[x][y] = Tile.DOOR_OPEN;
@@ -115,9 +108,8 @@ var Tile = {
         reflects: true,
         spawnable: false,
         look: 'An open door',
-        image: { x: 4, y: 0 },
+        image: { x: 4, y: 0, color: 'rgb(68, 68, 68)' },
         light: undefined,
-        color: 'rgb(68, 68, 68)',
         interact: undefined
     },
     UPWARD_STAIRCASE: {
@@ -128,9 +120,8 @@ var Tile = {
         reflects: true,
         spawnable: false,
         look: 'A staircase leading up',
-        image: { x: 5, y: 0 },
+        image: { x: 5, y: 0, color: 'rgb(162, 162, 162)' },
         light: undefined,
-        color: 'rgb(162, 162, 162)',
         interact: function(x, y, game) {
             'use strict';
             // Generate a new level
@@ -155,9 +146,8 @@ var Tile = {
         reflects: true,
         spawnable: false,
         look: 'A staircase leading down',
-        image: { x: 6, y: 0 },
+        image: { x: 6, y: 0, color: 'rgb(162, 162, 162)' },
         light: undefined,
-        color: 'rgb(162, 162, 162)',
         interact: function(x, y, game) {
             'use strict';
             // Generate a new level
@@ -188,9 +178,8 @@ var Tile = {
         reflects: true,
         spawnable: false,
         look: 'A staircase leading out of the dungeon',
-        image: { x: 5, y: 0 },
+        image: { x: 5, y: 0, color: 'rgb(162, 162, 162)' },
         light: undefined,
-        color: 'rgb(162, 162, 162)',
         interact: undefined
     },
     COCA_PLANT: {
@@ -201,9 +190,8 @@ var Tile = {
         reflects: true,
         spawnable: false,
         look: 'A plant with large lightgreen leaves',
-        image: { x: 7, y: 0 },
+        image: { x: 7, y: 0, color: 'rgb(34, 122, 48)' },
         light: undefined,
-        color: 'rgb(34, 122, 48)',
         interact: function(x, y, game) {
             'use strict';
             // Replace this with foilage and place x coca leafs in the players inventory
@@ -220,9 +208,8 @@ var Tile = {
         reflects: true,
         spawnable: false,
         look: 'A plant carrying a large poppy',
-        image: { x: 7, y: 0 },
+        image: { x: 7, y: 0, color: 'rgb(21, 93, 32)' },
         light: undefined,
-        color: 'rgb(21, 93, 32)',
         interact: function(x, y, game) {
             'use strict';
             // Replace this with foilage and place 1 opium poppy in the players inventory
@@ -239,9 +226,8 @@ var Tile = {
         reflects: false,
         spawnable: false,
         look: 'An untapped well',
-        image: { x: 8, y: 0 },
+        image: { x: 8, y: 0, color: 'rgb(138, 30, 81)' },
         light: [138, 30, 81],
-        color: 'rgb(138, 30, 81)',
         interact: function(x, y, game) {
             'use strict';
             game.dungeon.levels[game.level].cells[x][y] = Tile.WELL_EMPTY;
@@ -257,9 +243,8 @@ var Tile = {
         reflects: false,
         spawnable: false,
         look: 'An empty well',
-        image: { x: 8, y: 0 },
+        image: { x: 8, y: 0, color: 'rgb(104, 36, 68)' },
         light: undefined,
-        color: 'rgb(104, 36, 68)',
         interact: undefined
     },
     // The following ones are only for debugging pruposes
@@ -271,9 +256,8 @@ var Tile = {
         reflects: true,
         spawnable: true,
         look: 'The dungeon floor',
-        image: { x: 0, y: 0 },
+        image: { x: 0, y: 0, color: 'rgb(255, 255, 0)' },
         light: undefined,
-        color: 'rgb(255, 255, 0)',
         interact: undefined
     },
     CELLULAR_HIGHLIGHT: {
@@ -284,9 +268,8 @@ var Tile = {
         reflects: true,
         spawnable: true,
         look: 'The dungeon floor',
-        image: { x: 0, y: 0 },
+        image: { x: 0, y: 0, color: 'rgb(255, 0, 255)' },
         light: undefined,
-        color: 'rgb(255, 0, 255)',
         interact: undefined
     }
 };

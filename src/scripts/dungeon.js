@@ -30,11 +30,7 @@ Dungeon.prototype.at = function(x, y, level) {
     }
 
     if(this.levels[level].cells[x][y].id !== Tile.EMPTY.id) {
-        return {
-            x: this.levels[level].cells[x][y].image.x,
-            y: this.levels[level].cells[x][y].image.y,
-            color: this.levels[level].cells[x][y].color
-        };
+        return this.levels[level].cells[x][y].image;
     }
 
     return null;
