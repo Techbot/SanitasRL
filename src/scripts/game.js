@@ -99,13 +99,13 @@ var Game = function() {
 
 Game.prototype.calculatePath = function(sx, sy, dx, dy) {
     var path = [];
-    
+
     var astar = new ROT.Path.AStar(dx, dy, function(x, y) {
         /** This piece of code can defenitly be cleaned up **/
         if(x > 0 && y > 0 && x < this.dungeon.width && y < this.dungeon.height) {
             var a = this.dungeon.levels[this.level].cells[x][y].autopilotPasses;
             var p = this.dungeon.levels[this.level].cells[x][y].entityPasses;
-            
+
             if(a === true) {
                 return true;
             }
@@ -117,7 +117,7 @@ Game.prototype.calculatePath = function(sx, sy, dx, dy) {
     astar.compute(sx, sy, function(x, y) {
         path.push(x.toString() + ',' + y.toString());
     }.bind(this));
-    
+
     return path;
 };
 
@@ -268,7 +268,7 @@ Game.prototype.updateInterface = function() {
             $('.character-sight-header').text('You can\'t see that far');
             $('.character-sight').html('');
         }
-        
+
         /** This code should really not be here... **/
         if(this.state.id === State.CURSOR.id) {
             this.player.path = [];

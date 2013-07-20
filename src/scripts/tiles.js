@@ -123,7 +123,7 @@ var Tile = {
     UPWARD_STAIRCASE: {
         id: 8,
         entityPasses: true,
-        autopilotPasses: true,
+        autopilotPasses: false,
         lightPasses: true,
         reflects: true,
         spawnable: false,
@@ -150,7 +150,7 @@ var Tile = {
     DOWNWARD_STAIRCASE: {
         id: 9,
         entityPasses: true,
-        autopilotPasses: true,
+        autopilotPasses: false,
         lightPasses: true,
         reflects: true,
         spawnable: false,
