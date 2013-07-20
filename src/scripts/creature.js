@@ -6,6 +6,7 @@ var Creature = function(x, y) {
     
     this.image = {
         x: 1,
-        y: 2
+        y: 2,
+        color: 'rgb(204, 0, 0)'
     };
 };

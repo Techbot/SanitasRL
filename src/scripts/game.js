@@ -188,12 +188,12 @@ Game.prototype.render = function() {
         this.canvas.clearRect(0, 0, 800, 576);
 
         if(this.pulseDir === true) {
-            this.pulse += 0.3;
+            this.pulse += 0.5;
         } else {
-            this.pulse -= 0.3;
+            this.pulse -= 0.5;
         }
 
-        if(this.pulse >= 20 || this.pulse <= 0) {
+        if(this.pulse >= 20 || this.pulse <= -20) {
             this.pulseDir = !this.pulseDir;
         }
 
@@ -201,7 +201,7 @@ Game.prototype.render = function() {
         for(x = 0; x < this.dungeon.width; x += 1) {
             for(y = 0; y < this.dungeon.height; y += 1) {
                 if(x === this.player.x && y === this.player.y) {
-                    tile = { x: 0, y: 2, color: undefined };
+                    tile = { x: 0, y: 2, color: 'rgb(68, 68, 68)' };
                 } else {
                     tile = this.dungeon.at(x, y, this.level);
                 }

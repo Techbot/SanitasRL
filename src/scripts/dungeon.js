@@ -25,11 +25,7 @@ Dungeon.prototype.at = function(x, y, level) {
     'use strict';
     for(var i = 0; i < this.levels[level].creatures.length; i++) {
         if(this.levels[level].creatures[i].x === x && this.levels[level].creatures[i].y === y) {
-            return {
-                x: this.levels[level].creatures[i].image.x,
-                y: this.levels[level].creatures[i].image.y,
-                color: undefined
-            };
+            return this.levels[level].creatures[i].image;
         }
     }
     
