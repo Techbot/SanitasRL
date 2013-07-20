@@ -8,6 +8,12 @@ var Player = function(x, y) {
     this.path = [];
 
     this.inventory = new Inventory();
+
+    this.image = {
+        x: 0,
+        y: 2,
+        color: 'rgb(162, 162, 162)'
+    };
 };
 
 Player.prototype.move = function(direction, game) {
