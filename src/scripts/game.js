@@ -10,12 +10,12 @@ var Game = function() {
     $(document).on('keydown', function(e) {
         var key = e.which + (e.ctrlKey ? 400 : (e.altKey ? 600 : 0));
         if(Keys.hasOwnProperty(key)) {
-            this.input(Keys[key]);
+            this.input(Keys[key], e);
             return false;
         }
     }.bind(this)).on('keypress', function(e) {
         if(Keys.hasOwnProperty(e.which + 200)) {
-            this.input(Keys[e.which + 200]);
+            this.input(Keys[e.which + 200], e);
             return false;
         }
     }.bind(this));
@@ -79,7 +79,7 @@ var Game = function() {
     this.pulse = 0;
 
     // Set the debug mode
-    this.debug = true;
+    this.debug = false;
     if(this.debug === true) {
         $('.window').hide();
         $('.character-position').show();
@@ -97,6 +97,7 @@ var Game = function() {
     this.updateInterface();
 };
 
+// Calculates an AStar path between [sx,sy] and [dx,dy]
 Game.prototype.calculatePath = function(sx, sy, dx, dy) {
     var path = [];
 
@@ -119,6 +120,27 @@ Game.prototype.calculatePath = function(sx, sy, dx, dy) {
     }.bind(this));
 
     return path;
+};
+
+// Returns the furthest tile away from [x,y] in direction
+// without any barriers (autopilotPasses)
+Game.prototype.traverse = function(x, y, direction) {
+    var passes = true,
+        nx = x + ROT.DIRS['8'][direction][0],
+        ny = y + ROT.DIRS['8'][direction][1];
+
+    while(passes === true) {
+        if(this.dungeon.levels[game.level].cells[nx][ny].autopilotPasses === true) {
+            x = nx;
+            y = ny;
+            nx = x + ROT.DIRS['8'][direction][0];
+            ny = y + ROT.DIRS['8'][direction][1];
+        } else {
+            passes = false;
+        }
+    }
+
+    return { x: x, y: y };
 };
 
 Game.prototype.computeFOV = function(sx, sy) {

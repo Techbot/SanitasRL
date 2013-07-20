@@ -86,3 +86,16 @@ Player.prototype.automove = function(game) {
         this.autopilot = false;
     }
 };
+
+Player.prototype.shiftMove = function(direction, game) {
+    var dest = game.traverse(this.x, this.y, direction);
+    this.path = game.calculatePath(this.x, this.y, dest.x, dest.y);
+    // Remove the top position since this is the players current position
+    this.path.shift();
+
+    if(this.path.length > 0) {
+        game.state = State.AUTOPILOT;
+        this.automove(game);
+    }
+};
+

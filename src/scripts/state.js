@@ -37,40 +37,80 @@ var State = {
                 case 'k':
                     game.player.move(ROT.NORTH, game);
                     break;
+                // Shift + Numpad 8 / K - Automove player north
+                case 'up':
+                case 'K':
+                    game.player.shiftMove(ROT.NORTH, game);
+                    break;
                 // Numpad 9 / u - Move player north east
                 case 'numpad9':
                 case 'u':
                     game.player.move(ROT.NORTH_EAST, game);
+                    break;
+                // Shift + Numpad 9 / U - Automove player north east
+                case 'pageup':
+                case 'U':
+                    game.player.shiftMove(ROT.NORTH_EAST, game);
                     break;
                 // Numpad 6 / l - Move player east
                 case 'numpad6':
                 case 'l':
                     game.player.move(ROT.EAST, game);
                     break;
+                // Shift + Numpad 6 / L - Automove player east
+                case 'right':
+                case 'L':
+                    game.player.shiftMove(ROT.EAST, game);
+                    break;
                 // Numpad 3 / n - Move player south east
                 case 'numpad3':
                 case 'n':
                     game.player.move(ROT.SOUTH_EAST, game);
+                    break;
+                // Shift + Numpad 3 / N - Automove player south east
+                case 'pagedown':
+                case 'N':
+                    game.player.shiftMove(ROT.SOUTH_EAST, game);
                     break;
                 // Numpad 2 / j - Move player south
                 case 'numpad2':
                 case 'j':
                     game.player.move(ROT.SOUTH, game);
                     break;
+                // Shift + Numpad 2 / J - Automove player south
+                case 'down':
+                case 'J':
+                    game.player.shiftMove(ROT.SOUTH, game);
+                    break;
                 // Numpad 1 / b - Move player south west
                 case 'numpad1':
                 case 'b':
                     game.player.move(ROT.SOUTH_WEST, game);
+                    break;
+                // Shift + Numpad 1 / B - Automove player south west
+                case 'end':
+                case 'B':
+                    game.player.shiftMove(ROT.SOUTH_WEST, game);
                     break;
                 // Numpad 4 / h - Move player west
                 case 'numpad4':
                 case 'h':
                     game.player.move(ROT.WEST, game);
                     break;
+                // Shift + Numpad 4 / H - Automove player west
+                case 'left':
+                case 'H':
+                    game.player.shiftMove(ROT.WEST, game);
+                    break;
                 // Numpad 7 / y - Move player north west
                 case 'numpad7':
                 case 'y':
                     game.player.move(ROT.NORTH_WEST, game);
+                    break;
+                // Shift + Numpad 7 / Y - Automove player north west
+                case 'home':
+                case 'Y':
+                    game.player.shiftMove(ROT.NORTH_WEST, game);
                     break;
                 // Numpad 5 / . - Wait one turn
                 case 'numpad5':
