@@ -115,7 +115,7 @@ var State = {
                 // Numpad 5 / . - Wait one turn
                 case 'numpad5':
                 case '.':
-                    game.next();
+                    game.next(100); // Wait for 100
                     break;
                 // i - Open inventory
                 case 'i':
@@ -280,5 +280,12 @@ var State = {
             window.show();
         },
         previousState: null
+    },
+    NONPLAYER: {
+        id: 5,
+        render: true,
+        input: function(key, e, game) {
+            'use strict';
+        }
     }
 };

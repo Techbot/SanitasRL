@@ -14,8 +14,7 @@ var Level = function(length) {
     this.endingPosition = { x: undefined, y: undefined };
     this.creatures = [];
 
-    var i;
-    for(i = 0; i < length; i += 1) {
+    for(var i = 0; i < length; i += 1) {
         this.cells[i] = [];
         this.explored[i] = [];
     }
@@ -59,15 +58,15 @@ Dungeon.prototype.generate = function(game) {
         };
 
     for(i = 0; i < 3; i += 1) {
-        generator = new ROT.Map.Cellular(ROT.RNG.getInt(10, 20), ROT.RNG.getInt(10, 20));
+        generator = new ROT.Map.Cellular(ROT.RNG.getInteger(10, 20), ROT.RNG.getInteger(10, 20));
         generator.randomize(0.5);
 
         for(j = 0; j < 4; j += 1) {
             generator.create();
         }
 
-        offset.x = ROT.RNG.getInt(2, this.width - 20 - 2); // Width - maximum cullular size - 2 for walls
-        offset.y = ROT.RNG.getInt(2, this.height - 20 - 2); // Height - maximum cellular size - 2 for walls
+        offset.x = ROT.RNG.getInteger(2, this.width - 20 - 2); // Width - maximum cullular size - 2 for walls
+        offset.y = ROT.RNG.getInteger(2, this.height - 20 - 2); // Height - maximum cellular size - 2 for walls
 
         generator.create(create);
     }
@@ -75,9 +74,9 @@ Dungeon.prototype.generate = function(game) {
     // Add oasis-like growth in the cellular porition of the level
     var growth = {
         origin: cellular.random(),
-        size: ROT.RNG.getInt(5, 15),
+        size: ROT.RNG.getInteger(5, 15),
         start: { x: undefined, y: undefined },
-        type: (ROT.RNG.getInt(0, 1) === 1 ? Tile.OPIUM_PLANT : Tile.COCA_PLANT)
+        type: (ROT.RNG.getInteger(0, 1) === 1 ? Tile.OPIUM_PLANT : Tile.COCA_PLANT)
     }, grass = [];
     growth.start.x = growth.origin.x - Math.floor(growth.size / 2);
     growth.start.y = growth.origin.y - Math.floor(growth.size / 2);
@@ -117,7 +116,7 @@ Dungeon.prototype.generate = function(game) {
             level.cells[center.x + 1][center.y + 1] = Tile.PILLAR;
             level.cells[center.x - 1][center.y + 1] = Tile.PILLAR;
         // Well room
-        } else if(ROT.RNG.getInt(0, 5) === 0 && width % 2 !== 0 && height % 2 !== 0) {
+        } else if(ROT.RNG.getInteger(0, 5) === 0 && width % 2 !== 0 && height % 2 !== 0) {
             level.cells[center.x][center.y] = Tile.WELL;
         }
     }
@@ -461,6 +460,7 @@ Dungeon.prototype.generate = function(game) {
     }
 
     // Loop over everything placing lights and creatures
+    var i = 2;
     for(x = 0; x < this.width; x += 1) {
         for(y = 0; y < this.height; y += 1) {
             if(level.cells[x][y].light !== undefined) {
@@ -468,7 +468,10 @@ Dungeon.prototype.generate = function(game) {
             }
 
             if(level.cells[x][y].spawnable === true && ROT.RNG.getPercentage() < 5) {
-                level.creatures.push(new Creature(x, y));
+                var creature = new Creature(x, y);
+                level.creatures.push(creature);
+                game.scheduler.add(creature, true, i);
+                i++;
             }
         }
     }

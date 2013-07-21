@@ -57,12 +57,16 @@ var Game = function() {
     this.lighting = new ROT.Lighting(undefined, { range: 4 });
     this.lighting.setFOV(this.shadowcasting);
 
+    // The scheduler (ROT Action-duration scheduler)
+    this.scheduler = new ROT.Scheduler.Action();
+
     // Create the dungeon instance and generate a dungeon
     this.dungeon = new Dungeon();
     this.dungeon.generate(this);
 
     // Create the player instance
     this.player = new Player(this.dungeon.levels[this.level].startingPosition.x, this.dungeon.levels[this.level].startingPosition.y);
+    this.scheduler.add(this.player, true);
     this.cursor = { x: undefined, y: undefined };
 
     /*** TEMPORARY fov AND light 2d-arrays ***/ // Why / how are they temporary? What was the thought behind this?
@@ -252,10 +256,29 @@ Game.prototype.render = function() {
     window.requestAnimationFrame(this.render.bind(this));
 };
 
-Game.prototype.next = function() {
-    this.turn += 1;
+Game.prototype.next = function(time) {
+    // Set the duration of the player's action
+    this.scheduler.setDuration(time);
+    
+    // Remove the control from the player
+    var previousState = this.state;
+    this.state = State.NONPLAYER;
+
+    // Loop over the actors until we get to the player again
+    var actor = this.scheduler.next();
+    while(actor.autopilot === undefined) {
+        var time = actor.act(this);
+        this.scheduler.setDuration(time);
+        actor = this.scheduler.next();
+    }
+
+    // Return the control to the player
+    this.state = previousState;
+
+    // Update FOV, lighting and interface
     this.computeFOV(this.player.x, this.player.y);
     this.computeLighting();
+    this.turn = this.scheduler.getTime(); // Set the turn timer to the current scheduler time
     this.updateInterface();
 };
 

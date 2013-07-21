@@ -1216,7 +1216,7 @@ ROT.RNG = {
      * @param {integer} Max value
      * @returns {integer} Pseudorandom value [min,max], non-uniformly distributed
      */
-    getInt: function(min, max) {
+    getInteger: function(min, max) {
         // Using Math.floor() will give you a non-uniform distribution!
         return Math.floor(this.getUniform() * (max - min + 1)) + min;
     },

@@ -39,9 +39,9 @@ Player.prototype.move = function(direction, game) {
 
         $('.character-position').text('{ x: ' + x + ', y: ' + y + ' }');
 
-        game.next();
+        game.next(50); // Movement takes 50
     } else if(interacted === true) {
-        game.next();
+        game.next(50); // Movement takes 50
     }
 };
 
@@ -70,7 +70,7 @@ Player.prototype.automove = function(game) {
 
             $('.character-position').text('{ x: ' + x + ', y: ' + y + ' }');
 
-            game.next();
+            game.next(50); // Movement takes 50
             // When monsters are implemented, this is the time to check if we should abort the autopilot
             // if any new interesting stuff came into view
             window.setTimeout(this.automove.bind(this, game), 50);
@@ -80,7 +80,7 @@ Player.prototype.automove = function(game) {
             this.autopilot = false;
             this.path = [];
 
-            game.next();
+            game.next(); // Movement takes 50
         // We cannot go any further
         } else {
             game.state = State.PLAYER;
