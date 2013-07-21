@@ -35,6 +35,8 @@ Player.prototype.move = function(direction, game) {
         // we need to update the path, if there is any
         if(this.path.length > 0) {
             this.path = game.calculatePath(this.x, this.y, game.cursor.x, game.cursor.y);
+            // Remove the top position since this is the players current position
+            this.path.shift();
         }
 
         $('.character-position').text('{ x: ' + x + ', y: ' + y + ' }');
