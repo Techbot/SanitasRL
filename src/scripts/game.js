@@ -267,8 +267,8 @@ Game.prototype.next = function(time) {
     // Loop over the actors until we get to the player again
     var actor = this.scheduler.next();
     while(actor.autopilot === undefined) {
-        var time = actor.act(this);
-        this.scheduler.setDuration(time);
+        var actiontime = actor.act(this);
+        this.scheduler.setDuration(actiontime);
         actor = this.scheduler.next();
     }
 

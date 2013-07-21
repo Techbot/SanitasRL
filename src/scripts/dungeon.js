@@ -460,7 +460,7 @@ Dungeon.prototype.generate = function(game) {
     }
 
     // Loop over everything placing lights and creatures
-    var i = 2;
+    i = 2;
     for(x = 0; x < this.width; x += 1) {
         for(y = 0; y < this.height; y += 1) {
             if(level.cells[x][y].light !== undefined) {
