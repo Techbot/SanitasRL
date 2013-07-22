@@ -3,6 +3,8 @@ var Player = function(x, y) {
 
     this.x = x;
     this.y = y;
+    
+    this.health = 20;
 
     this.autopilot = false;
     this.path = [];

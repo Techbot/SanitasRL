@@ -257,6 +257,46 @@ var State = {
                     $('.window.inventory').hide();
                     game.state = this.previousState; // This should really revert to whatever state it was before
                     break;
+                case 'd':
+                    var str = '[ What item? (<span class="cyan">a</span> - <span class="cyan">z</span>)';
+                    str = str.rpad(' ', 151);
+                    str += ']';
+                    
+                    $('.window.inventory .bottom').html(str);
+                    
+                    this.action = 'drop';
+                    break;
+                case 'e':
+                    var str = '[ What item? (<span class="cyan">a</span> - <span class="cyan">z</span>)';
+                    str = str.rpad(' ', 151);
+                    str += ']';
+                    
+                    $('.window.inventory .bottom').html(str);
+                
+                    this.action = 'use';
+                    break;
+                default:
+                    if(this.az.indexOf(key) !== -1) {
+                        var i = this.az.indexOf(key);
+                        
+                        switch(this.action) {
+                            case 'drop':
+                                game.player.inventory.items.splice(i, 1);
+                                this.action = null;
+                                break;
+                            case 'use':
+                                game.player.inventory.items[i].use(game, game.player.inventory.items[i]);
+                                if(game.player.inventory.items[i].quantity <= 0) {
+                                    game.player.inventory.items.splice(i, 1);
+                                }
+                                this.action = null;
+                                break;
+                        }
+                        
+                        
+                        this.construct(game);
+                    }
+                    break;
             }
         },
         construct: function(game) {
@@ -266,19 +306,26 @@ var State = {
             var window = $('.window.inventory');
 
             window.html('<p class="heading">============================================= INVENTORY ============================================</p>');
-
-            var az = [ 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z' ];
+            
             if(inventory.length > 0) {
                 for(var i = 0; i < inventory.length; i++) {
-                    window.append('<span class="cyan">' + az[i] +'</span>) ' + inventory[i].name + ' (' + inventory[i].quantity + 'x)<br>');
+                    window.append('<span class="cyan">' + this.az[i] +'</span>) ' + inventory[i].name + ' (' + inventory[i].quantity + 'x)<br>');
                 }
             } else {
                 window.append('You have no items.');
             }
 
+            var bottom = '[ <span class="cyan">d</span> - Drop, <span class="cyan">e</span> - Use';
+            bottom = bottom.rpad(' ', 151);
+            bottom += ']';
+            
+            window.append('<pre class="bottom">' + bottom + '</pre>');
+            
             window.show();
         },
-        previousState: null
+        previousState: null,
+        az: [ 'a', 'b', 'c', 'f', 'g', 'h', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z' ],
+        action: null
     },
     NONPLAYER: {
         id: 5,

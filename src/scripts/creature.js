@@ -2,6 +2,8 @@ var Creature = function(x, y, template) {
     'use strict';
     this.x = x;
     this.y = y;
+    
+    this.health = template.health;
 
     this.image = template.image;
     this.look = template.look;

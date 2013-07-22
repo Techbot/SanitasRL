@@ -288,6 +288,7 @@ Game.prototype.updateInterface = function() {
     if(this.state.id !== State.WELCOME.id) {
         $('.dungeon-level').text(this.level);
         $('.dungeon-turn').text(this.turn);
+        $('.character-health').text(this.player.health);
 
         var look = '', position;
         if(this.state.id === State.PLAYER.id) {
@@ -304,9 +305,6 @@ Game.prototype.updateInterface = function() {
         }
 
         if(this.dungeon.levels[this.level].explored[position.x][position.y] === true) {
-            /*if(this.dungeon.levels[this.level].cells[position.x][position.y].look !== undefined) {
-                look += this.dungeon.levels[this.level].cells[position.x][position.y].look + '<br>';
-            }*/
             look += this.dungeon.at(position.x, position.y, this.level).look + '<br>';
 
             if(this.fov[position.x][position.y] > 0) {

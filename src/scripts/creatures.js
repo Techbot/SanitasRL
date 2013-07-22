@@ -5,6 +5,7 @@ Creature.RAT = {
         color: 'rgb(127, 127, 127)'
     },
     look: 'A rat',
+    health: 6,
     movementCost: 100,
     attackCost: 100
 };
@@ -16,6 +17,7 @@ Creature.KOBOLD = {
         color: '#664c33'
     },
     look: 'A kobold',
+    health: 7,
     movementCost: 100,
     attackCost: 100
 };
@@ -27,6 +29,7 @@ Creature.JACKAL = {
         color: '#996b44'
     },
     look: 'A jackal',
+    health: 8,
     movementCost: 50,
     attackCost: 100
 };
@@ -38,6 +41,7 @@ Creature.MONKEY = {
         color: '#993f3f'
     },
     look: 'A monkey',
+    health: 12,
     movementCost: 100,
     attackCost: 100
 };

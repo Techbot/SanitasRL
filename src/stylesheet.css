@@ -70,7 +70,6 @@ canvas {
     width: 100%;
     position: absolute;
     bottom: 0;
-    text-align: right;
 }
 .window .center {
     text-align: center;
@@ -143,3 +142,5 @@ pre i, .gold {
 .sidebar .touch-controls div:hover, .sidebar .touch-controls div:active {
     background: rgba(255, 255, 255, 0.1);
 }
+
+.red { color: #c00; }
