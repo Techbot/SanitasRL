@@ -1,13 +1,12 @@
-var Creature = function(x, y) {
+var Creature = function(x, y, template) {
     'use strict';
     this.x = x;
     this.y = y;
 
-    this.image = {
-        x: 1,
-        y: 2,
-        color: 'rgb(204, 0, 0)'
-    };
+    this.image = template.image;
+    this.look = template.look;
+    this.movementCost = template.movementCost;
+    this.attackCost = template.attackCost;
 };
 
 Creature.prototype.act = function(game) {
@@ -20,5 +19,5 @@ Creature.prototype.act = function(game) {
         this.y = ny;
     }
 
-    return 25;
+    return this.movementCost;
 };

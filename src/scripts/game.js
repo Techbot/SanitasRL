@@ -304,9 +304,10 @@ Game.prototype.updateInterface = function() {
         }
 
         if(this.dungeon.levels[this.level].explored[position.x][position.y] === true) {
-            if(this.dungeon.levels[this.level].cells[position.x][position.y].look !== undefined) {
+            /*if(this.dungeon.levels[this.level].cells[position.x][position.y].look !== undefined) {
                 look += this.dungeon.levels[this.level].cells[position.x][position.y].look + '<br>';
-            }
+            }*/
+            look += this.dungeon.at(position.x, position.y, this.level).look + '<br>';
 
             if(this.fov[position.x][position.y] > 0) {
                 $('.character-sight-header').text('You see:');

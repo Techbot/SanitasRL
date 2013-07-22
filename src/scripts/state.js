@@ -115,7 +115,7 @@ var State = {
                 // Numpad 5 / . - Wait one turn
                 case 'numpad5':
                 case '.':
-                    game.next(100); // Wait for 100
+                    game.next(100); // Wait for 100 ticks
                     break;
                 // i - Open inventory
                 case 'i':

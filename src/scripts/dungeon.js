@@ -24,12 +24,12 @@ Dungeon.prototype.at = function(x, y, level) {
     'use strict';
     for(var i = 0; i < this.levels[level].creatures.length; i++) {
         if(this.levels[level].creatures[i].x === x && this.levels[level].creatures[i].y === y) {
-            return this.levels[level].creatures[i].image;
+            return $.extend(this.levels[level].creatures[i].image, { look: this.levels[level].creatures[i].look });
         }
     }
 
     if(this.levels[level].cells[x][y].id !== Tile.EMPTY.id) {
-        return this.levels[level].cells[x][y].image;
+        return $.extend(this.levels[level].cells[x][y].image, { look: this.levels[level].cells[x][y].look });
     }
 
     return null;
@@ -468,7 +468,7 @@ Dungeon.prototype.generate = function(game) {
             }
 
             if(level.cells[x][y].spawnable === true && ROT.RNG.getPercentage() < 5) {
-                var creature = new Creature(x, y);
+                var creature = new Creature(x, y, Creature.random(game.level));
                 level.creatures.push(creature);
                 game.scheduler.add(creature, true, i);
                 i++;

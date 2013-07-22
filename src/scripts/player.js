@@ -41,9 +41,9 @@ Player.prototype.move = function(direction, game) {
 
         $('.character-position').text('{ x: ' + x + ', y: ' + y + ' }');
 
-        game.next(50); // Movement takes 50
+        game.next(100); // Movement takes 100 ticks
     } else if(interacted === true) {
-        game.next(50); // Movement takes 50
+        game.next(100); // Movement takes 100 ticks
     }
 };
 
@@ -72,7 +72,7 @@ Player.prototype.automove = function(game) {
 
             $('.character-position').text('{ x: ' + x + ', y: ' + y + ' }');
 
-            game.next(50); // Movement takes 50
+            game.next(100); // Movement takes 100 ticks
             // When monsters are implemented, this is the time to check if we should abort the autopilot
             // if any new interesting stuff came into view
             window.setTimeout(this.automove.bind(this, game), 50);
@@ -82,7 +82,7 @@ Player.prototype.automove = function(game) {
             this.autopilot = false;
             this.path = [];
 
-            game.next(); // Movement takes 50
+            game.next(100); // Movement takes 100 ticks
         // We cannot go any further
         } else {
             game.state = State.PLAYER;
@@ -106,4 +106,3 @@ Player.prototype.shiftMove = function(direction, game) {
         this.automove(game);
     }
 };
-
