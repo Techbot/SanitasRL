@@ -292,7 +292,6 @@ var State = {
         render: false,
         input: function(key, e, game) {
             'use strict';
-            console.log(key);
             switch(key) {
                 default:
                     if(key !== 'mousemove' && key !== 'mouseenter' && key !== 'mouseleave') {

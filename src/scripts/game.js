@@ -46,7 +46,7 @@ var Game = function() {
 
     // Shadowcaster for field of view
     this.shadowcasting = new ROT.FOV.PreciseShadowcasting(function(x, y) {
-        if(x > 0 && x < this.dungeon.width && y > 0 && y < this.dungeon.height && this.dungeon.levels[this.level].cells[x][y].id !== Tile.EMPTY.id) {
+        if(x > 0 && x < this.dungeon.width && y > 0 && y < this.dungeon.height) {
             return this.dungeon.levels[this.level].cells[x][y].lightPasses;
         }
 
@@ -259,7 +259,7 @@ Game.prototype.render = function() {
 Game.prototype.next = function(time) {
     // Set the duration of the player's action
     this.scheduler.setDuration(time);
-    
+
     // Remove the control from the player
     var previousState = this.state;
     this.state = State.NONPLAYER;
