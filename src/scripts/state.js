@@ -5,15 +5,14 @@ var State = {
         input: function(key, e, game) {
             'use strict';
             switch(key) {
-                // Enter - Go to PLAYER state
                 default:
-                    $('.window.welcome').fadeOut();
+                    $('.window.welcome').hide();
                     game.state = State.PLAYER;
                     break;
             }
         },
         construct: function(game) {
-            $('.window.welcome').fadeIn();
+            $('.window.welcome').show();
         }
     },
     PLAYER: {
@@ -24,8 +23,8 @@ var State = {
             switch(key) {
                 // ? - Open help screen
                 case '?':
-                    State.WELCOME.construct();
-                    game.state = State.WELCOME;
+                    State.HELP.construct();
+                    game.state = State.HELP;
                     break;
                 // Enter - Go to cursor mode
                 case 'enter':
@@ -286,6 +285,25 @@ var State = {
         render: true,
         input: function(key, e, game) {
             'use strict';
+        }
+    },
+    HELP: {
+        id: 6,
+        render: false,
+        input: function(key, e, game) {
+            'use strict';
+            console.log(key);
+            switch(key) {
+                default:
+                    if(key !== 'mousemove' && key !== 'mouseenter' && key !== 'mouseleave') {
+                        $('.window.help').hide();
+                        game.state = State.PLAYER;
+                    }
+                    break;
+            }
+        },
+        construct: function(game) {
+            $('.window.help').show();
         }
     }
 };
