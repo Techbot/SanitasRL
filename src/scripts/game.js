@@ -93,6 +93,7 @@ var Game = function() {
         $('.window').hide();
         $('.character-position').show();
         $('.touch-controls').show();
+        $('.game-state').show();
         this.state = State.PLAYER;
     }
 
@@ -207,7 +208,7 @@ Game.prototype.render = function() {
                 if(x === this.player.x && y === this.player.y) {
                     tile = this.player.image;
                 } else {
-                    tile = this.dungeon.at(x, y, this.level);
+                    tile = this.dungeon.at(x, y, this.level, this.fov[x][y] === undefined ? false : true);
                 }
                                      // DEBUGGING                                                  END DEBUGGING //
                 if(tile !== null && (this.debug === true || this.dungeon.levels[this.level].explored[x][y] === true)) {
@@ -290,6 +291,9 @@ Game.prototype.updateInterface = function() {
         $('.dungeon-turn').text(this.turn);
         $('.character-health').text(this.player.health);
 
+        // STATE DEBUGGING
+        $('.game-state').text(this.state.name);
+
         var look = '', position;
         if(this.state.id === State.PLAYER.id) {
             // If we recently moved the mouse, show what's there instead of below the player
@@ -305,7 +309,13 @@ Game.prototype.updateInterface = function() {
         }
 
         if(this.dungeon.levels[this.level].explored[position.x][position.y] === true) {
-            look += this.dungeon.at(position.x, position.y, this.level).look + '<br>';
+            var at = this.dungeon.at(position.x, position.y, this.level, this.fov[position.x][position.y] === undefined ? false : true);
+
+            if(at.index === undefined) {
+                look += at.look + '<br>';
+            } else {
+                look += at.look + ' with ' + this.dungeon.levels[this.level].creatures[at.index].health + ' health<br>';
+            }
 
             if(this.fov[position.x][position.y] > 0) {
                 $('.character-sight-header').text('You see:');
@@ -342,6 +352,7 @@ Game.prototype.input = function(key, e) {
             this.debug = !this.debug;
             $('.character-position').toggle();
             $('.touch-controls').toggle();
+            $('.game-state').toggle();
             break;
         default:
             this.state.input(key, e, this);
@@ -350,3 +361,4 @@ Game.prototype.input = function(key, e) {
 
     this.updateInterface();
 };
+

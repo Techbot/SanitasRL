@@ -1,6 +1,7 @@
 var State = {
     WELCOME: {
         id: 0,
+        name: 'WELCOME',
         render: false,
         input: function(key, e, game) {
             'use strict';
@@ -17,6 +18,7 @@ var State = {
     },
     PLAYER: {
         id: 1,
+        name: 'PLAYER',
         render: true,
         input: function(key, e, game) {
             'use strict';
@@ -162,6 +164,7 @@ var State = {
     },
     CURSOR: {
         id: 2,
+        name: 'CURSOR',
         render: true,
         input: function(key, e, game) {
             'use strict';
@@ -234,6 +237,7 @@ var State = {
     },
     AUTOPILOT: {
         id: 3,
+        name: 'AUTOPILOT',
         render: true,
         input: function(key, e, game) {
             'use strict';
@@ -248,6 +252,7 @@ var State = {
     },
     INVENTORY: {
         id: 4,
+        name: 'INVENTORY',
         render: false,
         input: function(key, e, game) {
             'use strict';
@@ -329,6 +334,7 @@ var State = {
     },
     NONPLAYER: {
         id: 5,
+        name: 'NONPLAYER',
         render: true,
         input: function(key, e, game) {
             'use strict';
@@ -336,6 +342,7 @@ var State = {
     },
     HELP: {
         id: 6,
+        name: 'HELP',
         render: false,
         input: function(key, e, game) {
             'use strict';

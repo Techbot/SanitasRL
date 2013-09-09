@@ -20,11 +20,14 @@ var Level = function(length) {
     }
 };
 
-Dungeon.prototype.at = function(x, y, level) {
+Dungeon.prototype.at = function(x, y, level, inFov) {
     'use strict';
-    for(var i = 0; i < this.levels[level].creatures.length; i++) {
-        if(this.levels[level].creatures[i].x === x && this.levels[level].creatures[i].y === y) {
-            return $.extend(this.levels[level].creatures[i].image, { look: this.levels[level].creatures[i].look });
+
+    if(inFov === true) {
+        for(var i = 0; i < this.levels[level].creatures.length; i++) {
+            if(this.levels[level].creatures[i].x === x && this.levels[level].creatures[i].y === y) {
+                return $.extend(this.levels[level].creatures[i].image, { look: this.levels[level].creatures[i].look, index: i });
+            }
         }
     }
 

@@ -65,6 +65,23 @@ Player.prototype.automove = function(game) {
         if(game.dungeon.levels[game.level].cells[x][y].interact !== undefined) {
             canMoveAfterInteraction = game.dungeon.levels[game.level].cells[x][y].interact(x, y, game);
             interacted = true;
+        // Else, if there is a creature at the position
+        } else if(game.dungeon.at(x, y, game.level, true).index !== undefined) {
+            var index = game.dungeon.at(x, y, game.level, true).index,
+                creature = game.dungeon.levels[game.level].creatures[index];
+            console.log(creature.look + ' @ ' + x + ',' + y + ' loses 5 health, ' + (creature.health - 5 <= 0 ? 'now dead.' : 'now at ' + (creature.health - 5)));
+            creature.health -= 5;
+
+            if(creature.health <= 0) {
+                game.dungeon.levels[game.level].creatures.splice(index, 1);
+
+                if(game.dungeon.levels[game.level].cells[x][y].id === Tile.FLOOR.id) {
+                    game.dungeon.levels[game.level].cells[x][y] = Tile.BLOOD;
+                }
+            }
+
+            canMoveAfterInteraction = false;
+            interacted = true;
         }
 
         // If we can move after the interaction, do so

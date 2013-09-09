@@ -247,6 +247,18 @@ var Tile = {
         light: undefined,
         interact: undefined
     },
+    BLOOD: {
+        id: 15,
+        entityPasses: true,
+        autopilotPasses: true,
+        lightPasses: true,
+        reflects: true,
+        spawnable: true,
+        look: 'A pool of blood',
+        image: { x: 0, y: 0, color: 'rgb(204, 0, 0)' },
+        light: undefined,
+        interact: undefined
+    },
     // The following ones are only for debugging pruposes
     ROOM_HIGHLIGHT: {
         id: 100,
