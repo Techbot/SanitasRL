@@ -41,7 +41,11 @@ var State = {
                 // Shift + Numpad 8 / K - Automove player north
                 case 'up':
                 case 'K':
-                    game.player.shiftMove(ROT.NORTH, game);
+                    if(e.shiftKey) {
+                        game.player.shiftMove(ROT.NORTH, game);
+                    } else {
+                        game.player.move(ROT.NORTH, game);
+                    }
                     break;
                 // Numpad 9 / u - Move player north east
                 case 'numpad9':
@@ -61,7 +65,11 @@ var State = {
                 // Shift + Numpad 6 / L - Automove player east
                 case 'right':
                 case 'L':
-                    game.player.shiftMove(ROT.EAST, game);
+                    if(e.shiftKey) {
+                        game.player.shiftMove(ROT.EAST, game);
+                    } else {
+                        game.player.move(ROT.EAST, game);
+                    }
                     break;
                 // Numpad 3 / n - Move player south east
                 case 'numpad3':
@@ -81,7 +89,11 @@ var State = {
                 // Shift + Numpad 2 / J - Automove player south
                 case 'down':
                 case 'J':
-                    game.player.shiftMove(ROT.SOUTH, game);
+                    if(e.shiftKey) {
+                        game.player.shiftMove(ROT.SOUTH, game);
+                    } else {
+                        game.player.move(ROT.SOUTH, game);
+                    }
                     break;
                 // Numpad 1 / b - Move player south west
                 case 'numpad1':
@@ -101,7 +113,11 @@ var State = {
                 // Shift + Numpad 4 / H - Automove player west
                 case 'left':
                 case 'H':
-                    game.player.shiftMove(ROT.WEST, game);
+                    if(e.shiftKey) {
+                        game.player.shiftMove(ROT.WEST, game);
+                    } else {
+                        game.player.move(ROT.WEST, game);
+                    }
                     break;
                 // Numpad 7 / y - Move player north west
                 case 'numpad7':

@@ -87,7 +87,7 @@ var Tile = {
     DOOR: {
         id: 6,
         entityPasses: false,
-        autopilotPasses: true,
+        autopilotPasses: false,
         lightPasses: false,
         reflects: false,
         spawnable: false,
