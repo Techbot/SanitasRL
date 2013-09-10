@@ -6,6 +6,7 @@ Creature.RAT = {
     },
     look: 'A rat',
     health: 6,
+    damage: 1,
     movementCost: 100,
     attackCost: 100
 };
@@ -18,6 +19,7 @@ Creature.KOBOLD = {
     },
     look: 'A kobold',
     health: 7,
+    damage: 3,
     movementCost: 100,
     attackCost: 100
 };
@@ -30,6 +32,7 @@ Creature.JACKAL = {
     },
     look: 'A jackal',
     health: 8,
+    damage: 3,
     movementCost: 50,
     attackCost: 100
 };
@@ -42,6 +45,7 @@ Creature.MONKEY = {
     },
     look: 'A monkey',
     health: 12,
+    damage: 10,
     movementCost: 100,
     attackCost: 100
 };

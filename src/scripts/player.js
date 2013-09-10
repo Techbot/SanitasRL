@@ -34,6 +34,7 @@ Player.prototype.move = function(direction, game) {
             creature = game.dungeon.levels[game.level].creatures[index];
         console.log(creature.look + ' @ ' + x + ',' + y + ' loses 5 health, ' + (creature.health - 5 <= 0 ? 'now dead.' : 'now at ' + (creature.health - 5)));
         creature.health -= 5;
+        this.health -= creature.damage;
 
         if(creature.health <= 0) {
             game.dungeon.levels[game.level].creatures.splice(index, 1);
@@ -88,6 +89,7 @@ Player.prototype.automove = function(game) {
                 creature = game.dungeon.levels[game.level].creatures[index];
             console.log(creature.look + ' @ ' + x + ',' + y + ' loses 5 health, ' + (creature.health - 5 <= 0 ? 'now dead.' : 'now at ' + (creature.health - 5)));
             creature.health -= 5;
+            this.health -= creature.damage;
 
             if(creature.health <= 0) {
                 game.dungeon.levels[game.level].creatures.splice(index, 1);

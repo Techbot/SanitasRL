@@ -4,6 +4,7 @@ var Creature = function(x, y, template) {
     this.y = y;
     
     this.health = template.health;
+    this.damage = template.damage;
 
     this.image = template.image;
     this.look = template.look;
