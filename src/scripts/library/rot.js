@@ -1,6 +1,6 @@
 /*
     This is rot.js, the ROguelike Toolkit in JavaScript.
-    Version 0.5~dev, generated on Thu Jul 25 08:44:01 CEST 2013.
+    Version 0.5~dev, generated on Sat Sep 14 13:19:53 CEST 2013.
 */
 
 /**
@@ -29,7 +29,7 @@ var ROT = {
     WEST:       6,
     NORTH_WEST: 7,
 
-    /** Relative x and y coordinates. Ordering is important! */
+    /** Directional constants. Ordering is important! */
     DIRS: {
         "4": [
             [ 0, -1],
@@ -363,7 +363,7 @@ var ROT = {
     VK_PRINT: 42,
     /** Linux support for this keycode was added in Gecko 4.0. */
     VK_EXECUTE: 43,
-    /** Linux support for this keycode was added in Gecko 4.0.     */
+    /** Linux support for this keycode was added in Gecko 4.0.   */
     VK_SLEEP: 95
 };
 /**
@@ -374,8 +374,8 @@ ROT.Text = {
     RE_COLORS: /%([bc]){([^}]*)}/g,
 
     /* token types */
-    TYPE_TEXT:        0,
-    TYPE_NEWLINE:    1,
+    TYPE_TEXT:      0,
+    TYPE_NEWLINE:   1,
     TYPE_FG:        2,
     TYPE_BG:        3,
 
@@ -2261,7 +2261,7 @@ ROT.Map.Digger.prototype.create = function(callback) {
         var dir = this._getDiggingDirection(x, y);
         if (!dir) { continue; } /* this wall is not suitable */
 
-//        console.log("wall", x, y);
+//      console.log("wall", x, y);
 
         /* try adding a feature */
         var featureAttempts = 0;
@@ -2362,13 +2362,13 @@ ROT.Map.Digger.prototype._tryFeature = function(x, y, dx, dy) {
     feature = ROT.Map.Feature[feature].createRandomAt(x, y, dx, dy, this._options);
 
     if (!feature.isValid(this._isWallCallback, this._canBeDugCallback)) {
-//        console.log("not valid");
-//        feature.debug();
+//      console.log("not valid");
+//      feature.debug();
         return false;
     }
 
     feature.create(this._digCallback);
-//    feature.debug();
+//  feature.debug();
 
     if (feature instanceof ROT.Map.Feature.Room) { this._rooms.push(feature); }
     if (feature instanceof ROT.Map.Feature.Corridor) {
@@ -2635,9 +2635,9 @@ ROT.Map.Uniform.prototype._connectRooms = function(room1, room2) {
         var diff = start[index] - center2[index];
         switch (dirIndex2) {
             case 0:
-            case 1:    var rotation = (diff < 0 ? 3 : 1); break;
+            case 1: var rotation = (diff < 0 ? 3 : 1); break;
             case 2:
-            case 3:    var rotation = (diff < 0 ? 1 : 3); break;
+            case 3: var rotation = (diff < 0 ? 1 : 3); break;
         }
         dirIndex2 = (dirIndex2 + rotation) % 4;
 
@@ -4574,6 +4574,18 @@ ROT.Path = function(toX, toY, passableCallback, options) {
     for (var p in options) { this._options[p] = options[p]; }
 
     this._dirs = ROT.DIRS[this._options.topology];
+    if (this._options.topology == 8) { /* reorder dirs for more aesthetic result (vertical/horizontal first) */
+        this._dirs = [
+            this._dirs[0],
+            this._dirs[2],
+            this._dirs[4],
+            this._dirs[6],
+            this._dirs[1],
+            this._dirs[3],
+            this._dirs[5],
+            this._dirs[7]
+        ]
+    }
 }
 
 /**
@@ -4713,7 +4725,7 @@ ROT.Path.AStar.prototype._add = function(x, y, prev) {
         x: x,
         y: y,
         prev: prev,
-        g: (prev ? prev.g + Math.sqrt(Math.abs(prev.x - x) + Math.abs(prev.y - y)) : 0),
+        g: (prev ? prev.g+1 : 0), //g: (prev ? prev.g + Math.sqrt(Math.abs(prev.x - x) + Math.abs(prev.y - y)) : 0),
         h: this._distance(x, y)
     }
     this._done[x+","+y] = obj;
